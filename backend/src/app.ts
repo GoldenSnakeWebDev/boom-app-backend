@@ -2,7 +2,7 @@ import express, { json } from "express";
 import cors from "cors";
 import path from "path";
 import morgan from "morgan";
-import "express-async-error";
+import "express-async-errors";
 import cookieSession from "cookie-session";
 import { NotFoundError } from "./errors";
 import { errorHandler } from "./middlewares";
@@ -25,9 +25,7 @@ app.use(
 );
 
 /**log ... ERROR api endpoints*/
-if (process.env.NODE_ENV === "development") {
-  app.use(morgan("dev"));
-}
+app.use(morgan("dev"));
 
 // ROUTES
 app.use("/api/v1/users/", express.static(path.join(__dirname, "public")));
