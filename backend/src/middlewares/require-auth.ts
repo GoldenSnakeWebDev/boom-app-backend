@@ -1,0 +1,43 @@
+import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
+import { NotAuthorizedError } from "./../errors/not-authorized-error";
+import { UserPayload } from "./../utils/user-interface";
+
+export const requireAuth = (
+  req: Request,
+  _res: Response,
+  next: NextFunction
+) => {
+  let token: any;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+
+  const accessToken = req.session?.jwt || token;
+
+  if (!accessToken) {
+    throw new NotAuthorizedError();
+  }
+
+  try {
+    const payload = jwt.verify(
+      accessToken,
+      process.env.JWT_KEY!
+    ) as UserPayload;
+
+    req.currentUser = payload;
+
+    if (req.body.userId) {
+      req.userId = req.body.userId;
+    }
+    if (!req.currentUser) {
+      throw new NotAuthorizedError();
+    }
+    next();
+  } catch (err) {
+    throw new NotAuthorizedError();
+  }
+};
