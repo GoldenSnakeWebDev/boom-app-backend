@@ -50,4 +50,4 @@ router.post(
   }
 );
 
-export { router as UserRequestPasswordResetRoutes };
+export { router as UserResetPasswordResetRoutes };

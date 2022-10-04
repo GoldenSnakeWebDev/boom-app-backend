@@ -1,4 +1,22 @@
 import { app } from "./../app";
-import { CurrentUserRoutes } from "./users";
+import {
+  CurrentUserRoutes,
+  UserUpdateProfileRoute,
+  CurrentUserResetPasswordRoute,
+  SignInRoutes,
+  signOutRouter,
+  UserSignUpRoutes,
+  UserResetPasswordResetRoutes,
+  UserRequestPasswordResetRoutes,
+} from "./users";
 
-app.use([CurrentUserRoutes]);
+app.use([
+  UserResetPasswordResetRoutes,
+  UserRequestPasswordResetRoutes,
+  SignInRoutes,
+  UserSignUpRoutes,
+  signOutRouter,
+  CurrentUserRoutes,
+  UserUpdateProfileRoute,
+  CurrentUserResetPasswordRoute,
+]);
