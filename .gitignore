@@ -11,3 +11,5 @@ node_modules/
 broadcast/
 /broadcast/*
 /broadcast/*/31337/
+
+.env
