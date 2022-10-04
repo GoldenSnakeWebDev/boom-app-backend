@@ -9,7 +9,7 @@ const router = Router();
 
 router.post(
   "/api/v1/users/request-password-reset",
-  [body("email").notEmpty().withMessage("Please provide email address")],
+  [body("email").isEmail().withMessage("Please provide email address")],
   validateRequest,
   async (req: Request, res: Response) => {
     const { email } = req.body;
@@ -30,7 +30,8 @@ router.post(
     const updatedUser = await User.findByIdAndUpdate(
       user.id,
       {
-        password_reset: { code, is_changed: true },
+        password_reset: { is_changed: true },
+        password_reset_token: code,
       },
       { new: true }
     );

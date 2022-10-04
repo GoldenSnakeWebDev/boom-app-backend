@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { PasswordManager } from "src/utils/password-manager";
+import { PasswordManager } from "./../utils/password-manager";
 import { UserType } from "../types/user";
 
 interface IUser {
@@ -15,6 +15,7 @@ interface IUser {
     is_changed?: boolean;
     token?: string;
   };
+  password_reset_token?: string;
   bio?: string;
   username?: string;
   password: string;
@@ -45,9 +46,9 @@ const userSchema = new Schema<IUser>(
     followers: [{ type: Schema.Types.ObjectId, ref: "User" }],
     following: [{ type: Schema.Types.ObjectId, ref: "User" }],
     password_reset: {
-      token: { type: Schema.Types.String, default: "" },
       is_changed: { type: Schema.Types.Boolean, default: false },
     },
+    password_reset_token: { type: String, default: "" },
     password: { type: String, default: "" },
   },
   {

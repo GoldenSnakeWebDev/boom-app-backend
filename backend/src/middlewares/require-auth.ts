@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { NotAuthorizedError } from "./../errors/not-authorized-error";
-import { UserPayload } from "./../utils/user-interface";
+import { UserPayload } from "./../types/user";
 
 export const requireAuth = (
   req: Request,
@@ -30,9 +30,6 @@ export const requireAuth = (
 
     req.currentUser = payload;
 
-    if (req.body.userId) {
-      req.userId = req.body.userId;
-    }
     if (!req.currentUser) {
       throw new NotAuthorizedError();
     }

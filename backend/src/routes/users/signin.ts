@@ -11,7 +11,7 @@ const router = Router();
 router.post(
   "/api/v1/users/signin",
   [
-    body("email").notEmpty().withMessage("please provide email address"),
+    body("email").isEmail().withMessage("please provide email address"),
     body("password").notEmpty().withMessage("please provide your password"),
   ],
   validateRequest,

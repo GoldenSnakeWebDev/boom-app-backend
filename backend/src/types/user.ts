@@ -4,3 +4,27 @@ export enum UserType {
   ADMIN = "admin",
   DEVELOPER = "developer",
 }
+
+export interface UserPayload {
+  id?: string;
+  first_name?: string;
+  last_name?: string;
+  booms?: Array<any>;
+  followers?: Array<any>;
+  following?: Array<any>;
+  photo?: string;
+  email: string;
+  location?: string;
+  bio?: string;
+  username?: string;
+  user_type?: string;
+  is_active?: string;
+}
+
+declare global {
+  namespace Express {
+    interface Request {
+      currentUser?: UserPayload;
+    }
+  }
+}
