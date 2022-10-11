@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { NotAuthorizedError } from "./../errors/not-authorized-error";
 import { UserPayload } from "./../types/user";
+import { config } from "../config";
 
 export const requireAuth = (
   req: Request,
@@ -9,6 +10,7 @@ export const requireAuth = (
   next: NextFunction
 ) => {
   let token: any;
+
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
@@ -23,10 +25,7 @@ export const requireAuth = (
   }
 
   try {
-    const payload = jwt.verify(
-      accessToken,
-      process.env.JWT_KEY!
-    ) as UserPayload;
+    const payload = jwt.verify(accessToken, config.JWT_KEY) as UserPayload;
 
     req.currentUser = payload;
 

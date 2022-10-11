@@ -11,7 +11,8 @@ router.post(
   [
     body("email").notEmpty().withMessage("Please provide email address"),
     body("password")
-      .notEmpty()
+      .trim()
+      .isLength({ min: 4, max: 20 })
       .withMessage("please provide your desired password"),
   ],
   validateRequest,

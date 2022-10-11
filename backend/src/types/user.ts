@@ -19,6 +19,7 @@ export interface UserPayload {
   username?: string;
   user_type?: string;
   is_active?: string;
+  is_admin?: boolean;
 }
 
 declare global {

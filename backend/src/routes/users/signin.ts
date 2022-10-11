@@ -5,6 +5,7 @@ import { validateRequest } from "../../middlewares/validate-request";
 import { User } from "./../../models/user";
 import { BadRequestError } from "../../errors/bad-request-error";
 import { PasswordManager } from "../../utils/password-manager";
+import { config } from "./../../config";
 
 const router = Router();
 
@@ -34,8 +35,7 @@ router.post(
     }
 
     // generate token
-
-    const token = await jwt.sign(
+    const token = jwt.sign(
       {
         id: user.id,
         username: user.username,
@@ -43,8 +43,9 @@ router.post(
         last_name: user.last_name,
         email: user.email,
         photo: user.photo,
+        is_admin: user.is_admin,
       },
-      process.env.JWT_KEY!
+      config.JWT_KEY
     );
 
     // allow cookie session
@@ -56,6 +57,7 @@ router.post(
     res.status(200).json({
       status: "success",
       user,
+      token: token,
       cookie: req.session?.jwt,
       message: `Sucessfully signed in to your account`,
     });

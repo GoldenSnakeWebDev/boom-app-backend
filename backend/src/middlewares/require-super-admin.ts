@@ -8,9 +8,9 @@ export const requireSuperAdmin = async (
   next: NextFunction
 ) => {
   if (
-    (!req.currentUser?.is_superadmin &&
+    (!req.currentUser?.is_admin &&
       req.currentUser?.user_type !== UserType.SUPERADMIN) ||
-    (!req.currentUser?.is_superadmin &&
+    (!req.currentUser?.is_admin &&
       req.currentUser?.user_type !== UserType.ADMIN)
   ) {
     throw new NotAuthorizedError();
