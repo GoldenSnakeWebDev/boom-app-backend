@@ -1,13 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.12;
 import "../utils/BaseTest.sol";
+import "@boom/contracts/tokens/BoomERC721.sol";
 
 contract BoomERC721Test is BaseTest {
     function setUp() public override {
         super.setUp();
     }
-
-    /* TODO:  GETTERS */
 
     // Test Contract Type --name to be Vault;
     function testContractType() public {

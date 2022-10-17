@@ -5,6 +5,7 @@ import "forge-std/Test.sol";
 import "@boom/contracts/tokens/BoomERC721.sol";
 import "@boom/contracts/tokens/TokenERC20.sol";
 import "@boom/contracts/Forwarder.sol";
+import {Marketplace} from "@boom/contracts/marketplace/Marketplace.sol";
 
 abstract contract BaseTest is Test {
     // constants
@@ -23,6 +24,8 @@ abstract contract BaseTest is Test {
     BoomERC721 public boomERC721;
     TokenERC20 public tokenERC20;
     Forwarder public forwarder;
+    Marketplace public MARKET_PLACE;
+    address public WrappedNativeToken = address(0);
 
     /// Participants
     address public defaultAdmin = address(0x10000);
@@ -39,6 +42,7 @@ abstract contract BaseTest is Test {
         vm.startPrank(defaultAdmin);
         boomERC721 = _deployBoomERC721();
         tokenERC20 = _deployTokenERC20();
+        MARKET_PLACE = _deployMarketPlace();
         vm.stopPrank();
     }
 
@@ -71,6 +75,18 @@ abstract contract BaseTest is Test {
             saleRecipient,
             platformFeeRecipient,
             platformFeeBps
+        );
+    }
+
+    function _deployMarketPlace() internal returns (Marketplace _marketplace) {
+        _marketplace = new Marketplace();
+        _marketplace.initialize(
+            defaultAdmin,
+            CONTRACT_URI,
+            forwarders(),
+            platformFeeRecipient,
+            platformFeeBps,
+            WrappedNativeToken
         );
     }
 

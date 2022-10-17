@@ -133,7 +133,7 @@ contract BoomERC721 is
         _setupRole(DEFAULT_ADMIN_ROLE, _defaultAdmin);
         _setupRole(MINTER_ROLE, _defaultAdmin);
         _setupRole(TRANSFER_ROLE, _defaultAdmin);
-        _setupRole(TRANSFER_ROLE, address(0));
+        // _setupRole(TRANSFER_ROLE, address(0));
     }
 
     ///     =====   Public functions  =====
