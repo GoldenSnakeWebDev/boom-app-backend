@@ -25,7 +25,7 @@ abstract contract BaseTest is Test {
     TokenERC20 public tokenERC20;
     Forwarder public forwarder;
     Marketplace public MARKET_PLACE;
-    address public WrappedNativeToken = address(0);
+    address public NATIVE_TOKEN = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
 
     /// Participants
     address public defaultAdmin = address(0x10000);
@@ -86,7 +86,7 @@ abstract contract BaseTest is Test {
             forwarders(),
             platformFeeRecipient,
             platformFeeBps,
-            WrappedNativeToken
+            NATIVE_TOKEN
         );
     }
 

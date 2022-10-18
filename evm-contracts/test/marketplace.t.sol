@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.12;
+import "forge-std/console.sol";
 import "./utils/BaseTest.sol";
 import {Marketplace, IMarketplace} from "@boom/contracts/marketplace/Marketplace.sol";
 import {ITokenERC721} from "@boom/contracts/interfaces/ITokenERC721.sol";
@@ -12,10 +13,6 @@ contract MarketplaceTest is BaseTest {
         super.setUp();
     }
 
-    function test_create_listing() public {
-        assertEq(true, true);
-    }
-
     // helper methods
     function createERC721Listing(
         address to,
@@ -26,15 +23,12 @@ contract MarketplaceTest is BaseTest {
         public
         returns (
             uint256 listingId,
-            IMarketplace.ListingParameters memory listing
+            Marketplace.ListingParameters memory listing
         )
     {
-        vm.startPrank(defaultAdmin);
-        uint256 tokenId = boomERC721.mintTo(to, "");
-        // approve token to be spent by the marketplace
-
-        // end of approve
-        vm.stopPrank();
+        uint256 tokenId = boomERC721.mintTo(to, "https://");
+        vm.prank(to);
+        boomERC721.setApprovalForAll(address(MARKET_PLACE), true);
 
         listing.assetContract = address(boomERC721);
         listing.tokenId = tokenId;
@@ -47,7 +41,7 @@ contract MarketplaceTest is BaseTest {
         listing.listingType = listingType;
 
         listingId = MARKET_PLACE.totalListings();
-        vm.startPrank(to);
+        vm.prank(to);
         MARKET_PLACE.createListing(listing);
     }
 
@@ -84,4 +78,67 @@ contract MarketplaceTest is BaseTest {
         listing.tokenType = tokenType;
         listing.listingType = listingType;
     }
+
+    function getWinningBid(uint256 _listingId)
+        public
+        view
+        returns (Marketplace.Offer memory winningBid)
+    {
+        (
+            uint256 listingId,
+            address offeror,
+            uint256 quantityWanted,
+            address currency,
+            uint256 pricePerToken,
+
+        ) = MARKET_PLACE.winningBid(_listingId);
+        winningBid.listingId = listingId;
+        winningBid.offeror = offeror;
+        winningBid.quantityWanted = quantityWanted;
+        winningBid.currency = currency;
+        winningBid.pricePerToken = pricePerToken;
+    }
+
+    function test_createListingFor_autction_and_listing() public {
+        vm.warp(0);
+        (
+            uint256 createdListingId,
+            Marketplace.ListingParameters memory createdListing
+        ) = createERC721Listing(
+                getActor(0),
+                NATIVE_TOKEN,
+                1 ether,
+                IMarketplace.ListingType.Auction
+            );
+
+        Marketplace.Listing memory listing = getListing(createdListingId);
+        assertEq(createdListingId, listing.listingId);
+        assertEq(createdListing.assetContract, listing.assetContract);
+        assertEq(createdListing.tokenId, listing.tokenId);
+        assertEq(createdListing.startTime, listing.startTime);
+        assertEq(
+            createdListing.startTime + createdListing.secondsUntilEndTime,
+            listing.endTime
+        );
+        assertEq(createdListing.quantityToList, listing.quantity);
+        assertEq(createdListing.currencyToAccept, listing.currency);
+        assertEq(
+            createdListing.reservePricePerToken,
+            listing.reservePricePerToken
+        );
+        assertEq(
+            createdListing.buyoutPricePerToken,
+            listing.buyoutPricePerToken
+        );
+        assertEq(
+            uint8(IMarketplace.TokenType.ERC721),
+            uint8(listing.tokenType)
+        );
+        assertEq(
+            uint8(IMarketplace.ListingType.Auction),
+            uint8(listing.listingType)
+        );
+    }
+
+    function test_offer_bidForAuctionNativeToken() public {}
 }
