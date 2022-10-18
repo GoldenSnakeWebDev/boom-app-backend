@@ -43,6 +43,7 @@ contract MarketplaceTest is BaseTest {
         listingId = MARKET_PLACE.totalListings();
         vm.prank(to);
         MARKET_PLACE.createListing(listing);
+        vm.stopPrank();
     }
 
     function getListing(uint256 _listingId)
@@ -79,27 +80,7 @@ contract MarketplaceTest is BaseTest {
         listing.listingType = listingType;
     }
 
-    function getWinningBid(uint256 _listingId)
-        public
-        view
-        returns (Marketplace.Offer memory winningBid)
-    {
-        (
-            uint256 listingId,
-            address offeror,
-            uint256 quantityWanted,
-            address currency,
-            uint256 pricePerToken,
-
-        ) = MARKET_PLACE.winningBid(_listingId);
-        winningBid.listingId = listingId;
-        winningBid.offeror = offeror;
-        winningBid.quantityWanted = quantityWanted;
-        winningBid.currency = currency;
-        winningBid.pricePerToken = pricePerToken;
-    }
-
-    function test_createListingFor_autction_and_listing() public {
+    function test_createListingFor_auction_and_listing() public {
         vm.warp(0);
         (
             uint256 createdListingId,
@@ -140,5 +121,42 @@ contract MarketplaceTest is BaseTest {
         );
     }
 
-    function test_offer_bidForAuctionNativeToken() public {}
+    function test_buyDirectListingNFT() public {
+        vm.deal(defaultAdmin, 100 ether);
+        (uint256 listingId, ) = createERC721Listing(
+            defaultAdmin,
+            NATIVE_TOKEN,
+            10 ether,
+            IMarketplace.ListingType.Direct
+        );
+
+        // increase block timestamp
+        vm.warp(100);
+
+        // buy the a listing with some value
+        MARKET_PLACE.buy{value: 10 ether}(
+            listingId,
+            getActor(0),
+            1,
+            NATIVE_TOKEN,
+            10 ether
+        );
+    }
+
+    function test_cancel_direct_listing_only_done_by_by_the_lister() public {
+        vm.deal(getActor(0), 100 ether);
+
+        (uint256 listingId, ) = createERC721Listing(
+            getActor(0),
+            NATIVE_TOKEN,
+            10 ether,
+            IMarketplace.ListingType.Direct
+        );
+
+        // increase block timestamp
+        vm.warp(100);
+        vm.startPrank(getActor(0));
+        MARKET_PLACE.cancelDirectListing(listingId);
+        vm.stopPrank();
+    }
 }

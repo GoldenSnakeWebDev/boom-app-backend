@@ -23,6 +23,7 @@ import "../openzeppelin/metatx/ERC2771ContextUpgradeable.sol";
 import {Currency} from "../libraries/Currency.sol";
 import "@boom/contracts/libraries/CurrencyTransferLib.sol";
 import "@boom/contracts/libraries/FeeType.sol";
+import "forge-std/console.sol";
 
 contract Marketplace is
     Initializable,
