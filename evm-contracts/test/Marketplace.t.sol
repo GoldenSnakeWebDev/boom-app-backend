@@ -158,7 +158,6 @@ contract MarketplaceTest is BoomFactoryTest {
             IMarketplace.ListingType.Direct
         );
 
-        // increase block timestamp
         vm.warp(100);
         vm.startPrank(getActor(0));
         marketplace.cancelDirectListing(listingId);

@@ -8,37 +8,29 @@ import "@boom/contracts/tokens/TokenERC20.sol";
 import {BoomFactory} from "@boom/contracts/BoomFactory.sol";
 
 contract BoomFactoryTest is Test {
-    // constants
     string public constant NAME = "BOOM TOKEN";
     string public constant SYMBOL = "BTN";
     string public constant CONTRACT_URI = "URL";
-
     string public constant uri =
         "ipfs://QmWtWLf7Z9K5V7ZNC7vpkpXVezWXvhFnCfTVNYpdKjDxo";
-
     uint128 public royaltyBps = 500; // 5%
     uint128 public platformFeeBps = 500; // 5%
     uint256 public constant MAX_BPS = 10_000; // 100%
-
-    /// Contracts
     Forwarder public forwarder;
     BoomFactory public factory;
     address public NATIVE_TOKEN = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
-
-    /// Participants
     address public defaultAdmin = address(0x10000);
     address public deployer = address(0x40000);
     address public saleRecipient = address(0x30000);
     address public royaltyRecipient = address(0x30001);
     address public platformFeeRecipient = address(0x30002);
-    ///
     uint256 public privateKey = 1234;
     address public signer;
 
     function setUp() public virtual {
         forwarder = _deployForwarder();
         factory = _deployBoomFactory();
-        // deploy other things
+
         factory.deployBoom721Token(NAME, SYMBOL);
         factory.deployBoomERC20Token(NAME, SYMBOL);
         factory.deployMarketplace();
