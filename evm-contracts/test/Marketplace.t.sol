@@ -1,16 +1,21 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.12;
 import "forge-std/console.sol";
-import "./utils/BaseTest.sol";
+import "./utils/BoomFactory.t.sol";
+import "@boom/contracts/tokens/BoomERC721.sol";
 import {Marketplace, IMarketplace} from "@boom/contracts/marketplace/Marketplace.sol";
 import {ITokenERC721} from "@boom/contracts/interfaces/ITokenERC721.sol";
 
-contract MarketplaceTest is BaseTest {
+contract MarketplaceTest is BoomFactoryTest {
+    Marketplace private marketplace;
+    BoomERC721 public boomERC721;
     Marketplace.ListingParameters public directListing;
     Marketplace.ListingParameters public auctionListing;
 
     function setUp() public override {
         super.setUp();
+        boomERC721 = factory.boomER721Token();
+        marketplace = factory.marketplace();
     }
 
     // helper methods
@@ -28,7 +33,7 @@ contract MarketplaceTest is BaseTest {
     {
         uint256 tokenId = boomERC721.mintTo(to, "https://");
         vm.prank(to);
-        boomERC721.setApprovalForAll(address(MARKET_PLACE), true);
+        boomERC721.setApprovalForAll(address(marketplace), true);
 
         listing.assetContract = address(boomERC721);
         listing.tokenId = tokenId;
@@ -40,9 +45,9 @@ contract MarketplaceTest is BaseTest {
         listing.buyoutPricePerToken = price;
         listing.listingType = listingType;
 
-        listingId = MARKET_PLACE.totalListings();
+        listingId = marketplace.totalListings();
         vm.prank(to);
-        MARKET_PLACE.createListing(listing);
+        marketplace.createListing(listing);
         vm.stopPrank();
     }
 
@@ -64,7 +69,7 @@ contract MarketplaceTest is BaseTest {
             uint256 buyoutPricePerToken,
             IMarketplace.TokenType tokenType,
             IMarketplace.ListingType listingType
-        ) = MARKET_PLACE.listings(_listingId);
+        ) = marketplace.listings(_listingId);
 
         listing.listingId = listingId;
         listing.tokenOwner = tokenOwner;
@@ -134,7 +139,7 @@ contract MarketplaceTest is BaseTest {
         vm.warp(100);
 
         // buy the a listing with some value
-        MARKET_PLACE.buy{value: 10 ether}(
+        marketplace.buy{value: 10 ether}(
             listingId,
             getActor(0),
             1,
@@ -156,7 +161,7 @@ contract MarketplaceTest is BaseTest {
         // increase block timestamp
         vm.warp(100);
         vm.startPrank(getActor(0));
-        MARKET_PLACE.cancelDirectListing(listingId);
+        marketplace.cancelDirectListing(listingId);
         vm.stopPrank();
     }
 }
