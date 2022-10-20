@@ -13,6 +13,9 @@ export enum BoomState {
 
 export interface IBoom {
   boom_type: BoomType;
+  quantity?: number;
+  fixed_price?: number;
+  title: number;
   description?: string;
   is_minted?: boolean;
   image_url?: string;

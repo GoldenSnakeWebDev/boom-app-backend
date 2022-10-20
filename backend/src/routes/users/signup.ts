@@ -20,6 +20,8 @@ const router = Router();
  *     parameters:
  *        - name: email
  *          description: Email Address
+ *        - name: username
+ *          description: Username
  *        - name: password
  *          description: Password
  *     responses:
@@ -29,7 +31,8 @@ const router = Router();
 router.post(
   "/api/v1/users/signup",
   [
-    body("email").notEmpty().withMessage("Please provide email address"),
+    body("email").isEmail().withMessage("Please provide email address"),
+    body("username").notEmpty().withMessage("Please provide your username"),
     body("password")
       .trim()
       .isLength({ min: 4, max: 20 })

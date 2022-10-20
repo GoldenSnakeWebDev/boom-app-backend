@@ -28,6 +28,12 @@ const router = Router();
  *          description: Boom Description
  *        - name: image_url
  *          description: Boom Image URL
+ *        - name: title
+ *          description: Boom Title
+ *        - name: quantity
+ *          description: Quantity
+ *        - name: fixed_price
+ *          description: Boom Fixed Price
  *     responses:
  *       200:
  *         description: . Successfully created a boom
@@ -41,11 +47,26 @@ router.post(
         "please provide the network on which you want eventually mint the boom"
       ),
     body("image_url").notEmpty().withMessage("Please provide your boom image"),
+    body("title").notEmpty().withMessage("Please provide your boom title"),
+    body("quantity")
+      .notEmpty()
+      .withMessage("Please provide your boom quantity"),
+    body("fixed_price")
+      .notEmpty()
+      .withMessage("Please provide your boom fixed price"),
   ],
   validateRequest,
   requireAuth,
   async (req: Request, res: Response) => {
-    const { boom_type, description, network, image_url } = req.body;
+    const {
+      boom_type,
+      description,
+      network,
+      image_url,
+      quantity,
+      fixed_price,
+      title,
+    } = req.body;
 
     // perform checks
     if (!Object.values(BoomType).includes(boom_type)) {
@@ -64,6 +85,9 @@ router.post(
       network,
       image_url,
       user: req.currentUser?.id!,
+      quantity,
+      fixed_price,
+      title,
     });
 
     await boom.save();
@@ -96,6 +120,12 @@ router.post(
  *          description: Boom Description
  *        - name: image_url
  *          description: Boom Image URL
+ *        - name: title
+ *          description: Boom Title
+ *        - name: quantity
+ *          description: Quantity
+ *        - name: fixed_price
+ *          description: Boom Fixed Price
  *     responses:
  *       200:
  *         description: . Successfully created a boom
@@ -109,9 +139,24 @@ router.patch(
         "please provide the network on which you want eventually mint the boom"
       ),
     body("image_url").notEmpty().withMessage("Please provide your boom image"),
+    body("title").notEmpty().withMessage("Please provide your boom title"),
+    body("quantity")
+      .notEmpty()
+      .withMessage("Please provide your boom quantity"),
+    body("fixed_price")
+      .notEmpty()
+      .withMessage("Please provide your boom fixed price"),
   ],
   async (req: Request, res: Response) => {
-    const { boom_type, description, network, image_url } = req.body;
+    const {
+      boom_type,
+      description,
+      network,
+      image_url,
+      quantity,
+      fixed_price,
+      title,
+    } = req.body;
 
     // perform checks
     if (!Object.values(BoomType).includes(boom_type)) {
@@ -137,6 +182,9 @@ router.patch(
       description,
       network,
       image_url,
+      quantity,
+      fixed_price,
+      title,
     });
 
     res.status(200).json({
