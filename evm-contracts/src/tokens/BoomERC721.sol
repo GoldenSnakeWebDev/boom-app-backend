@@ -175,7 +175,6 @@ contract BoomERC721 is
         return uri[_tokenId];
     }
 
-    // TODO:  Enable  onlyRole(MINTER_ROLE)
     /// @dev Lets an account with MINTER_ROLE mint an NFT.
     function mintTo(address _to, string calldata _uri)
         external
