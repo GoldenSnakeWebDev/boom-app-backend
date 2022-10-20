@@ -1,0 +1,27 @@
+{
+    "components": {
+        "examples": {},
+        "headers": {},
+        "parameters": {},
+        "requestBodies": {},
+        "responses": {},
+        "schemas": {},
+        "securitySchemes": {}
+    },
+    "info": {
+        "title": "Web3 Boom Social Platform",
+        "version": "1.0.0",
+        "description": "The Web3 Social Media Platform",
+        "license": {
+            "name": "ISC"
+        },
+        "contact": {
+            "name": "Omambia Mogaka Dauglous"
+        }
+    },
+    "openapi": "3.0.0",
+    "paths": {},
+    "servers": [{
+        "url": "/"
+    }]
+}
