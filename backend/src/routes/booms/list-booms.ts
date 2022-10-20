@@ -5,12 +5,42 @@ import { requireAuth } from "../../middlewares/require-auth";
 
 const router = Router();
 
+/**
+ * @openapi
+ * /api/v1/users/booms-types:
+ *   get:
+ *     tags:
+ *        - Booms
+ *     description: List of all boom types  available to for the boom platform.
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     responses:
+ *       200:
+ *         description: . Returns a  list of boom types.
+ */
 router.get("/api/v1/booms-types", async (_req: Request, res: Response) => {
   res
     .status(200)
     .json({ status: "success", boom_types: Object.values(BoomType) });
 });
 
+/**
+ * @openapi
+ * /api/v1/users/booms:
+ *   get:
+ *     tags:
+ *        - Booms
+ *     description: List of all platform booms.
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     responses:
+ *       200:
+ *         description: . Returns a  list of booms.
+ */
 router.get("/api/v1/booms", async (req: Request, res: Response) => {
   const response = new ApiResponse(Boom.find(), req.query)
     .filter()
@@ -29,6 +59,21 @@ router.get("/api/v1/booms", async (req: Request, res: Response) => {
   });
 });
 
+/**
+ * @openapi
+ * /api/v1/users/booms/mine:
+ *   get:
+ *     tags:
+ *        - Booms
+ *     description: List of all  user  platform booms.
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     responses:
+ *       200:
+ *         description: . Returns a  list of booms.
+ */
 router.get(
   "/api/v1/booms/mine",
   requireAuth,
@@ -53,6 +98,22 @@ router.get(
     });
   }
 );
+
+/**
+ * @openapi
+ * /api/v1/users/booms/:id:
+ *   get:
+ *     tags:
+ *        - Booms
+ *     description: Get details of a single boom.
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     responses:
+ *       200:
+ *         description: . Returns an object of a single boom.
+ */
 router.get("/api/v1/booms/:id", async (req: Request, res: Response) => {
   const boom = await Boom.findById(req.params.id);
   res.status(200).json({ status: "success", boom });

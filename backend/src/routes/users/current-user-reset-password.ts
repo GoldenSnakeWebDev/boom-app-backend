@@ -8,7 +8,28 @@ import { PasswordManager } from "../../utils/password-manager";
 import { BadRequestError } from "../../errors/bad-request-error";
 
 const router = Router();
-
+/**
+ * @openapi
+ * /api/v1/users/currentuser-update-password:
+ *   post:
+ *     tags:
+ *        - Auth
+ *     description: Enables currently logged in user to reset his/password.
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     parameters:
+ *        - name: current_password
+ *          description: Current User Password
+ *        - name: new_password
+ *          description: New Password
+ *        - name: confirm_password
+ *          description: Confirm your New Password
+ *     responses:
+ *       200:
+ *         description: . Successfully reset password for currently logged in user.
+ */
 router.post(
   "/api/v1/users/currentuser-update-password",
   [
@@ -53,12 +74,10 @@ router.post(
       { password: new_password },
       { new: true }
     );
-    res
-      .status(200)
-      .send({
-        status: "success",
-        message: "Successfully updated your password",
-      });
+    res.status(200).send({
+      status: "success",
+      message: "Successfully updated your password",
+    });
   }
 );
 

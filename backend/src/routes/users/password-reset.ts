@@ -6,6 +6,28 @@ import { BadRequestError } from "../../errors/bad-request-error";
 
 const router = Router();
 
+/**
+ * @openapi
+ * /api/v1/users/password-reset:
+ *   post:
+ *     tags:
+ *        - Auth
+ *     description: Enables user to reset thier password with received password reset code.
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     parameters:
+ *        - name: code
+ *          description: Password Reset Code
+ *        - name: password
+ *          description: Password
+ *        - name: confirm_password
+ *          description: Confirm Password
+ *     responses:
+ *       200:
+ *         description: . Successfully resets user password.
+ */
 router.post(
   "/api/v1/users/password-reset",
   [

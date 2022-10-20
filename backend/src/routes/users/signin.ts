@@ -9,6 +9,26 @@ import { config } from "./../../config";
 
 const router = Router();
 
+/**
+ * @openapi
+ * /api/v1/users/signin:
+ *   post:
+ *     tags:
+ *        - Auth
+ *     description: Enables user to be authenticated and authorized.
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     parameters:
+ *        - name: email
+ *          description: Email Address
+ *        - name: password
+ *          description: Password
+ *     responses:
+ *       200:
+ *         description: . Successfully logged in to your account.
+ */
 router.post(
   "/api/v1/users/signin",
   [

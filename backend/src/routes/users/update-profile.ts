@@ -7,6 +7,38 @@ import { validateRequest } from "../../middlewares/validate-request";
 
 const router = Router();
 
+/**
+ * @openapi
+ * /api/v1/users/update-profile:
+ *   patch:
+ *     tags:
+ *        - Auth
+ *     description: Enables new users to update  their account.
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     parameters:
+ *        - name: email
+ *          description: Email Address
+ *        - name: first_name
+ *          description: User first name
+ *        - name: last_name
+ *          description: User last name
+ *        - name: first_name
+ *          description: User first name
+ *        - name: username
+ *          description: User username
+ *        - name: photo
+ *          description: User photo
+ *        - name: bio
+ *          description: User biography
+ *        - name: location
+ *          description: User location
+ *     responses:
+ *       200:
+ *         description: . Successfully updated your account.
+ */
 router.post(
   "/api/v1/users/update-profile",
   [body("email").isEmail().withMessage("please provide your email address")],

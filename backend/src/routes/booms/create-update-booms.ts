@@ -8,6 +8,30 @@ import { requireAuth } from "../../middlewares/require-auth";
 
 const router = Router();
 
+/**
+ * @openapi
+ * /api/v1/booms:
+ *   post:
+ *     tags:
+ *        - Booms
+ *     description: Enables  users to create a boom.
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     parameters:
+ *        - name: network
+ *          description: Choose your network
+ *        - name: boom_type
+ *          description: Please provide your boom type
+ *        - name: description
+ *          description: Boom Description
+ *        - name: image_url
+ *          description: Boom Image URL
+ *     responses:
+ *       200:
+ *         description: . Successfully created a boom
+ */
 router.post(
   "/api/v1/booms",
   [
@@ -52,6 +76,30 @@ router.post(
   }
 );
 
+/**
+ * @openapi
+ * /api/v1/booms/:id:
+ *   patch:
+ *     tags:
+ *        - Booms
+ *     description: Enables  users to update a boom.
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     parameters:
+ *        - name: network
+ *          description: Choose your network
+ *        - name: boom_type
+ *          description: Please provide your boom type
+ *        - name: description
+ *          description: Boom Description
+ *        - name: image_url
+ *          description: Boom Image URL
+ *     responses:
+ *       200:
+ *         description: . Successfully created a boom
+ */
 router.patch(
   "/api/v1/booms:id",
   [

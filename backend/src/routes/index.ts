@@ -10,6 +10,9 @@ import {
   UserRequestPasswordResetRoutes,
 } from "./users";
 
+import { BoomCreateUpdateRoutes } from "./booms/create-update-booms";
+import { BoomListRoutes } from "./booms/list-booms";
+
 app.use([
   UserResetPasswordResetRoutes,
   UserRequestPasswordResetRoutes,
@@ -20,3 +23,5 @@ app.use([
   UserUpdateProfileRoute,
   CurrentUserResetPasswordRoute,
 ]);
+
+app.use([BoomListRoutes, BoomCreateUpdateRoutes]);

@@ -6,6 +6,26 @@ import { BadRequestError } from "../../errors/bad-request-error";
 
 const router = Router();
 
+/**
+ * @openapi
+ * /api/v1/users/signup:
+ *   post:
+ *     tags:
+ *        - Auth
+ *     description: Enables new users to create their account.
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     parameters:
+ *        - name: email
+ *          description: Email Address
+ *        - name: password
+ *          description: Password
+ *     responses:
+ *       200:
+ *         description: . Successfully created your account. Please login
+ */
 router.post(
   "/api/v1/users/signup",
   [

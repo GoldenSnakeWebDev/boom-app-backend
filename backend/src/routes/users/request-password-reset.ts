@@ -7,6 +7,24 @@ import { randomCode } from "../../utils/common";
 
 const router = Router();
 
+/**
+ * @openapi
+ * /api/v1/users/request-password-reset:
+ *   post:
+ *     tags:
+ *        - Auth
+ *     description: Enables user to be authenticated and authorized.
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     parameters:
+ *        - name: email
+ *          description: Email Address
+ *     responses:
+ *       200:
+ *         description: . Successfully logged in to your account.
+ */
 router.post(
   "/api/v1/users/request-password-reset",
   [body("email").isEmail().withMessage("Please provide email address")],
