@@ -1,4 +1,3 @@
-import { response } from "express";
 import Mpesa from "mpesa-node";
 
 // interfaces
@@ -156,6 +155,8 @@ export class MpesaWrapper {
       default:
         break;
     }
+
+    console.log(message);
 
     if (!status.includes("successful")) {
       /**
