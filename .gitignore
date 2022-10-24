@@ -5,6 +5,8 @@ out/
 /out
 node_modules/
 /node_modules
+dist/
+/dist
 
 # Ignores development broadcast logs
 !/broadcast
