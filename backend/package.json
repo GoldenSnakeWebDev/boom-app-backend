@@ -5,6 +5,7 @@
   "main": "dist/src/index.js",
   "scripts": {
     "dev": "ts-node-dev src/index.ts",
+    "start": "node dist/index.js",
     "test": "ts-node-dev src/abis/test-common.ts",
     "compile": "tsc"
   },
