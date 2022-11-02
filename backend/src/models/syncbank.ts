@@ -19,7 +19,6 @@ const syncBankSchema = new Schema<ISyncBank>(
   {
     syncID: {
       type: Schema.Types.String,
-      default: `BM/${Date.now}`,
       unique: true,
     },
     amount_in: { type: Schema.Types.Number, default: 0.0 },

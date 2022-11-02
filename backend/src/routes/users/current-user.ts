@@ -25,7 +25,7 @@ router.get(
   requireAuth,
   async (req: Request, res: Response) => {
     console.log(req.currentUser);
-    const user = await User.findById(req.currentUser?.id).populate("SyncBank");
+    const user = await User.findById(req.currentUser?.id).populate("sync_bank");
 
     if (!user) {
       throw new NotAuthorizedError();
