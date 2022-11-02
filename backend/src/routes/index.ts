@@ -15,6 +15,7 @@ import { BoomListRoutes } from "./booms/list-booms";
 import { SyncBankCurrentUserRoute } from "./sync-bank/current-user";
 import { SyncBankCurrentUserDepositRoute } from "./sync-bank/deposit-withdraw";
 import { ListTransactionsRoutes } from "./transactions/list";
+import { HelperRoutes } from "./helper";
 
 app.use([
   UserResetPasswordResetRoutes,
@@ -31,3 +32,4 @@ app.use([BoomListRoutes, BoomCreateUpdateRoutes]);
 app.use([SyncBankCurrentUserRoute]);
 app.use([SyncBankCurrentUserDepositRoute]);
 app.use([ListTransactionsRoutes]);
+app.use([HelperRoutes]);

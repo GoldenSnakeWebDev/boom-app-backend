@@ -17,6 +17,9 @@ export const createSyncBankForNewUser = async (opts: {
       wallet_type: opts.wallet_type,
       user: opts.user,
       syncID: `BM/${Date.now()}`,
+      amount_in: 1000,
+      amount_balance: 1000,
+      amount_out: 0,
     });
 
     return { wallet };

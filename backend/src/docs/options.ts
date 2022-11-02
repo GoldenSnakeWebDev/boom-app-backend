@@ -27,5 +27,5 @@ export const swaggerOptions: SwaggerJSDoc.Options = {
     produces: ["application/json"],
   },
   failOnErrors: true,
-  apis: [`${__dirname}/../routes/**/*.ts`],
+  apis: [`${__dirname}/../routes/**/*.ts`, `${__dirname}/../routes/*.ts`],
 };
