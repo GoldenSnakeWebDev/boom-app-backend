@@ -1,9 +1,9 @@
 import { Schema, model, Types } from "mongoose";
 
 export enum BoomType {
-  TALE = "tale",
-  EPIC = "epic",
-  NORMAL = "normal",
+  TALE = "text",
+  EPIC = "video",
+  NORMAL = "image",
 }
 
 export enum BoomState {
@@ -15,12 +15,14 @@ export interface IBoom {
   boom_type: BoomType;
   quantity?: number;
   fixed_price?: number;
-  title: number;
+  title: string;
   description?: string;
   is_minted?: boolean;
   image_url?: string;
   network: Types.ObjectId;
   user: Types.ObjectId;
+  price?: string;
+  tags?: Array<string>;
   boom_state?: BoomState;
   created_at?: Date;
   is_active?: boolean;
@@ -36,6 +38,7 @@ const boomSchema = new Schema<IBoom>(
         message: `Boom types can only be ${Object.values(BoomType).join(",")}`,
       },
     },
+    title: { type: Schema.Types.String, default: "" },
     boom_state: { type: Schema.Types.String, default: BoomState.SYNTHETIC },
     is_minted: { type: Schema.Types.Boolean, default: false },
     description: {
@@ -48,6 +51,9 @@ const boomSchema = new Schema<IBoom>(
       type: Schema.Types.String,
       default: "",
     },
+    price: { type: Schema.Types.String, defult: "" },
+    fixed_price: { type: Schema.Types.String, defult: "" },
+    tags: { type: Schema.Types.Array, defult: [] },
     created_at: { type: Schema.Types.Date, default: Date.now },
     is_active: { type: Schema.Types.Boolean, default: true },
   },

@@ -34,6 +34,8 @@ const router = Router();
  *          description: Quantity
  *        - name: fixed_price
  *          description: Boom Fixed Price
+ *        - name: price
+ *          description: Boom Price
  *     responses:
  *       200:
  *         description: . Successfully created a boom
@@ -58,7 +60,7 @@ router.post(
   validateRequest,
   requireAuth,
   async (req: Request, res: Response) => {
-    const {
+    let {
       boom_type,
       description,
       network,
@@ -66,6 +68,8 @@ router.post(
       quantity,
       fixed_price,
       title,
+      price,
+      tags,
     } = req.body;
 
     // perform checks
@@ -79,6 +83,10 @@ router.post(
       throw new BadRequestError("Network not found or is not active");
     }
 
+    if (tags) {
+      tags = tags.split(/[_/:\-;\\]+/);
+    }
+
     const boom = new Boom({
       description,
       boom_type,
@@ -88,6 +96,7 @@ router.post(
       quantity,
       fixed_price,
       title,
+      price,
     });
 
     await boom.save();
@@ -126,6 +135,8 @@ router.post(
  *          description: Quantity
  *        - name: fixed_price
  *          description: Boom Fixed Price
+ *        - name: price
+ *          description: Boom Price
  *     responses:
  *       200:
  *         description: . Successfully created a boom
@@ -148,7 +159,7 @@ router.patch(
       .withMessage("Please provide your boom fixed price"),
   ],
   async (req: Request, res: Response) => {
-    const {
+    let {
       boom_type,
       description,
       network,
@@ -156,6 +167,8 @@ router.patch(
       quantity,
       fixed_price,
       title,
+      price,
+      tags,
     } = req.body;
 
     // perform checks
@@ -178,6 +191,10 @@ router.patch(
       throw new BadRequestError("You are  not allowed to edit a minted NFT");
     }
 
+    if (tags) {
+      tags = tags.split(/[_/:\-;\\]+/);
+    }
+
     const boom = await Boom.findByIdAndUpdate(req.params.id, {
       description,
       network,
@@ -185,6 +202,8 @@ router.patch(
       quantity,
       fixed_price,
       title,
+      tags,
+      price,
     });
 
     res.status(200).json({

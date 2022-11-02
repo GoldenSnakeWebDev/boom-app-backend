@@ -1,4 +1,6 @@
 import express, { json } from "express";
+import http from "http";
+import { Server } from "socket.io";
 import cors from "cors";
 import path from "path";
 import morgan from "morgan";
@@ -11,6 +13,12 @@ import { NotFoundError } from "./errors";
 import { errorHandler } from "./middlewares";
 
 const app = express();
+
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: { origin: "*", methods: ["GET", "POST"] },
+});
 
 // MIDDLEWARE
 app.set("trust proxy", false);
@@ -53,4 +61,4 @@ app.all("*", async (_req, _res) => {
 // ERROR HANDLING
 app.use(errorHandler);
 
-export { app };
+export { app, io, server };

@@ -3,6 +3,8 @@ import { body } from "express-validator";
 import { validateRequest } from "../../middlewares/validate-request";
 import { User } from "./../../models/user";
 import { BadRequestError } from "../../errors/bad-request-error";
+import { createSyncBankForNewUser } from "../../utils/sync-bank";
+import { SyncBankType } from "./../../models";
 
 const router = Router();
 
@@ -40,7 +42,7 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { email, password } = req.body;
+    const { email, password, username } = req.body;
 
     const user = await User.findOne({ email: email });
 
@@ -56,7 +58,16 @@ router.post(
 
     // create user with password
 
-    const newUser = new User({ email, password, is_active: true });
+    const newUser = new User({ email, password, username, is_active: true });
+
+    const syncBank = await createSyncBankForNewUser({
+      user: newUser.id,
+      wallet_type: SyncBankType.USER,
+    });
+
+    if (syncBank.wallet) {
+      newUser.sync_bank = syncBank.wallet.id;
+    }
 
     await newUser.save();
 

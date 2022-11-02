@@ -8,6 +8,7 @@ interface IUser {
   booms?: Array<Schema.Types.ObjectId>;
   followers?: Array<Schema.Types.ObjectId>;
   following?: Array<Schema.Types.ObjectId>;
+  sync_bank?: Schema.Types.ObjectId;
   photo?: string;
   email: string;
   location?: string;
@@ -22,6 +23,12 @@ interface IUser {
   password: string;
   user_type?: string;
   is_active?: string;
+  social_media?: {
+    twitter?: string;
+    instagram?: string;
+    tiktok?: string;
+    facebook?: string;
+  };
 }
 
 const userSchema = new Schema<IUser>(
@@ -33,6 +40,7 @@ const userSchema = new Schema<IUser>(
     email: { type: String, default: "" },
     bio: { type: String, default: "" },
     location: { type: String, default: "" },
+    sync_bank: { type: Schema.Types.ObjectId, ref: "SyncBank" },
     user_type: {
       type: String,
       enum: {
@@ -48,6 +56,12 @@ const userSchema = new Schema<IUser>(
     following: [{ type: Schema.Types.ObjectId, ref: "User" }],
     password_reset: {
       is_changed: { type: Schema.Types.Boolean, default: false },
+    },
+    social_media: {
+      twitter: { type: Schema.Types.String, default: "" },
+      instagram: { type: Schema.Types.String, default: "" },
+      tiktok: { type: Schema.Types.String, default: "" },
+      facebook: { type: Schema.Types.String, default: "" },
     },
     is_admin: { type: Schema.Types.Boolean, default: false },
     password_reset_token: { type: String, default: "" },

@@ -39,7 +39,7 @@ router.post(
   async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).populate("SyncBank");
 
     if (!user) {
       throw new BadRequestError(`Wrong credentials. Please try again`);

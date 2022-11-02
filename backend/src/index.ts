@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { app } from "./app";
+import { server } from "./app";
 import { config } from "./config";
 
 const start = async () => {
@@ -12,7 +12,7 @@ const start = async () => {
     .then(() => console.log("Successfully connected to db"));
 
   const PORT = config.PORT || 4000;
-  app.listen(PORT, () =>
+  server.listen(PORT, () =>
     console.log(`App is running on http://localhost:${PORT}`)
   );
 };
