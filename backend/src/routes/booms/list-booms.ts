@@ -7,7 +7,7 @@ const router = Router();
 
 /**
  * @openapi
- * /api/v1/users/booms-types:
+ * /api/v1/booms-types:
  *   get:
  *     tags:
  *        - Booms
@@ -28,7 +28,7 @@ router.get("/api/v1/booms-types", async (_req: Request, res: Response) => {
 
 /**
  * @openapi
- * /api/v1/users/booms:
+ * /api/v1/booms:
  *   get:
  *     tags:
  *        - Booms
@@ -61,7 +61,7 @@ router.get("/api/v1/booms", async (req: Request, res: Response) => {
 
 /**
  * @openapi
- * /api/v1/users/booms/mine:
+ * /api/v1/booms/mine:
  *   get:
  *     tags:
  *        - Booms
@@ -101,7 +101,7 @@ router.get(
 
 /**
  * @openapi
- * /api/v1/users/booms/:id:
+ * /api/v1/booms/:id:
  *   get:
  *     tags:
  *        - Booms
