@@ -32,14 +32,18 @@ const router = Router();
 router.post(
   "/api/v1/users/signin",
   [
-    body("email").isEmail().withMessage("please provide email address"),
+    body("email")
+      .notEmpty()
+      .withMessage("please provide email address  or username"),
     body("password").notEmpty().withMessage("please provide your password"),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email }).populate("sync_bank");
+    const user = await User.findOne({
+      $or: [{ email: email }, { username: email }],
+    }).populate("sync_bank");
 
     if (!user) {
       throw new BadRequestError(`Wrong credentials. Please try again`);
