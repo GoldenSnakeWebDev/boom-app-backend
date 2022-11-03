@@ -97,6 +97,7 @@ router.post(
       fixed_price,
       title,
       price,
+      tags,
     });
 
     await boom.save();

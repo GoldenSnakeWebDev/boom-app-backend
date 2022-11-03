@@ -47,14 +47,14 @@ router.get("/api/v1/booms", async (req: Request, res: Response) => {
     .sort()
     .limitFields();
 
-  const count = await response.query;
+  // const count = await response.query;
 
-  const booms = await response.paginate().query();
+  const booms = await response.paginate().query;
 
   res.status(200).json({
     status: "success",
     page: response?.page_info,
-    count: count.length,
+    // count: count.length,
     booms,
   });
 });
@@ -86,14 +86,14 @@ router.get(
       .sort()
       .limitFields();
 
-    const count = await response.query;
+    // const count = await response.query;
 
-    const booms = await response.paginate().query();
+    const booms = await response.paginate().query;
 
     res.status(200).json({
       status: "success",
       page: response?.page_info,
-      count: count.length,
+      // count: count.length,
       booms,
     });
   }

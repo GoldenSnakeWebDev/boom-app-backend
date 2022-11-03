@@ -2,6 +2,7 @@ import SwaggerJSDoc from "swagger-jsdoc";
 
 export const swaggerOptions: SwaggerJSDoc.Options = {
   swaggerDefinition: {
+    security: [{ bearerAuth: [] }],
     openapi: "3.0.0",
     info: {
       title: "Boom Social Media",
