@@ -1,8 +1,8 @@
 import { Schema, model, Types } from "mongoose";
 
 export enum BoomType {
-  TALE = "text",
-  EPIC = "video",
+  TEXT = "text",
+  VIDEO = "video",
   NORMAL = "image",
 }
 
