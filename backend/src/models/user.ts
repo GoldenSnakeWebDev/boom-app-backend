@@ -10,6 +10,7 @@ interface IUser {
   following?: Array<Schema.Types.ObjectId>;
   sync_bank?: Schema.Types.ObjectId;
   photo?: string;
+  cover?: string;
   email: string;
   location?: string;
   password_reset?: {
@@ -37,6 +38,7 @@ const userSchema = new Schema<IUser>(
     last_name: { type: String, default: "" },
     username: { type: String, default: "" },
     photo: { type: String, default: "" },
+    cover: { type: String, default: "" },
     email: { type: String, default: "" },
     bio: { type: String, default: "" },
     location: { type: String, default: "" },

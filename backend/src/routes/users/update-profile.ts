@@ -45,8 +45,16 @@ router.post(
   validateRequest,
   requireAuth,
   async (req: Request, res: Response) => {
-    const { email, username, first_name, last_name, bio, photo, location } =
-      req.body;
+    const {
+      email,
+      username,
+      first_name,
+      last_name,
+      bio,
+      photo,
+      location,
+      cover,
+    } = req.body;
     const user = await User.findById(req.currentUser?.id!);
 
     if (!user) {
@@ -64,6 +72,7 @@ router.post(
         last_name,
         bio,
         photo,
+        cover,
         location,
       },
       { new: true }
