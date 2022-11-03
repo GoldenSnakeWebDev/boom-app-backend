@@ -7,7 +7,7 @@
     "dev": "ts-node-dev src/index.ts",
     "start": "node dist/index.js",
     "test": "ts-node-dev src/abis/test-common.ts",
-    "compile": "tsc"
+    "compile": "tsc && cpx \"./src/public/*\" ./dist/public  --clean"
   },
   "keywords": [],
   "author": "Omambia M. Dauglous => (Ngeni IO Limited)",
@@ -33,6 +33,7 @@
     "@types/mpesa-node": "^0.1.1",
     "cookie-session": "^2.0.0",
     "cors": "^2.8.5",
+    "cpx": "^1.5.0",
     "dotenv": "^16.0.3",
     "ethers": "^5.7.1",
     "express": "^4.18.1",

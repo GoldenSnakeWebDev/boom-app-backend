@@ -21,6 +21,7 @@ const networkSchema = new Schema<INetwork>(
       type: Schema.Types.String,
       default: "",
     },
+    is_active: { type: Schema.Types.Boolean, default: true },
   },
   {
     toJSON: {
