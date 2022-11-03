@@ -9,6 +9,7 @@ export enum BoomType {
 export enum BoomState {
   REAL_NFT = "realnft",
   SYNTHETIC = "synthetic",
+  UPLOAD = "upload",
 }
 
 export interface IBoom {
@@ -39,7 +40,7 @@ const boomSchema = new Schema<IBoom>(
       },
     },
     title: { type: Schema.Types.String, default: "" },
-    boom_state: { type: Schema.Types.String, default: BoomState.SYNTHETIC },
+    boom_state: { type: Schema.Types.String, default: BoomState.UPLOAD },
     is_minted: { type: Schema.Types.Boolean, default: false },
     description: {
       type: Schema.Types.String,

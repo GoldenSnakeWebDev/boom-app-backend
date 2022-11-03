@@ -7,6 +7,7 @@ import {
   ITransactionPaymentStatus,
 } from "./../models/transaction";
 import moment from "moment";
+import { config } from "../config";
 
 export const createSyncBankForNewUser = async (opts: {
   user: string;
@@ -17,8 +18,8 @@ export const createSyncBankForNewUser = async (opts: {
       wallet_type: opts.wallet_type,
       user: opts.user,
       syncID: `BM/${Date.now()}`,
-      amount_in: 1000,
-      amount_balance: 1000,
+      amount_in: config.ENVIRONMENT === "development" ? 1000 : 0.0,
+      amount_balance: config.ENVIRONMENT === "development" ? 1000 : 0.0,
       amount_out: 0,
     });
 

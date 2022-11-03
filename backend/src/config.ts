@@ -7,4 +7,5 @@ export const config = {
   PRIVATE_KEY: process.env.PRIVATE_KEY!,
   RPC_URL: process.env.RPC_URL!,
   PORT: process.env.PORT!,
+  ENVIRONMENT: "development",
 };
