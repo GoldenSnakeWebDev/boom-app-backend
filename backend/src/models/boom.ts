@@ -21,8 +21,12 @@ export interface IBoom {
   is_minted?: boolean;
   image_url?: string;
   network: Types.ObjectId;
+  comments?: Array<Types.ObjectId>;
   user: Types.ObjectId;
   price?: string;
+  reactions?: {
+    like: { url: string; value: number };
+  };
   tags?: Array<string>;
   boom_state?: BoomState;
   created_at?: Date;
@@ -47,6 +51,7 @@ const boomSchema = new Schema<IBoom>(
       default: "",
     },
     network: { type: Schema.Types.ObjectId, ref: "Network" },
+    comments: Array<{ type: Schema.Types.ObjectId; ref: "Comment" }>,
     user: { type: Schema.Types.ObjectId, ref: "User" },
     image_url: {
       type: Schema.Types.String,
