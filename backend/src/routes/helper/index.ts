@@ -77,12 +77,12 @@ const docStorage = multer.diskStorage({
   },
   filename: function (_req, file, cb) {
     const ext = file.mimetype.split("/")[1].toLowerCase();
-    const requireExt = ["png", "jpg", "pdf", "jpeg"];
-    if (!requireExt.includes(ext)) {
-      throw new BadRequestError(
-        "You can only upload documents with the following extension. .pdf, .png, .jpeg, and jpg"
-      );
-    }
+    // const requireExt = ["png", "jpg", "pdf", "jpeg", "mp4", "mov", "jif", "mpg", "webm","ogg","m4p",];
+    // if (!requireExt.includes(ext)) {
+    //   throw new BadRequestError(
+    //     "You can only upload documents with the following extension. .pdf, .png, .jpeg, and jpg"
+    //   );
+    // }
     const name = `${FOLDER_NAME}-${fileName}-${Date.now()}.${ext}`;
     cb(null, name);
   },
