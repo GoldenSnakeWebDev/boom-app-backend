@@ -42,7 +42,10 @@ router.get("/api/v1/booms-types", async (_req: Request, res: Response) => {
  *         description: . Returns a  list of booms.
  */
 router.get("/api/v1/booms", async (req: Request, res: Response) => {
-  const response = new ApiResponse(Boom.find(), req.query)
+  const response = new ApiResponse(
+    Boom.find().populate({ path: "comments", options: { _recursed: true } }),
+    req.query
+  )
     .filter()
     .sort()
     .limitFields();
@@ -79,7 +82,7 @@ router.get(
   requireAuth,
   async (req: Request, res: Response) => {
     const response = new ApiResponse(
-      Boom.find({ user: req.currentUser?.id }),
+      Boom.find({ user: req.currentUser?.id }).populate("comments"),
       req.query
     )
       .filter()
@@ -115,7 +118,7 @@ router.get(
  *         description: . Returns an object of a single boom.
  */
 router.get("/api/v1/booms/:id", async (req: Request, res: Response) => {
-  const boom = await Boom.findById(req.params.id);
+  const boom = await Boom.findById(req.params.id).populate("comments");
   res.status(200).json({ status: "success", boom });
 });
 

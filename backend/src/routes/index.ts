@@ -17,6 +17,7 @@ import { SyncBankCurrentUserDepositRoute } from "./sync-bank/deposit-withdraw";
 import { ListTransactionsRoutes } from "./transactions/list";
 import { HelperRoutes } from "./helper";
 import { NetworksListRoutes } from "./networks";
+import { CommentRoutes } from "./booms/comment";
 
 app.use([
   UserResetPasswordResetRoutes,
@@ -35,3 +36,4 @@ app.use([SyncBankCurrentUserDepositRoute]);
 app.use([ListTransactionsRoutes]);
 app.use([HelperRoutes]);
 app.use([NetworksListRoutes]);
+app.use([CommentRoutes]);

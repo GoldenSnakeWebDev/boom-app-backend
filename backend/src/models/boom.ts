@@ -25,7 +25,11 @@ export interface IBoom {
   user: Types.ObjectId;
   price?: string;
   reactions?: {
-    like: { url: string; value: number };
+    likes: Array<Types.ObjectId>;
+    loves: Array<Types.ObjectId>;
+    smiles: Array<Types.ObjectId>;
+    rebooms: Array<Types.ObjectId>;
+    reports: Array<Types.ObjectId>;
   };
   tags?: Array<string>;
   boom_state?: BoomState;
@@ -56,6 +60,13 @@ const boomSchema = new Schema<IBoom>(
     image_url: {
       type: Schema.Types.String,
       default: "",
+    },
+    reactions: {
+      likes: Array<{ type: Schema.Types.ObjectId; ref: "User" }>,
+      loves: Array<{ type: Schema.Types.ObjectId; ref: "User" }>,
+      smiles: Array<{ type: Schema.Types.ObjectId; ref: "User" }>,
+      rebooms: Array<{ type: Schema.Types.ObjectId; ref: "User" }>,
+      reports: Array<{ type: Schema.Types.ObjectId; ref: "User" }>,
     },
     price: { type: Schema.Types.String, default: "" },
     fixed_price: { type: Schema.Types.String, default: "" },

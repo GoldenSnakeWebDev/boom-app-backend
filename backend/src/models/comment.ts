@@ -11,6 +11,7 @@ export interface IComment {
 const commentSchema = new Schema<IComment>(
   {
     user: { type: Schema.Types.ObjectId, ref: "User" },
+    boom: { type: Schema.Types.ObjectId, ref: "Boom" },
     message: {
       type: Schema.Types.String,
       default: "",
