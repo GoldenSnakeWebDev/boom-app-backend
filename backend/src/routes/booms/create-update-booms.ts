@@ -215,4 +215,107 @@ router.patch(
   }
 );
 
+/**
+ * @openapi
+ * /api/v1/react-to-booms/:id:
+ *   patch:
+ *     tags:
+ *        - Booms
+ *     description: Enables  users to react to boom.
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     parameters:
+ *        - name: react_type
+ *          description: Please provide your reaction type
+ *     responses:
+ *       200:
+ *         description: . Successfully reacted to the boom
+ */
+router.patch(
+  "/api/v1/react-to-booms/:id",
+  [
+    body("react_type")
+      .notEmpty()
+      .withMessage("please provide the reaction type"),
+  ],
+  requireAuth,
+  async (req: Request, res: Response) => {
+    let { react_type } = req.body;
+    console.log("App", req.params.id);
+
+    const boomMinted: any = await Boom.findById(req.params.id);
+
+    if (!boomMinted) {
+      throw new BadRequestError("The provided boom does not exist");
+    }
+
+    if (react_type === "likes") {
+      if (!boomMinted?.reactions?.likes.includes(req.currentUser?.id!)) {
+        await Boom.findByIdAndUpdate(
+          req.params.id,
+          {
+            $push: { "reactions.likes": req.currentUser?.id! },
+          },
+          { new: true }
+        );
+      } else {
+      }
+    } else if (react_type === "loves") {
+      if (!boomMinted?.reactions?.loves.includes(req.currentUser?.id!)) {
+        await Boom.findByIdAndUpdate(
+          req.params.id,
+          {
+            $push: { "reactions.loves": req.currentUser?.id! },
+          },
+          { new: true }
+        );
+      } else {
+      }
+    } else if (react_type === "smiles") {
+      if (!boomMinted?.reactions?.smiles.includes(req.currentUser?.id!)) {
+        await Boom.findByIdAndUpdate(
+          req.params.id,
+          {
+            $push: { "reactions.smiles": req.currentUser?.id! },
+          },
+          { new: true }
+        );
+      } else {
+      }
+    } else if (react_type === "rebooms") {
+      if (!boomMinted?.reactions?.rebooms.includes(req.currentUser?.id!)) {
+        await Boom.findByIdAndUpdate(
+          req.params.id,
+          {
+            $push: { "reactions.rebooms": req.currentUser?.id! },
+          },
+          { new: true }
+        );
+      } else {
+      }
+    } else if (react_type === "reports") {
+      if (!boomMinted?.reactions?.reports.includes(req.currentUser?.id!)) {
+        await Boom.findByIdAndUpdate(
+          req.params.id,
+          {
+            $push: { "reactions.reports": req.currentUser?.id! },
+          },
+          { new: true }
+        );
+      } else {
+      }
+    }
+
+    await boomMinted.save();
+
+    res.status(200).json({
+      status: "success",
+      message: `Successfully ${react_type}`,
+      boom: boomMinted,
+    });
+  }
+);
+
 export { router as BoomCreateUpdateRoutes };
