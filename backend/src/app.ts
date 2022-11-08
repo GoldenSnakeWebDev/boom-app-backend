@@ -52,7 +52,10 @@ import "./routes/index";
 app.use(
   "/api-docs",
   SwaggerUi.serve,
-  SwaggerUi.setup(SwaggerJSDoc(swaggerOptions))
+  SwaggerUi.setup(SwaggerJSDoc(swaggerOptions), {
+    explorer: true,
+    customSiteTitle: "Boom App",
+  })
 );
 
 // Not found Route
