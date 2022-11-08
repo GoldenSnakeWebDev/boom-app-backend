@@ -45,6 +45,7 @@ router.get("/api/v1/booms", async (req: Request, res: Response) => {
   const response = new ApiResponse(
     Boom.find()
       .populate({ path: "comments", options: { _recursed: true } })
+      .populate("network")
       .populate("user"),
     req.query
   )
@@ -86,7 +87,8 @@ router.get(
     const response = new ApiResponse(
       Boom.find({ user: req.currentUser?.id })
         .populate("comments")
-        .populate("user"),
+        .populate("user")
+        .populate("network"),
       req.query
     )
       .filter()
@@ -124,7 +126,8 @@ router.get(
 router.get("/api/v1/booms/:id", async (req: Request, res: Response) => {
   const boom = await Boom.findById(req.params.id)
     .populate("comments")
-    .populate("user");
+    .populate("user")
+    .populate("network");
   res.status(200).json({ status: "success", boom });
 });
 
