@@ -18,6 +18,7 @@ import { ListTransactionsRoutes } from "./transactions/list";
 import { HelperRoutes } from "./helper";
 import { NetworksListRoutes } from "./networks";
 import { CommentRoutes } from "./booms/comment";
+import { EpicTaleRoutes } from "./status/index";
 
 app.use([
   UserResetPasswordResetRoutes,
@@ -37,3 +38,4 @@ app.use([ListTransactionsRoutes]);
 app.use([HelperRoutes]);
 app.use([NetworksListRoutes]);
 app.use([CommentRoutes]);
+app.use([EpicTaleRoutes]);

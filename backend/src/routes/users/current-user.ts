@@ -24,7 +24,6 @@ router.get(
   "/api/v1/users/currentuser",
   requireAuth,
   async (req: Request, res: Response) => {
-    console.log(req.currentUser);
     const user = await User.findById(req.currentUser?.id).populate("sync_bank");
 
     if (!user) {

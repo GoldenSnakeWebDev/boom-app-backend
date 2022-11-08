@@ -40,7 +40,7 @@ router.post(
   async (req: Request, res: Response) => {
     let { message } = req.body;
 
-    const boom = await Boom.findById(req.params.boomId);
+    let boom = await Boom.findById(req.params.boomId);
 
     if (!boom) {
       throw new BadRequestError("This boom does not exist");
@@ -54,16 +54,27 @@ router.post(
 
     await comment.save();
 
-    await Boom.findByIdAndUpdate(boom.id, {
-      $push: {
-        comments: comment.id,
+    boom = await Boom.findByIdAndUpdate(
+      boom.id,
+      {
+        $push: {
+          comments: comment.id,
+        },
       },
-    });
+      { new: true }
+    )
+      .populate("network")
+      .populate("reactions.likes")
+      .populate("reactions.loves")
+      .populate("reactions.smiles")
+      .populate("reactions.rebooms")
+      .populate("reactions.reports")
+      .populate("user");
 
     res.status(201).json({
       status: "success",
       message: "Successfully create a new comment",
-      comment,
+      boom,
     });
   }
 );
@@ -100,16 +111,20 @@ router.patch(
   async (req: Request, res: Response) => {
     let { message } = req.body;
 
-    const comment = Comment.findByIdAndUpdate(
-      req.params.id,
-      { message },
-      { new: true }
-    );
+    Comment.findByIdAndUpdate(req.params.id, { message }, { new: true });
 
+    let boom = await Boom.findById(req.params.boomId)
+      .populate("network")
+      .populate("reactions.likes")
+      .populate("reactions.loves")
+      .populate("reactions.smiles")
+      .populate("reactions.rebooms")
+      .populate("reactions.reports")
+      .populate("user");
     res.status(201).json({
       status: "success",
       message: "Successfully updated comment",
-      comment,
+      boom,
     });
   }
 );

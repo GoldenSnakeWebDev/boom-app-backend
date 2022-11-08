@@ -91,14 +91,13 @@ router.get(
   async (req: Request, res: Response) => {
     const response = new ApiResponse(
       Boom.find({ user: req.currentUser?.id })
-        .populate("comments")
-        .populate("user")
         .populate("network")
         .populate("reactions.likes")
         .populate("reactions.loves")
         .populate("reactions.smiles")
         .populate("reactions.rebooms")
-        .populate("reactions.reports"),
+        .populate("reactions.reports")
+        .populate("user"),
       req.query
     )
       .filter()
@@ -135,14 +134,13 @@ router.get(
  */
 router.get("/api/v1/booms/:id", async (req: Request, res: Response) => {
   const boom = await Boom.findById(req.params.id)
-    .populate("comments")
-    .populate("user")
     .populate("network")
     .populate("reactions.likes")
     .populate("reactions.loves")
     .populate("reactions.smiles")
     .populate("reactions.rebooms")
-    .populate("reactions.reports");
+    .populate("reactions.reports")
+    .populate("user");
   res.status(200).json({ status: "success", boom });
 });
 
