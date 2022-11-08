@@ -5,7 +5,7 @@
   "main": "dist/src/index.js",
   "scripts": {
     "dev": "ts-node-dev src/index.ts",
-    "start": "ts-node src/index.ts",
+    "start": "node dist/src/index.js",
     "test": "ts-node-dev src/abis/test-common.ts",
     "compile": "tsc && cpx \"./src/public/**/*\" ./dist/src/public  --clean"
   },
