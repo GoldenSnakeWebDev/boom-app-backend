@@ -11,14 +11,13 @@ io.on(
 
     socket.on("join_room", (data) => {
       socket.join(data);
-
       console.log(`User with ID: ${socket.id} joined room: ${data}`);
     });
 
     // send message
     socket.on("send_message", (message) => {
-      console.log("Message", message.author);
-      socket.to(message.room).emit("message_received", message);
+      console.log("Message", message);
+      socket.to(message.room).emit("receive_message", message);
     });
 
     socket.on("disconnect", () => {
