@@ -46,6 +46,11 @@ router.get("/api/v1/booms", async (req: Request, res: Response) => {
     Boom.find()
       .populate({ path: "comments", options: { _recursed: true } })
       .populate("network")
+      .populate("reactions.likes")
+      .populate("reactions.loves")
+      .populate("reactions.smiles")
+      .populate("reactions.rebooms")
+      .populate("reactions.reports")
       .populate("user"),
     req.query
   )
@@ -88,7 +93,12 @@ router.get(
       Boom.find({ user: req.currentUser?.id })
         .populate("comments")
         .populate("user")
-        .populate("network"),
+        .populate("network")
+        .populate("reactions.likes")
+        .populate("reactions.loves")
+        .populate("reactions.smiles")
+        .populate("reactions.rebooms")
+        .populate("reactions.reports"),
       req.query
     )
       .filter()
@@ -127,7 +137,12 @@ router.get("/api/v1/booms/:id", async (req: Request, res: Response) => {
   const boom = await Boom.findById(req.params.id)
     .populate("comments")
     .populate("user")
-    .populate("network");
+    .populate("network")
+    .populate("reactions.likes")
+    .populate("reactions.loves")
+    .populate("reactions.smiles")
+    .populate("reactions.rebooms")
+    .populate("reactions.reports");
   res.status(200).json({ status: "success", boom });
 });
 
