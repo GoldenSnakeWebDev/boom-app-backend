@@ -19,6 +19,7 @@ import { HelperRoutes } from "./helper";
 import { NetworksListRoutes } from "./networks";
 import { CommentRoutes } from "./booms/comment";
 import { EpicTaleRoutes } from "./status/index";
+import { BoomBoxRoutes } from "./boom-box";
 
 app.use([
   UserResetPasswordResetRoutes,
@@ -39,3 +40,4 @@ app.use([HelperRoutes]);
 app.use([NetworksListRoutes]);
 app.use([CommentRoutes]);
 app.use([EpicTaleRoutes]);
+app.use([BoomBoxRoutes]);

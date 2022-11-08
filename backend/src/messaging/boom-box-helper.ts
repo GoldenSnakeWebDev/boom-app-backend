@@ -17,6 +17,7 @@ export const createOrGetBoomBoxAndSendMessage = async (message: {
   socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>;
 }) => {
   let boomBox = await BoomBox.findOne({ box: message.box });
+  const receiver = await User.findById(message.receiver).populate("sync_bank");
 
   if (boomBox) {
     // save message
@@ -46,9 +47,11 @@ export const createOrGetBoomBoxAndSendMessage = async (message: {
   }
 
   // create boom box and
-
   boomBox = new BoomBox({
-    box: `${message.author}:${message.receiver}`,
+    box: `${message.author}:${Date.now()}`,
+    label: receiver?.username
+      ? `${receiver?.username}`
+      : `${receiver?.first_name!} ${receiver?.last_name!}`,
     box_type: message.boomBoxType,
     author: message.author,
     receiver: message.receiver,
