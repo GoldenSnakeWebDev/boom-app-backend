@@ -20,6 +20,8 @@ const io = new Server(server, {
   cors: { origin: "*", methods: ["GET", "POST"] },
 });
 
+import "./messaging/connection";
+
 // MIDDLEWARE
 app.set("trust proxy", false);
 app.use(express.static(path.join(__dirname, "public")));
