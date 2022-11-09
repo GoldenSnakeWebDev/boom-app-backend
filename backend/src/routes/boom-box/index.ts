@@ -31,7 +31,7 @@ router.get("/api/v1/boom-box-types", async (_req: Request, res: Response) => {
  * /api/v1/boom-boxes:
  *   get:
  *     tags:
- *        - Booms
+ *        - BoomBox
  *     description: List of all platform booms.
  *     produces:
  *        - application/json
@@ -51,6 +51,7 @@ router.get(
           { "messages.author": req.currentUser?.id },
           { "messages.receiver": req.currentUser?.id },
         ],
+        box_type: "public",
       })
         .populate("messages.author")
         .populate("messages.receiver"),

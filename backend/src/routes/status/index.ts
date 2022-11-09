@@ -3,15 +3,47 @@ import { body } from "express-validator";
 import { Status, StatusType } from "./../../models/status";
 import { validateRequest } from "../../middlewares/validate-request";
 import { requireAuth } from "../../middlewares/require-auth";
+import { ApiResponse } from "../../utils/api-response";
+
 const router = Router();
 
 /**
- * status_type
-expiry_time
+ * @openapi
+ * /api/v1/statuses:
+ *   get:
+ *     tags:
+ *        - Status(Epic & Tales)
+ *     description: List all epics or tales.
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     responses:
+ *       200:
+ *         description: . list all epics epic/tales
  */
+
+router.post("/api/v1/statuses", async (req: Request, res: Response) => {
+  const response = new ApiResponse(Status.find().populate("user"), req.query)
+    .filter()
+    .sort()
+    .limitFields();
+
+  // const count = await response.query;
+
+  const statuses = await response.paginate().query;
+
+  res.status(200).json({
+    status: "success",
+    page: response?.page_info,
+    // count: count.length,
+    statuses,
+  });
+});
+
 /**
  * @openapi
- * /api/v1/booms/:boomId/comments:
+ * /api/v1/statuses:
  *   post:
  *     tags:
  *        - Status(Epic & Tales)
