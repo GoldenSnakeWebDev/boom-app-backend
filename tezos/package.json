@@ -1,0 +1,8 @@
+{
+  "name": "@contracts/tezos",
+  "version": "1.0.0",
+  "description": "Boom Tezos Smart Contracts",
+  "author": "Dennoh Peter",
+  "license": "MIT",
+  "private":true
+}
