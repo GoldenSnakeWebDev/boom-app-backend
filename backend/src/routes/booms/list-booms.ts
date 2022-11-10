@@ -51,7 +51,8 @@ router.get("/api/v1/booms", async (req: Request, res: Response) => {
       .populate("reactions.smiles")
       .populate("reactions.rebooms")
       .populate("reactions.reports")
-      .populate("user"),
+      .populate("user")
+      .populate("comment"),
     req.query
   )
     .filter()
@@ -97,7 +98,8 @@ router.get(
         .populate("reactions.smiles")
         .populate("reactions.rebooms")
         .populate("reactions.reports")
-        .populate("user"),
+        .populate("user")
+        .populate("comment"),
       req.query
     )
       .filter()
@@ -140,7 +142,8 @@ router.get("/api/v1/booms/:id", async (req: Request, res: Response) => {
     .populate("reactions.smiles")
     .populate("reactions.rebooms")
     .populate("reactions.reports")
-    .populate("user");
+    .populate("user")
+    .populate("comment");
   res.status(200).json({ status: "success", boom });
 });
 
