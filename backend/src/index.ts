@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { server } from "./app";
 import { config } from "./config";
+import { updateStatuses } from "./schedular";
 import { seed } from "./seeders/seeds";
 
 const start = async () => {
@@ -13,6 +14,7 @@ const start = async () => {
     .then(() => console.log("Successfully connected to db"));
 
   await seed();
+  updateStatuses();
   const PORT = config.PORT || 4000;
   server.listen(PORT, () =>
     console.log(`App is running on http://localhost:${PORT}`)
