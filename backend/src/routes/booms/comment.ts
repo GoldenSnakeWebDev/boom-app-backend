@@ -70,7 +70,7 @@ router.post(
       .populate("reactions.rebooms")
       .populate("reactions.reports")
       .populate("user")
-      .populate("comment");
+      .populate("comments");
 
     res.status(201).json({
       status: "success",
@@ -122,7 +122,7 @@ router.patch(
       .populate("reactions.rebooms")
       .populate("reactions.reports")
       .populate("user")
-      .populate("comment");
+      .populate("comments");
     res.status(201).json({
       status: "success",
       message: "Successfully updated comment",
