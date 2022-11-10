@@ -6,7 +6,7 @@ import "@boom/contracts/tokens/BoomERC721.sol";
 import "@boom/contracts/tokens/TokenERC20.sol";
 import {BoomFactory} from "@boom/contracts/BoomFactory.sol";
 
-contract DeployBoomFactoryScript is Script {
+contract BaseDeploy is Script {
     string public constant NAME = "BOOM TOKEN";
     string public constant SYMBOL = "BTN";
     string public constant CONTRACT_URI = "URL";
@@ -26,26 +26,43 @@ contract DeployBoomFactoryScript is Script {
 
     function setUp() public {}
 
-    function run() public {
-        vm.broadcast();
-        forwarder = _deployForwarder();
-        factory = _deployBoomFactory();
-        factory.deployBoom721Token(NAME, SYMBOL);
-        factory.deployBoomERC20Token(NAME, SYMBOL);
-        factory.deployMarketplace();
-        vm.stopBroadcast();
+    // function run() public {
+    //     vm.broadcast();
+    //     forwarder = _deployForwarder();
+    //     factory = ();
+    //     vm.stopBroadcast();
+    // }
+    function deployBoomERC721() external returns (BoomERC721 _token) {
+        _token = new BoomERC721();
+        _token.initialize(
+            defaultAdmin,
+            NAME,
+            SYMBOL,
+            CONTRACT_URI,
+            forwarders(),
+            saleRecipient,
+            royaltyRecipient,
+            royaltyBps,
+            platformFeeBps,
+            platformFeeRecipient
+        );
     }
 
-    function _mintTokenERC721To(address recipient, string memory url)
-        internal
-        returns (uint256 _tokenId)
-    {
-        vm.startPrank(defaultAdmin);
-        _tokenId = factory.boomER721Token().mintTo(recipient, url);
-        vm.stopPrank();
+    function deployTokenERC20() external returns (TokenERC20 _token) {
+        _token = new TokenERC20();
+        _token.initialize(
+            defaultAdmin,
+            NAME,
+            SYMBOL,
+            CONTRACT_URI,
+            forwarders(),
+            saleRecipient,
+            platformFeeRecipient,
+            platformFeeBps
+        );
     }
 
-    function _deployBoomFactory() internal returns (BoomFactory _factory) {
+    function deployBoomFactory() external returns (BoomFactory _factory) {
         _factory = new BoomFactory();
         _factory.initialize(
             defaultAdmin,
@@ -60,7 +77,7 @@ contract DeployBoomFactoryScript is Script {
         );
     }
 
-    function _deployForwarder() internal returns (Forwarder _forwarder) {
+    function deployForwarder() external returns (Forwarder _forwarder) {
         _forwarder = new Forwarder();
     }
 
