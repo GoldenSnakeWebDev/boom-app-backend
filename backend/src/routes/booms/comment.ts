@@ -70,7 +70,8 @@ router.post(
       .populate("reactions.rebooms")
       .populate("reactions.reports")
       .populate("user")
-      .populate("comments");
+      .populate("comments")
+      .populate("comments.user");
 
     res.status(201).json({
       status: "success",
@@ -82,37 +83,31 @@ router.post(
 
 /**
  * @openapi
- * /api/v1/booms/:boomId/comments:
+ * /api/v1/booms/:boomId/comments/:id:
  *   patch:
  *     tags:
  *        - Boom Comments
- *     description: Enables  users to comment on at boom.
+ *     description: Use this endpoint to like a comment.
  *     produces:
  *        - application/json
  *     consumes:
  *        - application/json
- *     parameters:
- *        - name: message
- *          description: Please provide your message
- *        - name: boom
- *          description: Please provide your boom
  *     responses:
  *       200:
- *         description: . Successfully created a message
+ *         description: . update your comment
  */
 router.patch(
   "/api/v1/booms/:boomId/comments/:id",
-  [
-    body("message")
-      .notEmpty()
-      .withMessage("please provide your comment message"),
-  ],
   validateRequest,
   requireAuth,
   async (req: Request, res: Response) => {
     let { message } = req.body;
 
-    Comment.findByIdAndUpdate(req.params.id, { message }, { new: true });
+    Comment.findByIdAndUpdate(
+      req.params.id,
+      { message, $push: { like: req.currentUser?.id } },
+      { new: true }
+    );
 
     let boom = await Boom.findById(req.params.boomId)
       .populate("network")
@@ -122,8 +117,9 @@ router.patch(
       .populate("reactions.rebooms")
       .populate("reactions.reports")
       .populate("user")
-      .populate("comments");
-    res.status(201).json({
+      .populate("comments")
+      .populate("comments.user");
+    res.status(200).json({
       status: "success",
       message: "Successfully updated comment",
       boom,
