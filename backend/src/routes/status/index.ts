@@ -9,6 +9,27 @@ const router = Router();
 
 /**
  * @openapi
+ * /api/v1/statuses-types:
+ *   get:
+ *     tags:
+ *        - Booms
+ *     description: List of statues types  available to for the boom platform.
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     responses:
+ *       200:
+ *         description: . Returns a  list of statues types.
+ */
+router.get("/api/v1/booms-types", async (_req: Request, res: Response) => {
+  res
+    .status(200)
+    .json({ status: "success", status_types: Object.values(StatusType) });
+});
+
+/**
+ * @openapi
  * /api/v1/statuses:
  *   get:
  *     tags:
@@ -55,13 +76,18 @@ router.get("/api/v1/statuses", async (req: Request, res: Response) => {
  *     parameters:
  *        - name: image_url
  *          description: Please provide image for the epic
+ *        - name: status_type
+ *          description: Please status type
  *     responses:
  *       200:
  *         description: . Successfully created your epic/tales
  */
 router.post(
   "/api/v1/statuses",
-  [body("image_url").notEmpty().withMessage("please provide tale/epic image")],
+  [
+    body("image_url").notEmpty().withMessage("please provide tale/epic image"),
+    body("status_type").notEmpty().withMessage("please provide status type"),
+  ],
   validateRequest,
   requireAuth,
   async (req: Request, res: Response) => {
