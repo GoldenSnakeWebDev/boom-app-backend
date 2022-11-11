@@ -53,8 +53,6 @@ router.get("/api/v1/statuses", async (req: Request, res: Response) => {
  *     consumes:
  *        - application/json
  *     parameters:
- *        - name: status_type
- *          description: Please provide status type
  *        - name: image_url
  *          description: Please provide image for the epic
  *     responses:
