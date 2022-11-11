@@ -23,7 +23,7 @@ const router = Router();
  *         description: . list all epics epic/tales
  */
 
-router.post("/api/v1/statuses", async (req: Request, res: Response) => {
+router.get("/api/v1/statuses", async (req: Request, res: Response) => {
   const response = new ApiResponse(Status.find().populate("user"), req.query)
     .filter()
     .sort()
