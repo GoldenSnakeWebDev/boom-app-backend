@@ -16,20 +16,15 @@ install :; forge install forge-std openzeppelin/openzeppelin-contracts
 update:; forge update
 
 build:; forge build
-
-test :; forge test -vvv  --gas-report --fork-url=$(RPC_URL)
-
+#testing 
+test :; forge test -vvv  --gas-report --fork-url $BSC_RPC_URL
+#get snapshot
 snapshot :; forge snapshot
-
-anvil :; anvil --fork-url=$(RPC_URL)
-
-# use the "@" to hide the command from your shell 
-deploy-mainnet :; @forge script script/DeployBoomFactory.s.sol:DeployBoomFactoryScript --fork-url $(RPC_URL) --private-key $(PRIVATE_KEY) --broadcast -vvvv
-
-
-# Fork Mainnet
-test-mainnet :; @forge test -vvvv  --rpc-url $(RPC_URL) 
-
-
-deploytest :; @forge script script/DeployBoomFactory.s.sol:DeployBoomFactoryScript --fork-url $(RPC_URL) --private-key $(PRIVATE_KEY)  --broadcast -vvvv
-deploymainnet :; @forge script script/DeployBoomFactory.s.sol:DeployBoomFactoryScript --fork-url $(RPC_URL) --private-key $(PRIVATE_KEY) --broadcast -vvvv
+# anvil
+anvil :; anvil --fork-url=$BSC_RPC_URL
+# bsc
+bsctest :; @forge script --fork-url $BSC_RPC_URL --private-key $BSC_PRIVATE_KEY script/DeployScript.sol:DeployScript  --broadcast -vvvv
+bscdeploy :; @forge script --fork-url $BSC_RPC_URL --private-key $BSC_PRIVATE_KEY script/DeployScript.sol:DeployScript --broadcast -vvvv
+# matic
+matictest :; @forge script --fork-url $BSC_RPC_URL --private-key $MATIC_PRIVATE_KEY script/DeployScript.sol:DeployScript --broadcast -vvvv
+maticdeploy :; @forge script --fork-url $BSC_RPC_URL --private-key $MATIC_PRIVATE_KEY script/DeployScript.sol:DeployScript  --broadcast -vvvv
