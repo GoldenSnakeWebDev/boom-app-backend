@@ -1,0 +1,176 @@
+const not_authorized_error = "NOT_AUTHORIZED";
+
+const invalid_fee_rate_error = "INVALID_FEE_RATE";
+
+const insufficient_balance_error = "INSUFFICIENT_BALANCE";
+
+const invalid_quantity_error = "INVALID_QUANTITY";
+
+const invalid_price_error = "INVALID_PRICE";
+
+const uknown_view_get_balance_error = 
+  "UNKNOWN_VIEW_GET_BALANCE";
+
+type listing_id_type = nat;
+
+type asset_contract_type = address;
+
+type token_id_type = nat;
+
+type listing_type =
+  {
+    listing_id: listing_id_type,
+    token_owner: address,
+    asset_contract: asset_contract_type,
+    token_id: token_id_type,
+    quantity: nat,
+    price_per_token: tez
+  };
+
+type listing_params_type =
+  {
+    asset_contract: asset_contract_type,
+    token_id: token_id_type,
+    quantity: nat,
+    price_per_token: tez
+  };
+
+type update_listing_params_type =
+  {
+    listing_id: listing_id_type,
+    quantity: nat,
+    price_per_token: tez
+  };
+
+type remove_listing_params_type =
+  {listing_id: listing_id_type};
+
+type buy_listing_params_type =
+  {listing_id: listing_id_type, quantity: nat};
+
+type set_fee_params_type = {fee: nat};
+
+type actions_ =
+  | ["CreateListing", listing_params_type]
+  | ["UpdateListing", update_listing_params_type]
+  | ["RemoveListing", remove_listing_params_type]
+  | ["Buy", buy_listing_params_type]
+  | ["SetFee", set_fee_params_type];
+
+type storage_ =
+  {
+    admin: address,
+    fee_rate: nat,
+    listings: big_map<listing_id_type, listing_type>,
+    next_listing_id: listing_id_type
+  };
+
+type return_ =
+
+  [list<operation>,
+   storage_];
+
+const create_listing = 
+  (params: listing_params_type, storage: storage_): return_ => {let _assert = 
+     assert_with_error(params.quantity > (0 as nat), invalid_quantity_error);
+   let transaction_sender: address = Tezos.get_sender();
+   let balance_opt: option<nat> = 
+     Tezos.call_view("get_balance", [transaction_sender,
+      params.token_id], params.asset_contract);
+   let balance: nat = 
+     match(balance_opt, {None: () => 
+        (failwith(uknown_view_get_balance_error) as nat),
+      Some: (balance: nat) => balance});
+   let _assert = 
+     assert_with_error(balance >= params.quantity, insufficient_balance_error);
+   let _assert = 
+     assert_with_error(params.price_per_token > (0 as tez), invalid_price_error);
+   let listing_id: listing_id_type = storage.next_listing_id;
+   let listing: listing_type = 
+     {listing_id: listing_id,
+      token_owner: transaction_sender,
+      asset_contract: params.asset_contract,
+      token_id: params.token_id,
+      quantity: params.quantity,
+      price_per_token: params.price_per_token};
+   let listings = 
+     Big_map.add(listing_id, listing, storage.listings);
+   let next_listing_id = 
+     storage.next_listing_id + (1 as nat);
+   return [list([]) as list<operation>,
+    {...storage,
+     listings: listings,
+     next_listing_id: next_listing_id}]};
+
+const update_listing = 
+  (params: update_listing_params_type, storage: storage_): return_ => {let transaction_sender = 
+     Tezos.get_sender();
+   let listing_opt = 
+     Big_map.find(params.listing_id, storage.listings);
+   let listing = 
+     match(listing_opt, {None: () => 
+        failwith("Listing not found"),
+      Some: (listing: listing_type) => listing});
+   let _assert = 
+     assert_with_error(listing.token_owner == transaction_sender, not_authorized_error);
+   let _assert = 
+     assert_with_error(params.quantity > (0 as nat), invalid_quantity_error);
+   let _assert = 
+     assert_with_error(params.price_per_token > (0 as tez), invalid_price_error);
+   let balance_opt = 
+     Tezos.call_view("get_balance", [transaction_sender,
+      listing.token_id], listing.asset_contract);
+   let balance = 
+     match(balance_opt, {None: () => 
+        (failwith(uknown_view_get_balance_error) as nat),
+      Some: (balance: nat) => balance});
+   let _assert = 
+     assert_with_error(balance >= params.quantity, insufficient_balance_error);
+   let updated_listing = 
+     {...listing,
+      quantity: params.quantity,
+      price_per_token: params.price_per_token};
+   let listings = 
+     Big_map.update(params.listing_id, Some
+       (updated_listing), storage.listings);
+   return [list([]) as list<operation>,
+    {...storage, listings: listings}]};
+
+const remove_listing = 
+  (params: remove_listing_params_type, storage: storage_): return_ => {let transaction_sender = 
+     Tezos.get_sender();
+   let listing_opt = 
+     Big_map.find(params.listing_id, storage.listings);
+   let listing = 
+     match(listing_opt, {None: () => 
+        (failwith("Listing not found") as listing_type),
+      Some: (listing: listing_type) => listing});
+   let _assert = 
+     assert_with_error(listing.token_owner == transaction_sender, not_authorized_error);
+   let listings = 
+     Big_map.remove(params.listing_id, storage.listings);
+   return [list([]), {...storage, listings: listings}]};
+
+const buy = 
+  (params: buy_listing_params_type, storage: storage_): return_ => {return [list([]),
+    storage]};
+
+const set_fee = 
+  (params: set_fee_params_type, storage: storage_): return_ => {let transaction_sender: address = 
+     Tezos.get_sender();
+   let fee_rate = params.fee;
+   let _assert = 
+     assert_with_error(transaction_sender == storage.admin, not_authorized_error);
+   let _assert = 
+     assert_with_error(fee_rate >= 0 && fee_rate <= 100, invalid_fee_rate_error);
+   return [list([]), {...storage, fee_rate: fee_rate}]};
+
+const main = 
+  (action: actions_, storage: storage_): return_ => {match(action, {CreateListing: (p: listing_params_type) => 
+      create_listing(p, storage),
+    UpdateListing: (p: update_listing_params_type) => 
+      update_listing(p, storage),
+    RemoveListing: (p: remove_listing_params_type) => 
+      remove_listing(p, storage),
+    Buy: (p: buy_listing_params_type) => buy(p, storage),
+    SetFee: (p: set_fee_params_type) => set_fee(p, storage)})};
