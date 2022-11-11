@@ -36,6 +36,8 @@ const router = Router();
  *          description: Boom Fixed Price
  *        - name: price
  *          description: Boom Price
+ *       - name: location
+ *          description: What is your location
  *     responses:
  *       200:
  *         description: . Successfully created a boom
