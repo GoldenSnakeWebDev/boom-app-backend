@@ -367,11 +367,15 @@ router.post(
 
     // end of deductin  wallet amount
 
-    await updateWalletBalance({
+    const update = await updateWalletBalance({
       userId: req.currentUser?.id!,
       amount: parseFloat(existBoom?.price ? existBoom?.price : "0"),
       transaction_type: ITransactionType.WITHDRAW,
     });
+
+    if (!update.success) {
+      throw new BadRequestError("Buying transaction was not successful");
+    }
 
     await Boom.findByIdAndUpdate(
       existBoom.id,
