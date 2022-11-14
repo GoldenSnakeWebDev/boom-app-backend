@@ -22,7 +22,7 @@ const router = Router();
  *       200:
  *         description: . Returns a  list of statues types.
  */
-router.get("/api/v1/booms-types", async (_req: Request, res: Response) => {
+router.get("/api/v1/statuses-types", async (_req: Request, res: Response) => {
   res
     .status(200)
     .json({ status: "success", status_types: Object.values(StatusType) });

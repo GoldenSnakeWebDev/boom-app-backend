@@ -48,7 +48,7 @@ router.post(
 
     if (user) {
       throw new BadRequestError(
-        "You cannot proceed with the provided credentials. Please try again later."
+        "A user with the same email or username already exists."
       );
     }
 
