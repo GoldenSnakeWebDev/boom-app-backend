@@ -3,6 +3,7 @@ import { Schema, model, Types } from "mongoose";
 export enum NotificationType {
   MINTING = "minting",
   FOLLOWER = "follower",
+  BOOM_CREATED = "boom created",
 }
 
 export interface INotification {
@@ -10,6 +11,7 @@ export interface INotification {
   message: string;
   boom?: string;
   notofication_type: NotificationType;
+  is_read?: boolean;
 }
 
 const notificationSchema = new Schema<INotification>(
@@ -26,6 +28,7 @@ const notificationSchema = new Schema<INotification>(
         ).join(",")}`,
       },
     },
+    is_read: { type: Schema.Types.Boolean, default: false },
   },
   {
     toJSON: {

@@ -53,7 +53,9 @@ router.get(
   requireAuth,
   async (req: Request, res: Response) => {
     const response = new ApiResponse(
-      Nofitication.find().populate("user"),
+      Nofitication.find({ user: req.currentUser?.id })
+        .populate("user")
+        .populate("boom"),
       req.query
     )
       .filter()
@@ -117,6 +119,51 @@ router.post(
     });
 
     await notification.save();
+    res.status(201).json({
+      status: "success",
+      notification,
+    });
+  }
+);
+
+/**
+ * @openapi
+ * /api/v1/notifications/:id:
+ *   patch:
+ *     tags:
+ *        - Notifications
+ *     description: Mark noitification as read.
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     responses:
+ *       200:
+ *         description: . Mark notification as read
+ */
+
+router.patch(
+  "/api/v1/notifications/:id",
+  [
+    body("message").notEmpty().withMessage("please provide your message"),
+    body("notification_type")
+      .notEmpty()
+      .withMessage("what notification are you trying to create?"),
+    body("boomId")
+      .notEmpty()
+      .withMessage("Which boom are creating notification for?"),
+  ],
+  requireAuth,
+  validateRequest,
+  async (req: Request, res: Response) => {
+    const notification = await Nofitication.findByIdAndUpdate(
+      req.params.id,
+      {
+        is_read: true,
+      },
+      { new: true }
+    );
+
     res.status(201).json({
       status: "success",
       notification,
