@@ -5,6 +5,9 @@ import { validateRequest } from "../../middlewares/validate-request";
 import { BadRequestError } from "../../errors/bad-request-error";
 import { Network } from "./../../models/network";
 import { requireAuth } from "../../middlewares/require-auth";
+import { SyncBank } from "../../models/syncbank";
+import { updateWalletBalance } from "../../utils/sync-bank";
+import { ITransactionType } from "./../../models/transaction";
 
 const router = Router();
 
@@ -322,4 +325,64 @@ router.patch(
   }
 );
 
+/**
+ * @openapi
+ * /api/by-booms-with-sync-coins:
+ *   post:
+ *     tags:
+ *        - Booms
+ *     description: Enables  users to by an NFT using Sync Bank Coins.
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     parameters:
+ *        - name: boom
+ *          description: Please provide your ID
+ *     responses:
+ *       200:
+ *         description: . Enables  users to by an NFT using Sync Bank Coins
+ */
+
+router.post(
+  "/api/by-booms-with-sync-coins",
+  [body("boom").notEmpty().withMessage("Please provide your boom information")],
+  requireAuth,
+  validateRequest,
+  async (req: Request, res: Response) => {
+    const { boom } = req.body;
+    const existBoom = await Boom.findById(boom);
+
+    if (!existBoom) {
+      throw new BadRequestError("This boom does not exist");
+    }
+
+    // DEDUCT SYNC WALLET AMOUNTS
+
+    const syncBank = await SyncBank.findOne({ user: req.currentUser?.id! });
+
+    if (!syncBank) {
+      throw new BadRequestError("Your sync bank does not exist");
+    }
+
+    // end of deductin  wallet amount
+
+    await updateWalletBalance({
+      userId: req.currentUser?.id!,
+      amount: parseFloat(existBoom?.price ? existBoom?.price : "0"),
+      transaction_type: ITransactionType.WITHDRAW,
+    });
+
+    await Boom.findByIdAndUpdate(
+      existBoom.id,
+      { user: req.currentUser?.id! },
+      { new: true }
+    );
+
+    res.status(200).json({
+      status: "success",
+      message: "Successfully bought an NFT",
+    });
+  }
+);
 export { router as BoomCreateUpdateRoutes };

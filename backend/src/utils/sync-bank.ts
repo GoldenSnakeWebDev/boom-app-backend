@@ -1,13 +1,8 @@
 import { SyncBank, SyncBankType } from "../models/syncbank";
 import { User } from "./../models/user";
-import {
-  ITransactionType,
-  Transaction,
-  ITransactionStatus,
-  ITransactionPaymentStatus,
-} from "./../models/transaction";
-import moment from "moment";
+import { ITransactionType, Transaction } from "./../models/transaction";
 import { config } from "../config";
+import { getNextTransaction } from "./transaction-common";
 
 export const createSyncBankForNewUser = async (opts: {
   user: string;
@@ -35,23 +30,10 @@ export const updateWalletBalance = async (opts: {
   userId: string;
   transaction_type: ITransactionType;
   amount: number;
-  transactionId: string;
 }) => {
   let message = "";
 
-  console.log(opts);
-
   const user = await User.findById(opts.userId);
-
-  const transaction = await Transaction.findById(opts.transactionId);
-
-  if (!transaction) {
-    return {
-      error: `(transaction)Error updating wallet balance`,
-      success: false,
-      message,
-    };
-  }
 
   if (!user) {
     return {
@@ -75,23 +57,21 @@ export const updateWalletBalance = async (opts: {
 
   if (opts.transaction_type === ITransactionType.WITHDRAW) {
     // decrement wallet balance
-    message = `Congraturations. ${user.first_name} ${
-      user.last_name
-    }, your withdraw transaction of KES.${
-      opts.amount
-    } on ${moment().format()}. Your new wallet balance if ${
-      syncBank.amount_balance
-    }`;
 
     syncBank.amount_balance = syncBank.amount_balance! - opts.amount;
     syncBank.amount_out = syncBank.amount_out! - opts.amount;
     // save code
     await syncBank.save();
 
-    // update transactions
-    await Transaction.findByIdAndUpdate(opts.transactionId, {
-      status: ITransactionStatus.SUCCESS,
-      payment_method: ITransactionPaymentStatus.PAID,
+    // create transactions
+    await Transaction.create({
+      user: user.id,
+      transactionId: await getNextTransaction(),
+      amount: opts.amount,
+      transaction_type: opts.transaction_type,
+      narations: `Updated you wallet balance`,
+      phone: `+${user.email}`,
+      status: "success",
     });
   }
   if (opts.transaction_type === ITransactionType.DEPOSIT) {
@@ -100,18 +80,16 @@ export const updateWalletBalance = async (opts: {
     syncBank.amount_in = syncBank.amount_in! + opts.amount;
     // save code
     await syncBank.save();
-    await Transaction.findByIdAndUpdate(opts.transactionId, {
-      status: ITransactionStatus.SUCCESS,
-      payment_method: ITransactionPaymentStatus.PAID,
+    // create transactions
+    await Transaction.create({
+      user: user.id,
+      transactionId: await getNextTransaction(),
+      amount: opts.amount,
+      transaction_type: opts.transaction_type,
+      narations: `Updated you wallet balance`,
+      phone: `+${user.email}`,
+      status: "success",
     });
-
-    message = `Congraturations. ${user.first_name} ${
-      user.last_name
-    }, yout have success deposited to your syncBank with KES. ${
-      opts.amount
-    } was successfully on ${moment().format()}. Your new syncBank balance if ${
-      syncBank.amount_balance
-    }`;
   }
 
   return { error: "", success: true, message };
