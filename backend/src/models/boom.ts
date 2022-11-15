@@ -17,6 +17,7 @@ export interface IBoom {
   quantity?: number;
   fixed_price?: number;
   title: string;
+  location?: string;
   description?: string;
   is_minted?: boolean;
   image_url?: string;
@@ -51,6 +52,10 @@ const boomSchema = new Schema<IBoom>(
     boom_state: { type: Schema.Types.String, default: BoomState.UPLOAD },
     is_minted: { type: Schema.Types.Boolean, default: false },
     description: {
+      type: Schema.Types.String,
+      default: "",
+    },
+    location: {
       type: Schema.Types.String,
       default: "",
     },

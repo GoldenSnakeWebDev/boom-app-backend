@@ -5,6 +5,10 @@ import { validateRequest } from "../../middlewares/validate-request";
 import { BadRequestError } from "../../errors/bad-request-error";
 import { Network } from "./../../models/network";
 import { requireAuth } from "../../middlewares/require-auth";
+import { SyncBank } from "../../models/syncbank";
+import { updateWalletBalance } from "../../utils/sync-bank";
+import { ITransactionType } from "./../../models/transaction";
+import { Nofitication, NotificationType } from "../../models/notification";
 
 const router = Router();
 
@@ -36,6 +40,8 @@ const router = Router();
  *          description: Boom Fixed Price
  *        - name: price
  *          description: Boom Price
+ *        - name: location
+ *          description: What is your location
  *     responses:
  *       200:
  *         description: . Successfully created a boom
@@ -69,6 +75,7 @@ router.post(
       fixed_price,
       title,
       price,
+      location,
       tags,
     } = req.body;
 
@@ -96,12 +103,20 @@ router.post(
       quantity,
       fixed_price,
       title,
+      location,
       price,
       tags,
     });
 
     await boom.save();
 
+    const notification = new Nofitication({
+      message: `Successfully created a boom`,
+      boom: boom.id,
+      notofication_type: NotificationType.BOOM_CREATED,
+    });
+
+    await notification.save();
     res.status(201).json({
       status: "success",
       message: "Successfully create a new boom",
@@ -318,4 +333,68 @@ router.patch(
   }
 );
 
+/**
+ * @openapi
+ * /api/by-booms-with-sync-coins:
+ *   post:
+ *     tags:
+ *        - Booms
+ *     description: Enables  users to by an NFT using Sync Bank Coins.
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     parameters:
+ *        - name: boom
+ *          description: Please provide your ID
+ *     responses:
+ *       200:
+ *         description: . Enables  users to by an NFT using Sync Bank Coins
+ */
+
+router.post(
+  "/api/by-booms-with-sync-coins",
+  [body("boom").notEmpty().withMessage("Please provide your boom information")],
+  requireAuth,
+  validateRequest,
+  async (req: Request, res: Response) => {
+    const { boom } = req.body;
+    const existBoom = await Boom.findById(boom);
+
+    if (!existBoom) {
+      throw new BadRequestError("This boom does not exist");
+    }
+
+    // DEDUCT SYNC WALLET AMOUNTS
+
+    const syncBank = await SyncBank.findOne({ user: req.currentUser?.id! });
+
+    if (!syncBank) {
+      throw new BadRequestError("Your sync bank does not exist");
+    }
+
+    // end of deductin  wallet amount
+
+    const update = await updateWalletBalance({
+      userId: req.currentUser?.id!,
+      amount: parseFloat(existBoom?.price ? existBoom?.price : "0"),
+      transaction_type: ITransactionType.WITHDRAW,
+    });
+
+    if (!update.success) {
+      throw new BadRequestError("Buying transaction was not successful");
+    }
+
+    await Boom.findByIdAndUpdate(
+      existBoom.id,
+      { user: req.currentUser?.id! },
+      { new: true }
+    );
+
+    res.status(200).json({
+      status: "success",
+      message: "Successfully bought an NFT",
+    });
+  }
+);
 export { router as BoomCreateUpdateRoutes };

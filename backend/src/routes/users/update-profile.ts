@@ -53,6 +53,7 @@ router.post(
       bio,
       photo,
       location,
+      social_media,
       cover,
     } = req.body;
     const user = await User.findById(req.currentUser?.id!);
@@ -74,6 +75,7 @@ router.post(
         photo,
         cover,
         location,
+        social_media,
       },
       { new: true }
     );

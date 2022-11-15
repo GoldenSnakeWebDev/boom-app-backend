@@ -55,7 +55,6 @@ router.post(
       userId: req.currentUser?.id!,
       transaction_type: ITransactionType.DEPOSIT,
       amount,
-      transactionId: transactionRef,
     });
     // end of update sync bank
     res.status(200).json({
