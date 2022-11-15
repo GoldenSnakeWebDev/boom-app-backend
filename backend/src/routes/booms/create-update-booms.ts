@@ -8,6 +8,7 @@ import { requireAuth } from "../../middlewares/require-auth";
 import { SyncBank } from "../../models/syncbank";
 import { updateWalletBalance } from "../../utils/sync-bank";
 import { ITransactionType } from "./../../models/transaction";
+import { Nofitication, NotificationType } from "../../models/notification";
 
 const router = Router();
 
@@ -109,6 +110,13 @@ router.post(
 
     await boom.save();
 
+    const notification = new Nofitication({
+      message: `Successfully created a boom`,
+      boom: boom.id,
+      notofication_type: NotificationType.BOOM_CREATED,
+    });
+
+    await notification.save();
     res.status(201).json({
       status: "success",
       message: "Successfully create a new boom",
