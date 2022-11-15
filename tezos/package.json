@@ -1,8 +1,21 @@
 {
-  "name": "@contracts/tezos",
+  "name": "tezos",
   "version": "1.0.0",
-  "description": "Boom Tezos Smart Contracts",
-  "author": "Dennoh Peter",
-  "license": "MIT",
-  "private":true
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "tezos",
+    "smart-contracts",
+    "blockchain"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@taqueria/plugin-flextesa": "^0.22.2",
+    "@taqueria/plugin-ligo": "^0.22.2",
+    "@taqueria/plugin-taquito": "^0.22.2"
+  }
 }

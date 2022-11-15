@@ -4,6 +4,7 @@ import sharp from "sharp";
 import multer from "multer";
 import { v1 as uuid1 } from "uuid";
 import { BadRequestError } from "./../../errors";
+import { config } from "src/config";
 
 const router = express.Router();
 
@@ -17,7 +18,7 @@ const uuidOptions = {
 
 const fileName = uuid1(uuidOptions);
 
-const FOLDER_NAME = "NFTS";
+const FOLDER_NAME = config.FOLDER_NAME;
 
 // create custom folder
 const createOrReturnFolder = async (folderName: string) => {
@@ -98,7 +99,7 @@ const docMulterFilter = (_req: Request, file: any, cb: any) => {
 
 const uploadDoc = multer({ storage: docStorage, fileFilter: docMulterFilter });
 
-const uploadDocument = uploadDoc.single("doc");
+export const uploadDocument = uploadDoc.single("doc");
 
 // /**
 //  * @openapi

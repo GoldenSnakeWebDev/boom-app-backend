@@ -1,0 +1,276 @@
+{ parameter
+    (or (or (or (pair %buy (nat %listing_id) (nat %quantity))
+                (pair %createListing
+                   (pair (address %asset_contract) (mutez %price_per_token))
+                   (nat %quantity)
+                   (nat %token_id)))
+            (or (nat %removeListing) (nat %setFee)))
+        (pair %updateListing
+           (pair (nat %listing_id) (mutez %price_per_token))
+           (nat %quantity))) ;
+  storage
+    (pair (pair (address %admin) (nat %fee_rate))
+          (big_map %listings
+             nat
+             (pair (pair (pair (address %asset_contract) (nat %listing_id))
+                         (mutez %price_per_token)
+                         (nat %quantity))
+                   (nat %token_id)
+                   (address %token_owner)))
+          (nat %next_listing_id)) ;
+  code { PUSH string "NOT_AUTHORIZED" ;
+         PUSH string "INSUFFICIENT_BALANCE" ;
+         PUSH string "INVALID_QUANTITY" ;
+         PUSH string "INVALID_PRICE" ;
+         PUSH string "UNKNOWN_VIEW_GET_BALANCE" ;
+         DIG 5 ;
+         UNPAIR ;
+         IF_LEFT
+           { IF_LEFT
+               { DIG 6 ;
+                 DROP ;
+                 IF_LEFT
+                   { DIG 2 ; DIG 3 ; DIG 4 ; DIG 5 ; DROP 5 }
+                   { DIG 4 ;
+                     PUSH nat 0 ;
+                     DUP 3 ;
+                     CDR ;
+                     CAR ;
+                     COMPARE ;
+                     GT ;
+                     IF { DROP } { FAILWITH } ;
+                     SENDER ;
+                     DUP 2 ;
+                     CAR ;
+                     CAR ;
+                     DUP 3 ;
+                     CDR ;
+                     CDR ;
+                     DUP 3 ;
+                     PAIR ;
+                     VIEW "get_balance" nat ;
+                     IF_NONE { DIG 3 ; FAILWITH } { DIG 4 ; DROP } ;
+                     DIG 5 ;
+                     DUP 4 ;
+                     CDR ;
+                     CAR ;
+                     DIG 2 ;
+                     COMPARE ;
+                     GE ;
+                     IF { DROP } { FAILWITH } ;
+                     DIG 3 ;
+                     PUSH mutez 0 ;
+                     DUP 4 ;
+                     CAR ;
+                     CDR ;
+                     COMPARE ;
+                     GT ;
+                     IF { DROP } { FAILWITH } ;
+                     DUP 3 ;
+                     CDR ;
+                     CDR ;
+                     PUSH nat 1 ;
+                     DUP 5 ;
+                     CDR ;
+                     CDR ;
+                     ADD ;
+                     DUP 5 ;
+                     CDR ;
+                     CDR ;
+                     DUP 6 ;
+                     CDR ;
+                     CAR ;
+                     DIG 4 ;
+                     DUP 6 ;
+                     CDR ;
+                     CDR ;
+                     PAIR ;
+                     DUP 6 ;
+                     CDR ;
+                     CAR ;
+                     DUP 7 ;
+                     CAR ;
+                     CDR ;
+                     PAIR ;
+                     DUP 6 ;
+                     DIG 7 ;
+                     CAR ;
+                     CAR ;
+                     PAIR ;
+                     PAIR ;
+                     PAIR ;
+                     DIG 4 ;
+                     SWAP ;
+                     SOME ;
+                     SWAP ;
+                     UPDATE ;
+                     PAIR ;
+                     DIG 2 ;
+                     CAR ;
+                     PAIR ;
+                     SWAP ;
+                     DUP 2 ;
+                     CDR ;
+                     CAR ;
+                     PAIR ;
+                     SWAP ;
+                     CAR ;
+                     PAIR } }
+               { DIG 2 ;
+                 DIG 3 ;
+                 DIG 4 ;
+                 DIG 5 ;
+                 DROP 4 ;
+                 IF_LEFT
+                   { SENDER ;
+                     DUP 3 ;
+                     CDR ;
+                     CAR ;
+                     DUP 3 ;
+                     GET ;
+                     IF_NONE { PUSH string "Listing not found" ; FAILWITH } {} ;
+                     DIG 4 ;
+                     DUG 2 ;
+                     CDR ;
+                     CDR ;
+                     COMPARE ;
+                     EQ ;
+                     IF { DROP } { FAILWITH } ;
+                     DUP 2 ;
+                     CDR ;
+                     CDR ;
+                     DUP 3 ;
+                     CDR ;
+                     CAR ;
+                     DIG 2 ;
+                     NONE (pair (pair (pair address nat) mutez nat) nat address) ;
+                     SWAP ;
+                     UPDATE ;
+                     PAIR ;
+                     SWAP ;
+                     CAR }
+                   { SENDER ;
+                     DIG 3 ;
+                     DUP 4 ;
+                     CAR ;
+                     CAR ;
+                     DIG 2 ;
+                     COMPARE ;
+                     EQ ;
+                     IF { DROP } { FAILWITH } ;
+                     PUSH string "INVALID_FEE_RATE" ;
+                     PUSH nat 100 ;
+                     DUP 3 ;
+                     COMPARE ;
+                     LE ;
+                     PUSH nat 0 ;
+                     DUP 4 ;
+                     COMPARE ;
+                     GE ;
+                     AND ;
+                     IF { DROP } { FAILWITH } ;
+                     DUP 2 ;
+                     CDR ;
+                     SWAP ;
+                     DIG 2 ;
+                     CAR ;
+                     CAR ;
+                     PAIR } ;
+                 PAIR } }
+           { SENDER ;
+             DUP 3 ;
+             CDR ;
+             CAR ;
+             DUP 3 ;
+             CAR ;
+             CAR ;
+             GET ;
+             IF_NONE { PUSH string "Listing not found" ; FAILWITH } {} ;
+             DIG 8 ;
+             DUP 3 ;
+             DUP 3 ;
+             CDR ;
+             CDR ;
+             COMPARE ;
+             EQ ;
+             IF { DROP } { FAILWITH } ;
+             DIG 6 ;
+             PUSH nat 0 ;
+             DUP 5 ;
+             CDR ;
+             COMPARE ;
+             GT ;
+             IF { DROP } { FAILWITH } ;
+             DIG 5 ;
+             PUSH mutez 0 ;
+             DUP 5 ;
+             CAR ;
+             CDR ;
+             COMPARE ;
+             GT ;
+             IF { DROP } { FAILWITH } ;
+             DUP ;
+             CAR ;
+             CAR ;
+             CAR ;
+             DUP 2 ;
+             CDR ;
+             CAR ;
+             DIG 3 ;
+             PAIR ;
+             VIEW "get_balance" nat ;
+             IF_NONE { DIG 3 ; FAILWITH } { DIG 4 ; DROP } ;
+             DIG 4 ;
+             DUP 4 ;
+             CDR ;
+             DIG 2 ;
+             COMPARE ;
+             GE ;
+             IF { DROP } { FAILWITH } ;
+             DUP 3 ;
+             CDR ;
+             CDR ;
+             DUP 4 ;
+             CDR ;
+             CAR ;
+             DUP 3 ;
+             CDR ;
+             DUP 5 ;
+             CDR ;
+             DUP 5 ;
+             CAR ;
+             CDR ;
+             CAR ;
+             PAIR ;
+             DIG 4 ;
+             CAR ;
+             CAR ;
+             PAIR ;
+             PAIR ;
+             DUP ;
+             CDR ;
+             DUP 2 ;
+             CAR ;
+             CDR ;
+             CDR ;
+             DUP 6 ;
+             CAR ;
+             CDR ;
+             PAIR ;
+             DIG 2 ;
+             CAR ;
+             CAR ;
+             PAIR ;
+             PAIR ;
+             SOME ;
+             DIG 3 ;
+             CAR ;
+             CAR ;
+             UPDATE ;
+             PAIR ;
+             SWAP ;
+             CAR ;
+             PAIR } ;
+         NIL operation ;
+         PAIR } }
+
