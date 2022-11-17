@@ -22,7 +22,7 @@ import { EpicTaleRoutes } from "./status/index";
 import { BoomBoxRoutes } from "./boom-box";
 import { NofiticationRoutes } from "./notification/index";
 import { FriendsFollowersRoutes } from "./users/friends";
-
+import { TezosMintAndURLPrep } from "./tezos";
 app.use([
   UserResetPasswordResetRoutes,
   UserRequestPasswordResetRoutes,
@@ -45,3 +45,4 @@ app.use([EpicTaleRoutes]);
 app.use([BoomBoxRoutes]);
 app.use([NofiticationRoutes]);
 app.use([FriendsFollowersRoutes]);
+app.use([TezosMintAndURLPrep]);

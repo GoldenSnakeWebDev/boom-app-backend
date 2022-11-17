@@ -4,6 +4,7 @@ export enum NotificationType {
   MINTING = "minting",
   FOLLOWER = "follower",
   BOOM_CREATED = "boom created",
+  TRANSFER = "transfer",
 }
 
 export interface INotification {

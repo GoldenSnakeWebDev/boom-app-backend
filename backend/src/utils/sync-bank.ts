@@ -3,6 +3,7 @@ import { User } from "./../models/user";
 import { ITransactionType, Transaction } from "./../models/transaction";
 import { config } from "../config";
 import { getNextTransaction } from "./transaction-common";
+import { Nofitication, NotificationType } from "./../models/notification";
 
 export const createSyncBankForNewUser = async (opts: {
   user: string;
@@ -92,5 +93,51 @@ export const updateWalletBalance = async (opts: {
     });
   }
 
+  if (opts.transaction_type === ITransactionType.TRANSFER) {
+    syncBank.amount_balance = syncBank.amount_balance! - opts.amount;
+    syncBank.amount_out = syncBank.amount_out! - opts.amount;
+    // save code
+    await syncBank.save();
+    // create transactions
+    await Transaction.create({
+      user: user.id,
+      transactionId: await getNextTransaction(),
+      amount: opts.amount,
+      transaction_type: opts.transaction_type,
+      narations: `Transfered you money from your wallet`,
+      phone: `+${user.email}`,
+      status: "success",
+    });
+  }
+  if (opts.transaction_type === ITransactionType.INCOME) {
+    // increment wallet balance
+    syncBank.amount_balance = syncBank.amount_balance! + opts.amount;
+    syncBank.amount_in = syncBank.amount_in! + opts.amount;
+    // save code
+    await syncBank.save();
+    // create transactions
+    await Transaction.create({
+      user: user.id,
+      transactionId: await getNextTransaction(),
+      amount: opts.amount,
+      transaction_type: opts.transaction_type,
+      narations: `Recieved money from your friend`,
+      phone: `+${user.email}`,
+      status: "success",
+    });
+  }
+
+  // create a notification for updating the wallet balance
+  const notification = new Nofitication({
+    user: opts.userId,
+    notofication_type:
+      opts.transaction_type === ITransactionType.DEPOSIT ||
+      opts.transaction_type === ITransactionType.INCOME
+        ? NotificationType.TRANSFER
+        : NotificationType.MINTING,
+    message: `You have made ${opts.transaction_type}`,
+  });
+
+  await notification.save();
   return { error: "", success: true, message };
 };
