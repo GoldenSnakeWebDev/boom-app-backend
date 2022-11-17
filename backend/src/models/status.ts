@@ -8,6 +8,7 @@ export enum StatusType {
 export interface IStatus {
   status_type: StatusType;
   user: Types.ObjectId;
+  views?: Array<Types.ObjectId>;
   image_url?: string;
   expiry_time?: Date;
   created_at?: Date;
@@ -31,6 +32,7 @@ const statusSchema = new Schema<IStatus>(
       type: Schema.Types.String,
       default: "",
     },
+    views: [{ type: Schema.Types.ObjectId, ref: "User" }],
     expiry_time: { type: Schema.Types.String, default: "" },
     created_at: { type: Schema.Types.Date, default: Date.now },
     is_active: { type: Schema.Types.Boolean, default: true },

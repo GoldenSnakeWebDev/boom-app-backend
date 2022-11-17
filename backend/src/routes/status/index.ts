@@ -12,7 +12,7 @@ const router = Router();
  * /api/v1/statuses-types:
  *   get:
  *     tags:
- *        - Booms
+ *        - Status(Epic & Tales)
  *     description: List of statues types  available to for the boom platform.
  *     produces:
  *        - application/json
@@ -45,20 +45,46 @@ router.get("/api/v1/statuses-types", async (_req: Request, res: Response) => {
  */
 
 router.get("/api/v1/statuses", async (req: Request, res: Response) => {
-  const response = new ApiResponse(Status.find().populate("user"), req.query)
+  const response = new ApiResponse(Status.find(), req.query)
     .filter()
     .sort()
     .limitFields();
 
+  const statuesList = await Status.aggregate([
+    {
+      $lookup: {
+        from: "users",
+        localField: "user",
+        foreignField: "_id",
+        as: "user",
+      },
+    },
+    {
+      $unwind: "$user",
+    },
+    {
+      $group: {
+        _id: "$user.username",
+        count: { $sum: 1 },
+        statues: {
+          $push: {
+            id: "$_id",
+            image_url: "$image_url",
+            views: "$views",
+          },
+        },
+      },
+    },
+  ]);
   // const count = await response.query;
 
-  const statuses = await response.paginate().query;
+  // const statuses = await response.paginate().query;
 
   res.status(200).json({
     status: "success",
     page: response?.page_info,
     // count: count.length,
-    statuses,
+    statuses: statuesList,
   });
 });
 
@@ -139,7 +165,38 @@ router.delete(
 
     res.status(201).json({
       status: "success",
-      message: "Successfully updated comment",
+      message: "Successfully deleted your status",
+    });
+  }
+);
+
+/**
+ * @openapi
+ * /api/v1/statuses/:id:
+ *   patch:
+ *     tags:
+ *        - Status(Epic & Tales)
+ *     description: Enables  users to update viewer their epic or tale.
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     responses:
+ *       200:
+ *         description: . Successfully updates viewer your epic/tale
+ */
+router.patch(
+  "/api/v1/statuses/:id",
+  requireAuth,
+  async (req: Request, res: Response) => {
+    const status = await Status.findByIdAndUpdate(req.params.id, {
+      $push: { views: req.currentUser?.id },
+    });
+
+    res.status(201).json({
+      status: "success",
+      status_item: status,
+      message: "Successfully updated status",
     });
   }
 );
