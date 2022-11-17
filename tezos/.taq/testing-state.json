@@ -1,0 +1,44 @@
+{
+    "operations": {},
+    "tasks": {
+        "@taqueria/plugin-taquito.deploy.1668604256279": {
+            "task": "deploy",
+            "plugin": "@taqueria/plugin-taquito",
+            "time": 1668604256279,
+            "output": [
+                {
+                    "contract": "MarketPlace.tz",
+                    "address": "KT1PRWAcEAU6Y5P23zGqHEwsBPy5JiuZ1Cq6",
+                    "alias": "MarketPlace",
+                    "destination": "ghostnet"
+                }
+            ]
+        },
+        "@taqueria/plugin-taquito.deploy.1668604752623": {
+            "task": "deploy",
+            "plugin": "@taqueria/plugin-taquito",
+            "time": 1668604752623,
+            "output": [
+                {
+                    "contract": "TokenFA2.tz",
+                    "address": "KT1EJHyFcTUeuvYsVzkfsmsuvmAMWhi8FX9i",
+                    "alias": "TokenFA2",
+                    "destination": "ghostnet"
+                }
+            ]
+        },
+        "@taqueria/plugin-taquito.deploy.1668604815181": {
+            "task": "deploy",
+            "plugin": "@taqueria/plugin-taquito",
+            "time": 1668604815181,
+            "output": [
+                {
+                    "contract": "MarketPlace.tz",
+                    "address": "KT1JD58j7Z8KRYUdQPp6UTa8VnwmKJntxshC",
+                    "alias": "MarketPlace",
+                    "destination": "ghostnet"
+                }
+            ]
+        }
+    }
+}

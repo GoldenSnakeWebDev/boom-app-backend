@@ -15,6 +15,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@taqueria/plugin-flextesa": "^0.22.2",
+    "@taqueria/plugin-jest": "^0.22.2",
     "@taqueria/plugin-ligo": "^0.22.2",
     "@taqueria/plugin-taquito": "^0.22.2"
   }

@@ -1,101 +1,6 @@
 {
     "operations": {},
     "tasks": {
-        "@taqueria/plugin-ligo.compile.1668533887583": {
-            "task": "compile",
-            "plugin": "@taqueria/plugin-ligo",
-            "time": 1668533887584,
-            "output": [
-                {
-                    "contract": "TokenFA2.jsligo",
-                    "artifact": "artifacts/TokenFA2.tz"
-                },
-                {
-                    "contract": "TokenFA2.storages.jsligo",
-                    "artifact": "artifacts/TokenFA2.default_storage.tz\n"
-                },
-                {
-                    "contract": "TokenFA2.parameters.jsligo",
-                    "artifact": ""
-                }
-            ]
-        },
-        "@taqueria/plugin-ligo.compile.1668533950571": {
-            "task": "compile",
-            "plugin": "@taqueria/plugin-ligo",
-            "time": 1668533950571,
-            "output": [
-                {
-                    "contract": "TokenFA2.jsligo",
-                    "artifact": "artifacts/TokenFA2.tz"
-                },
-                {
-                    "contract": "TokenFA2.storages.jsligo",
-                    "artifact": "artifacts/TokenFA2.default_storage.tz\n"
-                },
-                {
-                    "contract": "TokenFA2.parameters.jsligo",
-                    "artifact": ""
-                }
-            ]
-        },
-        "@taqueria/plugin-ligo.compile.1668533971489": {
-            "task": "compile",
-            "plugin": "@taqueria/plugin-ligo",
-            "time": 1668533971489,
-            "output": [
-                {
-                    "contract": "TokenFA2.jsligo",
-                    "artifact": "artifacts/TokenFA2.tz"
-                },
-                {
-                    "contract": "TokenFA2.storages.jsligo",
-                    "artifact": "artifacts/TokenFA2.default_storage.tz\n"
-                },
-                {
-                    "contract": "TokenFA2.parameters.jsligo",
-                    "artifact": ""
-                }
-            ]
-        },
-        "@taqueria/plugin-ligo.compile.1668533991512": {
-            "task": "compile",
-            "plugin": "@taqueria/plugin-ligo",
-            "time": 1668533991512,
-            "output": [
-                {
-                    "contract": "TokenFA2.jsligo",
-                    "artifact": "artifacts/TokenFA2.tz"
-                },
-                {
-                    "contract": "TokenFA2.storages.jsligo",
-                    "artifact": "artifacts/TokenFA2.default_storage.tz\n"
-                },
-                {
-                    "contract": "TokenFA2.parameters.jsligo",
-                    "artifact": ""
-                }
-            ]
-        },
-        "@taqueria/plugin-ligo.compile.1668534013405": {
-            "task": "compile",
-            "plugin": "@taqueria/plugin-ligo",
-            "time": 1668534013405,
-            "output": [
-                {
-                    "contract": "TokenFA2.jsligo",
-                    "artifact": "artifacts/TokenFA2.tz"
-                },
-                {
-                    "contract": "TokenFA2.storages.jsligo",
-                    "artifact": "artifacts/TokenFA2.default_storage.tz\n"
-                },
-                {
-                    "contract": "TokenFA2.parameters.jsligo",
-                    "artifact": "artifacts/TokenFA2.parameter.update_operators_.tz\n"
-                }
-            ]
-        },
         "@taqueria/plugin-flextesa.list accounts.1668534271400": {
             "task": "list accounts",
             "plugin": "@taqueria/plugin-flextesa",
@@ -151,6 +56,93 @@
                     "address": "KT1TgsNPs4GLPA5HouWFan1VkYQhYxWni5SK",
                     "alias": "TokenFA2",
                     "destination": "local"
+                }
+            ]
+        },
+        "@taqueria/plugin-ligo.compile.1668604082066": {
+            "task": "compile",
+            "plugin": "@taqueria/plugin-ligo",
+            "time": 1668604082066,
+            "output": [
+                {
+                    "contract": "Marketplace.jsligo",
+                    "artifact": "Not compiled"
+                }
+            ]
+        },
+        "@taqueria/plugin-ligo.compile.1668604109970": {
+            "task": "compile",
+            "plugin": "@taqueria/plugin-ligo",
+            "time": 1668604109970,
+            "output": [
+                {
+                    "contract": "MarketPlace.jsligo",
+                    "artifact": "artifacts/MarketPlace.tz"
+                },
+                {
+                    "contract": "MarketPlace.storages.jsligo",
+                    "artifact": ""
+                },
+                {
+                    "contract": "MarketPlace.parameters.jsligo",
+                    "artifact": "artifacts/MarketPlace.parameter.set_fee_.tz\n"
+                }
+            ]
+        },
+        "@taqueria/plugin-ligo.compile.1668604196870": {
+            "task": "compile",
+            "plugin": "@taqueria/plugin-ligo",
+            "time": 1668604196870,
+            "output": [
+                {
+                    "contract": "MarketPlace.jsligo",
+                    "artifact": "artifacts/MarketPlace.tz"
+                },
+                {
+                    "contract": "MarketPlace.storages.jsligo",
+                    "artifact": "artifacts/MarketPlace.default_storage.tz\n"
+                },
+                {
+                    "contract": "MarketPlace.parameters.jsligo",
+                    "artifact": "artifacts/MarketPlace.parameter.set_fee_.tz\n"
+                }
+            ]
+        },
+        "@taqueria/plugin-ligo.compile.1668604682648": {
+            "task": "compile",
+            "plugin": "@taqueria/plugin-ligo",
+            "time": 1668604682648,
+            "output": [
+                {
+                    "contract": "MarketPlace.jsligo",
+                    "artifact": "artifacts/MarketPlace.tz"
+                },
+                {
+                    "contract": "MarketPlace.storages.jsligo",
+                    "artifact": "artifacts/MarketPlace.default_storage.tz\n"
+                },
+                {
+                    "contract": "MarketPlace.parameters.jsligo",
+                    "artifact": "artifacts/MarketPlace.parameter.set_fee_.tz\n"
+                }
+            ]
+        },
+        "@taqueria/plugin-ligo.compile.1668604708968": {
+            "task": "compile",
+            "plugin": "@taqueria/plugin-ligo",
+            "time": 1668604708968,
+            "output": [
+                {
+                    "contract": "TokenFA2.jsligo",
+                    "artifact": "artifacts/TokenFA2.tz"
+                },
+                {
+                    "contract": "TokenFA2.storages.jsligo",
+                    "artifact": "artifacts/TokenFA2.default_storage.tz\n"
+                },
+                {
+                    "contract": "TokenFA2.parameters.jsligo",
+                    "artifact": "artifacts/TokenFA2.parameter.update_operators_.tz\n"
                 }
             ]
         }

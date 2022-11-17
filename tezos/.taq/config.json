@@ -6,7 +6,14 @@
         "ghostnet": {
             "label": "ghostnet",
             "rpcUrl": "https://ghostnet.ecadinfra.com",
-            "protocol": "PtKathmankSpLLDALzWw7CGD2j2MtyveTwboEYokqUCP4a1LxMg"
+            "protocol": "PtKathmankSpLLDALzWw7CGD2j2MtyveTwboEYokqUCP4a1LxMg",
+            "accounts": {
+                "taqRootAccount": {
+                    "publicKey": "p2pk66bFHwjqFSTK7rrsEybRryni9EUrN5BHHm4LAvrX8tDbkMR4MYM",
+                    "publicKeyHash": "tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6",
+                    "privateKey": "p2sk3gE2mdHHcCpS5jH7LvhgDkfUTwcXsbJhgESN6kYgJJqSYGEnBQ"
+                }
+            }
         }
     },
     "sandbox": {
@@ -69,7 +76,15 @@
             "networks": [
                 "ghostnet"
             ],
-            "sandboxes": []
+            "sandboxes": [],
+            "aliases": {
+                "MarketPlace": {
+                    "address": "KT1JD58j7Z8KRYUdQPp6UTa8VnwmKJntxshC"
+                },
+                "TokenFA2": {
+                    "address": "KT1EJHyFcTUeuvYsVzkfsmsuvmAMWhi8FX9i"
+                }
+            }
         }
     },
     "accounts": {
@@ -91,9 +106,13 @@
         {
             "name": "@taqueria/plugin-taquito",
             "type": "npm"
+        },
+        {
+            "name": "@taqueria/plugin-jest",
+            "type": "npm"
         }
     ],
     "projectDir": "/home/dennohpeter/Projects/ngeni/boom-social-media/tezos",
     "configFile": "/home/dennohpeter/Projects/ngeni/boom-social-media/tezos/.taq/config.json",
-    "hash": "3561a351d1a253c342d225cfb50a613d171a0d61f70e8b24bb651e54923a2f5c"
+    "hash": "10149ede8ae6f794bead4f261fac3f85be258110ee3915ad2c884ac8f65d7fe0"
 }

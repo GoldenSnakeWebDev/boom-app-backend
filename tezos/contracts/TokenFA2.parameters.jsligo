@@ -1,12 +1,10 @@
 #include "TokenFA2.jsligo"
+const update_operators_ = 
+  Update_operators
+    (list([Add_operator
+       ({owner: ("tz3hhyurehKMNYFsRSf31RuZGKfWUQgrAw1L"
+          as address),
+        operator: ("tz3hhyurehKMNYFsRSf31RuZGKfWUQgrAw1L"
+          as address),
+        token_id: (0 as nat)})]));
 
-
-const update_operators_ = Update_operators(
-        list([
-            Add_operator({
-                owner: ("tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6" as address),
-                operator: ("tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6" as address),
-                token_id: (0 as nat)
-            })
-        ])
-    )

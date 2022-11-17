@@ -1,8 +1,7 @@
 #include "MarketPlace.jsligo"
+const initial_storage: storage_ = 
+  {admin: ("tz3hhyurehKMNYFsRSf31RuZGKfWUQgrAw1L" as address),
+   fee_rate: (0 as nat),
+   listings: Big_map.empty,
+   next_listing_id: (0 as nat)};
 
-const initial_storage: storage_ = {
-    admin: ("tz1aSkwEot3L2kmUvcoxzjMomb9mvBNuzFK6" as address),
-    fee_rate: (0 as nat),
-    listings: Big_map.empty,
-    next_listing_id: (0 as nat),
-}
