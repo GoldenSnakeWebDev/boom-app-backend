@@ -6,3 +6,4 @@ export * from "./signin";
 export * from "./signout";
 export * from "./signup";
 export * from "./update-profile";
+export * from "./friends";

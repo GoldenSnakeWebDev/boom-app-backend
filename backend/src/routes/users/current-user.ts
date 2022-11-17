@@ -25,7 +25,11 @@ router.get(
   "/api/v1/users/currentuser",
   requireAuth,
   async (req: Request, res: Response) => {
-    const user = await User.findById(req.currentUser?.id).populate("sync_bank");
+    const user = await User.findById(req.currentUser?.id)
+      .populate("sync_bank")
+      .populate("funs")
+      .populate("followers")
+      .populate("following");
 
     if (!user) {
       throw new NotAuthorizedError();
@@ -53,7 +57,11 @@ router.get(
  *         description: . Get a user's profile info by id.
  */
 router.get("/api/v1/users/:id", async (req: Request, res: Response) => {
-  const user = await User.findById(req.params.id).populate("sync_bank");
+  const user = await User.findById(req.params.id)
+    .populate("sync_bank")
+    .populate("funs")
+    .populate("followers")
+    .populate("following");
 
   if (!user) {
     throw new BadRequestError("User not found");
