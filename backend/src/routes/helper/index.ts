@@ -4,7 +4,7 @@ import sharp from "sharp";
 import multer from "multer";
 import { v1 as uuid1 } from "uuid";
 import { BadRequestError } from "./../../errors";
-import { config } from "src/config";
+import { config } from "./../../config";
 
 const router = express.Router();
 

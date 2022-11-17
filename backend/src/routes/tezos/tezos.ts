@@ -2,11 +2,11 @@ import { Request, Response, Router } from "express";
 import { body } from "express-validator";
 import pinataSDK from "@pinata/sdk";
 
-import { requireAuth, validateRequest } from "src/middlewares";
-import { config } from "src/config";
+import { requireAuth, validateRequest } from "./../../middlewares";
+import { config } from "./../../config";
 import { uploadDocument } from "../helper";
 import { createReadStream, unlinkSync } from "fs";
-import { buildFilterQuery } from "src/utils";
+import { buildFilterQuery } from "./../../utils";
 
 const router = Router();
 
