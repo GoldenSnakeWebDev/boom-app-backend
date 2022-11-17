@@ -1,4 +1,5 @@
 import { Schema, model, Types } from "mongoose";
+import { User } from "./user";
 
 export interface IComment {
   user: Types.ObjectId;
@@ -30,4 +31,8 @@ const commentSchema = new Schema<IComment>(
   }
 );
 
+commentSchema.pre(/^find/, function (next) {
+  this.populate({ path: "user", model: User });
+  next();
+});
 export const Comment = model("Comment", commentSchema);

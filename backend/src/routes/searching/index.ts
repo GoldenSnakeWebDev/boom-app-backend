@@ -40,7 +40,17 @@ router.get("/api/v1/searching", async (req: Request, res: Response) => {
         { description: new RegExp(`${searchQuery}`, "i") },
         { location: new RegExp(`${searchQuery}`, "i") },
       ],
-    }),
+    })
+      .populate({ path: "comments", options: { _recursed: true } })
+      .populate("network")
+      .populate("reactions.likes")
+      .populate("reactions.loves")
+      .populate("reactions.smiles")
+      .populate("reactions.rebooms")
+      .populate("reactions.reports")
+      .populate("user")
+      .populate("comments")
+      .populate("comments.user"),
     req.query
   )
     .filter()
