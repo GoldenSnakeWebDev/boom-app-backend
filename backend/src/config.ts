@@ -8,4 +8,9 @@ export const config = {
   RPC_URL: process.env.RPC_URL!,
   PORT: process.env.PORT!,
   ENVIRONMENT: "development",
+
+  FOLDER_NAME: "uploads",
+
+  PINATA_API_KEY: process.env.PINATA_API_KEY!,
+  PINATA_SECRET_API_KEY: process.env.PINATA_SECRET_API_KEY!,
 };

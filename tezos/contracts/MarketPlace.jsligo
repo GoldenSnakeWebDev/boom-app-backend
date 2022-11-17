@@ -71,8 +71,8 @@ type return_ =
    storage_];
 
 const create_listing = 
-  (params: listing_params_type, storage: storage_): return_ => {let _assert = 
-     assert_with_error(params.quantity > (0 as nat), invalid_quantity_error);
+  (params: listing_params_type, storage: storage_): return_ => {assert_with_error(params.quantity > (0
+       as nat), invalid_quantity_error);
    let transaction_sender: address = Tezos.get_sender();
    let balance_opt: option<nat> = 
      Tezos.call_view("get_balance", [transaction_sender,
@@ -81,10 +81,8 @@ const create_listing =
      match(balance_opt, {None: () => 
         (failwith(uknown_view_get_balance_error) as nat),
       Some: (balance: nat) => balance});
-   let _assert = 
-     assert_with_error(balance >= params.quantity, insufficient_balance_error);
-   let _assert = 
-     assert_with_error(params.price_per_token > (0 as tez), invalid_price_error);
+   assert_with_error(balance >= params.quantity, insufficient_balance_error);
+   assert_with_error(params.price_per_token > (0 as tez), invalid_price_error);
    let listing_id: listing_id_type = storage.next_listing_id;
    let listing: listing_type = 
      {listing_id: listing_id,
@@ -106,17 +104,14 @@ const update_listing =
   (params: update_listing_params_type, storage: storage_): return_ => {let transaction_sender = 
      Tezos.get_sender();
    let listing_opt = 
-     Big_map.find(params.listing_id, storage.listings);
-   let listing = 
+     Big_map.find_opt(params.listing_id, storage.listings);
+   let listing: listing_type = 
      match(listing_opt, {None: () => 
-        failwith("Listing not found"),
-      Some: (listing: listing_type) => listing});
-   let _assert = 
-     assert_with_error(listing.token_owner == transaction_sender, not_authorized_error);
-   let _assert = 
-     assert_with_error(params.quantity > (0 as nat), invalid_quantity_error);
-   let _assert = 
-     assert_with_error(params.price_per_token > (0 as tez), invalid_price_error);
+        failwith("Listing not found") as listing_type,
+      Some: listing => listing});
+   assert_with_error(listing.token_owner == transaction_sender, not_authorized_error);
+   assert_with_error(params.quantity > (0 as nat), invalid_quantity_error);
+   assert_with_error(params.price_per_token > (0 as tez), invalid_price_error);
    let balance_opt = 
      Tezos.call_view("get_balance", [transaction_sender,
       listing.token_id], listing.asset_contract);
@@ -124,8 +119,7 @@ const update_listing =
      match(balance_opt, {None: () => 
         (failwith(uknown_view_get_balance_error) as nat),
       Some: (balance: nat) => balance});
-   let _assert = 
-     assert_with_error(balance >= params.quantity, insufficient_balance_error);
+   assert_with_error(balance >= params.quantity, insufficient_balance_error);
    let updated_listing = 
      {...listing,
       quantity: params.quantity,
@@ -140,29 +134,27 @@ const remove_listing =
   (params: remove_listing_params_type, storage: storage_): return_ => {let transaction_sender = 
      Tezos.get_sender();
    let listing_opt = 
-     Big_map.find(params.listing_id, storage.listings);
+     Big_map.find_opt(params.listing_id, storage.listings);
    let listing = 
      match(listing_opt, {None: () => 
         (failwith("Listing not found") as listing_type),
       Some: (listing: listing_type) => listing});
-   let _assert = 
-     assert_with_error(listing.token_owner == transaction_sender, not_authorized_error);
+   assert_with_error(listing.token_owner == transaction_sender, not_authorized_error);
    let listings = 
      Big_map.remove(params.listing_id, storage.listings);
    return [list([]), {...storage, listings: listings}]};
 
 const buy = 
-  (params: buy_listing_params_type, storage: storage_): return_ => {return [list([]),
+  (_params: buy_listing_params_type, storage: storage_): return_ => {return [list([]),
     storage]};
 
 const set_fee = 
   (params: set_fee_params_type, storage: storage_): return_ => {let transaction_sender: address = 
      Tezos.get_sender();
    let fee_rate = params.fee;
-   let _assert = 
-     assert_with_error(transaction_sender == storage.admin, not_authorized_error);
-   let _assert = 
-     assert_with_error(fee_rate >= 0 && fee_rate <= 100, invalid_fee_rate_error);
+   assert_with_error(transaction_sender == storage.admin, not_authorized_error);
+   assert_with_error(fee_rate >= (0 as nat) && fee_rate <= (100
+           as nat), invalid_fee_rate_error);
    return [list([]), {...storage, fee_rate: fee_rate}]};
 
 const main = 

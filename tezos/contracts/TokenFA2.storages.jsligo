@@ -1,0 +1,11 @@
+#include "TokenFA2.jsligo"
+const inital_storage: storage_type = 
+  {ledger: Big_map.empty,
+   operators: Big_map.empty,
+   metadata: Big_map.empty,
+   token_metadata: Big_map.empty,
+   total_supply: Big_map.empty,
+   all_tokens: list([]),
+   next_token_id: (0 as nat),
+   admin: ("tz3hhyurehKMNYFsRSf31RuZGKfWUQgrAw1L" as address)};
+
