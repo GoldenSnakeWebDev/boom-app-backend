@@ -66,10 +66,17 @@ router.post(
       status: ITransactionStatus.PENDING,
     });
 
+    //for tiper
+    await updateWalletBalance({
+      userId: req.currentUser?.id!,
+      transaction_type: ITransactionType.TRANSFER,
+      amount,
+    });
+
     // after approve that payments have reached to our bank
     const syncBankResponse = await updateWalletBalance({
       userId: tipedUser.id,
-      transaction_type: ITransactionType.DEPOSIT,
+      transaction_type: ITransactionType.INCOME,
       amount,
     });
     // end of update sync bank
@@ -81,4 +88,4 @@ router.post(
   }
 );
 
-export { router as SyncBankCurrentUserDepositRoute };
+export { router as TippingRoute };

@@ -23,6 +23,9 @@ import { BoomBoxRoutes } from "./boom-box";
 import { NofiticationRoutes } from "./notification/index";
 import { FriendsFollowersRoutes } from "./users/friends";
 import { TezosMintAndURLPrep } from "./tezos";
+import { TippingRoute } from "./sync-bank/tipping";
+import { BoomSearchRoutes } from "./searching/index";
+
 app.use([
   UserResetPasswordResetRoutes,
   UserRequestPasswordResetRoutes,
@@ -46,3 +49,5 @@ app.use([BoomBoxRoutes]);
 app.use([NofiticationRoutes]);
 app.use([FriendsFollowersRoutes]);
 app.use([TezosMintAndURLPrep]);
+app.use([TippingRoute]);
+app.use([BoomSearchRoutes]);

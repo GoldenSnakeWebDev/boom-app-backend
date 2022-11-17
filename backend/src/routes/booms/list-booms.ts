@@ -74,6 +74,55 @@ router.get("/api/v1/booms", async (req: Request, res: Response) => {
 
 /**
  * @openapi
+ * /api/v1/fetch-user-booms/:id:
+ *   get:
+ *     tags:
+ *        - Booms
+ *     description: List of all platform booms.
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     responses:
+ *       200:
+ *         description: . Returns a  list of booms.
+ */
+router.get(
+  "/api/v1/fetch-user-booms/:userId",
+  async (req: Request, res: Response) => {
+    const response = new ApiResponse(
+      Boom.find({ user: req.params.userId })
+        .populate({ path: "comments", options: { _recursed: true } })
+        .populate("network")
+        .populate("reactions.likes")
+        .populate("reactions.loves")
+        .populate("reactions.smiles")
+        .populate("reactions.rebooms")
+        .populate("reactions.reports")
+        .populate("user")
+        .populate("comments")
+        .populate("comments.user"),
+      req.query
+    )
+      .filter()
+      .sort()
+      .limitFields();
+
+    // const count = await response.query;
+
+    const booms = await response.paginate().query;
+
+    res.status(200).json({
+      status: "success",
+      page: response?.page_info,
+      // count: count.length,
+      booms,
+    });
+  }
+);
+
+/**
+ * @openapi
  * /api/v1/booms/mine:
  *   get:
  *     tags:
