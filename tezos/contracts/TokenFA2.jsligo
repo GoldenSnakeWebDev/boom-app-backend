@@ -162,7 +162,7 @@ type return_type = [list<operation>, storage_type];
 
 
 /* TRANSFER */
-const transfer = ([params, storage]: [transfer_params_type, storage_type]): return_type => {
+export const transfer = ([params, storage]: [transfer_params_type, storage_type]): return_type => {
   const transaction_sender = Tezos.get_sender ();
   const transfers: list<transfer_type> = params;
 

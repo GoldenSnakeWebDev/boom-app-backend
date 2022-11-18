@@ -59,40 +59,54 @@
                 }
             ]
         },
-        "@taqueria/plugin-ligo.compile.1668604082066": {
+        "@taqueria/plugin-ligo.compile.1668775699531": {
             "task": "compile",
             "plugin": "@taqueria/plugin-ligo",
-            "time": 1668604082066,
+            "time": 1668775699531,
             "output": [
                 {
-                    "contract": "Marketplace.jsligo",
+                    "contract": "MarketPlace.jsligo",
                     "artifact": "Not compiled"
                 }
             ]
         },
-        "@taqueria/plugin-ligo.compile.1668604109970": {
+        "@taqueria/plugin-ligo.compile.1668775791849": {
             "task": "compile",
             "plugin": "@taqueria/plugin-ligo",
-            "time": 1668604109970,
+            "time": 1668775791849,
             "output": [
                 {
                     "contract": "MarketPlace.jsligo",
-                    "artifact": "artifacts/MarketPlace.tz"
-                },
-                {
-                    "contract": "MarketPlace.storages.jsligo",
-                    "artifact": ""
-                },
-                {
-                    "contract": "MarketPlace.parameters.jsligo",
-                    "artifact": "artifacts/MarketPlace.parameter.set_fee_.tz\n"
+                    "artifact": "Not compiled"
                 }
             ]
         },
-        "@taqueria/plugin-ligo.compile.1668604196870": {
+        "@taqueria/plugin-ligo.compile.1668775819913": {
             "task": "compile",
             "plugin": "@taqueria/plugin-ligo",
-            "time": 1668604196870,
+            "time": 1668775819913,
+            "output": [
+                {
+                    "contract": "MarketPlace.jsligo",
+                    "artifact": "Not compiled"
+                }
+            ]
+        },
+        "@taqueria/plugin-ligo.compile.1668775858314": {
+            "task": "compile",
+            "plugin": "@taqueria/plugin-ligo",
+            "time": 1668775858314,
+            "output": [
+                {
+                    "contract": "MarketPlace.jsligo",
+                    "artifact": "Not compiled"
+                }
+            ]
+        },
+        "@taqueria/plugin-ligo.compile.1668775875109": {
+            "task": "compile",
+            "plugin": "@taqueria/plugin-ligo",
+            "time": 1668775875109,
             "output": [
                 {
                     "contract": "MarketPlace.jsligo",
@@ -105,44 +119,6 @@
                 {
                     "contract": "MarketPlace.parameters.jsligo",
                     "artifact": "artifacts/MarketPlace.parameter.set_fee_.tz\n"
-                }
-            ]
-        },
-        "@taqueria/plugin-ligo.compile.1668604682648": {
-            "task": "compile",
-            "plugin": "@taqueria/plugin-ligo",
-            "time": 1668604682648,
-            "output": [
-                {
-                    "contract": "MarketPlace.jsligo",
-                    "artifact": "artifacts/MarketPlace.tz"
-                },
-                {
-                    "contract": "MarketPlace.storages.jsligo",
-                    "artifact": "artifacts/MarketPlace.default_storage.tz\n"
-                },
-                {
-                    "contract": "MarketPlace.parameters.jsligo",
-                    "artifact": "artifacts/MarketPlace.parameter.set_fee_.tz\n"
-                }
-            ]
-        },
-        "@taqueria/plugin-ligo.compile.1668604708968": {
-            "task": "compile",
-            "plugin": "@taqueria/plugin-ligo",
-            "time": 1668604708968,
-            "output": [
-                {
-                    "contract": "TokenFA2.jsligo",
-                    "artifact": "artifacts/TokenFA2.tz"
-                },
-                {
-                    "contract": "TokenFA2.storages.jsligo",
-                    "artifact": "artifacts/TokenFA2.default_storage.tz\n"
-                },
-                {
-                    "contract": "TokenFA2.parameters.jsligo",
-                    "artifact": "artifacts/TokenFA2.parameter.update_operators_.tz\n"
                 }
             ]
         }
