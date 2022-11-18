@@ -1,4 +1,8 @@
+#import "TokenFA2.jsligo" "FA2"
+
 const not_authorized_error = "NOT_AUTHORIZED";
+
+const self_buy_error = "CANNOT_BUY_OWN_NFT";
 
 const invalid_fee_rate_error = "INVALID_FEE_RATE";
 
@@ -10,6 +14,8 @@ const invalid_price_error = "INVALID_PRICE";
 
 const uknown_view_get_balance_error = 
   "UNKNOWN_VIEW_GET_BALANCE";
+
+const unkown_contract = "UNKOWN CONTRACT";
 
 type listing_id_type = nat;
 
@@ -145,8 +151,42 @@ const remove_listing =
    return [list([]), {...storage, listings: listings}]};
 
 const buy = 
-  (_params: buy_listing_params_type, storage: storage_): return_ => {return [list([]),
-    storage]};
+  ([_params, storage] : [buy_listing_params_type, storage_]): return_ => {
+    // Get Listing
+    let listing_opt = Big_map.find_opt(_params.listing_id, storage.listings);
+    let listing = match(listing_opt, {
+      None: () => (failwith("Listing not found") as listing_type),
+      Some: (listing: listing_type) => listing});
+
+    /* CHECKS
+     * 1. Make sure sender is not current owner
+     * 2. Make sure the amount is right
+     */
+     let expected_amount: tez = (listing.quantity as nat) * (Tezos.get_amount()); 
+ 
+     let _check_sender = assert_with_error((Tezos.get_sender()) != listing.token_owner, self_buy_error);
+     let _check_amount = assert_with_error(expected_amount == (Tezos.get_amount()), invalid_price_error);
+
+    // Transfer Tez to owner
+    let dest_opt: option<contract<unit>> = Tezos.get_contract_opt(listing.token_owner);
+    let destination: contract<unit> = match(dest_opt, {
+      None: () => (failwith("Unkown Owner") as contract<unit>),
+      Some: (c: contract<unit>) => c
+    });
+    let op_token: operation = Tezos.transaction(unit, Tezos.get_amount(), destination);
+
+
+    // Transfer NFT to new_owner
+    let nft_transfer_dest_opt = Tezos.get_entrypoint_opt("%Transfer", listing.asset_contract);
+    let nft_transfer_dest = match(nft_transfer_dest_opt, {
+      None: () => failwith(unkown_contract),
+      Some: ct => ct
+    });
+    let nft_transfer = list([{from_: listing.token_owner, tx:list([{to_:Tezos.get_sender(), token_id:listing.token_id}])}]);
+    let op_nft: operation = Tezos.transaction(nft_transfer, (0 as mutez), nft_transfer_dest);
+
+    return [list([op_token, op_nft]), storage]
+  };
 
 const set_fee = 
   (params: set_fee_params_type, storage: storage_): return_ => {let transaction_sender: address = 
