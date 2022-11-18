@@ -25,7 +25,11 @@ router.patch(
   "/api/v1/friends/:id",
   requireAuth,
   async (req: Request, res: Response) => {
-    const user = await User.findById(req.currentUser?.id).populate("sync_bank");
+    const user = await User.findById(req.currentUser?.id)
+      .populate("sync_bank")
+      .populate("funs")
+      .populate("followers")
+      .populate("following");
 
     if (req.currentUser?.id === req.params.id) {
       res.status(200).json({

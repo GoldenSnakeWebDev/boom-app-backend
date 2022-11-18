@@ -43,7 +43,11 @@ router.post(
 
     const user = await User.findOne({
       $or: [{ email: email }, { username: email }],
-    }).populate("sync_bank");
+    })
+      .populate("sync_bank")
+      .populate("funs")
+      .populate("followers")
+      .populate("following");
 
     if (!user) {
       throw new BadRequestError(`Wrong credentials. Please try again`);
