@@ -67,7 +67,7 @@ export const updateWalletBalance = async (opts: {
     // create transactions
     await Transaction.create({
       user: user.id,
-      transactionId: await getNextTransaction(),
+      transaction_number: await getNextTransaction(),
       amount: opts.amount,
       transaction_type: opts.transaction_type,
       narations: `Updated you wallet balance`,
@@ -84,7 +84,7 @@ export const updateWalletBalance = async (opts: {
     // create transactions
     await Transaction.create({
       user: user.id,
-      transactionId: await getNextTransaction(),
+      transaction_number: await getNextTransaction(),
       amount: opts.amount,
       transaction_type: opts.transaction_type,
       narations: `Updated you wallet balance`,
@@ -101,7 +101,7 @@ export const updateWalletBalance = async (opts: {
     // create transactions
     await Transaction.create({
       user: user.id,
-      transactionId: await getNextTransaction(),
+      transaction_number: await getNextTransaction(),
       amount: opts.amount,
       transaction_type: opts.transaction_type,
       narations: `Transfered you money from your wallet`,
@@ -118,7 +118,7 @@ export const updateWalletBalance = async (opts: {
     // create transactions
     await Transaction.create({
       user: user.id,
-      transactionId: await getNextTransaction(),
+      transaction_number: await getNextTransaction(),
       amount: opts.amount,
       transaction_type: opts.transaction_type,
       narations: `Recieved money from your friend`,

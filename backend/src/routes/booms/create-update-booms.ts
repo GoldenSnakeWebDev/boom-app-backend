@@ -335,7 +335,7 @@ router.patch(
 
 /**
  * @openapi
- * /api/by-booms-with-sync-coins:
+ * /api/v1/by-booms-with-sync-coins:
  *   post:
  *     tags:
  *        - Booms
