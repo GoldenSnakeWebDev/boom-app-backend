@@ -353,7 +353,7 @@ router.patch(
  */
 
 router.post(
-  "/api/by-booms-with-sync-coins",
+  "/api/v1/by-booms-with-sync-coins",
   [body("boom").notEmpty().withMessage("Please provide your boom information")],
   requireAuth,
   validateRequest,
