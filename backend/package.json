@@ -7,7 +7,7 @@
     "dev": "ts-node-dev src/index.ts",
     "start": "node dist/src/index.js",
     "test": "ts-node-dev src/abis/test-common.ts",
-    "compile": "tsc && cpx \"./src/public/**/*\" ./dist/src/public"
+    "compile": "tsc && cpx \"./src/public/**/*\" ./dist/src/public && cpx \"./src/emails/**/*\" ./dist/src/emails"
   },
   "keywords": [],
   "author": "Omambia M. Dauglous => (Ngeni IO Limited)",
