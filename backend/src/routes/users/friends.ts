@@ -72,8 +72,8 @@ router.patch(
       status: "success",
       user: await User.findById(req.currentUser?.id)
         .populate("sync_bank")
-        .populate("friends")
-        .populate("funs"),
+        .populate("friends", "username photo first_name last_name")
+        .populate("funs", "username photo first_name last_name"),
     });
   }
 );

@@ -58,8 +58,8 @@ router.get(
 router.get("/api/v1/users/:id", async (req: Request, res: Response) => {
   const user = await User.findById(req.params.id)
     .populate("sync_bank")
-    .populate("friends")
-    .populate("funs");
+    .populate("friends", "username photo first_name last_name")
+    .populate("funs", "username photo first_name last_name");
 
   if (!user) {
     throw new BadRequestError("User not found");

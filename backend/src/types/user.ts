@@ -10,8 +10,8 @@ export interface UserPayload {
   first_name?: string;
   last_name?: string;
   booms?: Array<any>;
-  followers?: Array<any>;
-  following?: Array<any>;
+  funs?: Array<any>;
+  friends?: Array<any>;
   photo?: string;
   email: string;
   location?: string;

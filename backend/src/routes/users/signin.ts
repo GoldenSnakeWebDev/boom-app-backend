@@ -46,8 +46,8 @@ router.post(
     })
       .populate("sync_bank")
       .populate("funs")
-      .populate("followers")
-      .populate("following");
+      .populate("friends", "username photo first_name last_name")
+      .populate("funs", "username photo first_name last_name");
 
     if (!user) {
       throw new BadRequestError(`Wrong credentials. Please try again`);
