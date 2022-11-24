@@ -1,8 +1,6 @@
 import { Request, Response, Router } from "express";
 import { requireAuth } from "../../middlewares/require-auth";
 import { User } from "../../models/user";
-import { NotAuthorizedError } from "../../errors/not-authorized-error";
-// import { BadRequestError } from "../../errors/bad-request-error";
 
 const router = Router();
 
@@ -27,9 +25,8 @@ router.patch(
   async (req: Request, res: Response) => {
     const user = await User.findById(req.currentUser?.id)
       .populate("sync_bank")
-      .populate("funs")
-      .populate("followers")
-      .populate("following");
+      .populate("friends")
+      .populate("funs");
 
     if (req.currentUser?.id === req.params.id) {
       res.status(200).json({
@@ -38,32 +35,45 @@ router.patch(
       });
     }
 
-    if (
-      user?.funs?.map((item) => item.toString()).includes(req.currentUser?.id!)
-    ) {
-      await User.findByIdAndUpdate(req.params.id, {
-        $push: { followers: req.currentUser?.id },
-      });
+    let nextUser = await User.findById(req.params.id);
+
+    const areYouNextUserFun = nextUser?.funs
+      ?.map((item) => item.toString())
+      .includes(req.currentUser?.id!);
+
+    if (!areYouNextUserFun) {
+      nextUser = await User.findByIdAndUpdate(
+        req.params.id,
+        { $push: { funs: req.currentUser?.id } },
+        { new: true }
+      );
     } else {
-      await User.findByIdAndUpdate(req.params.id, {
-        $push: { funs: req.currentUser?.id },
-      });
+      // remove being a friend
     }
 
-    await User.findByIdAndUpdate(req.currentUser?.id, {
-      $push: { funs: req.params.id },
-    });
+    const isSenderYourFun = user?.funs
+      ?.map((item) => item.toString())
+      .includes(req.currentUser?.id!);
 
-    if (!user) {
-      throw new NotAuthorizedError();
+    if (
+      nextUser?.funs
+        ?.map((item) => item.toString())
+        .includes(req.currentUser?.id!) &&
+      isSenderYourFun
+    ) {
+      await User.findByIdAndUpdate(
+        req.currentUser?.id,
+        { $push: { friends: req.params.id } },
+        { new: true }
+      );
     }
+
     res.status(200).json({
       status: "success",
       user: await User.findById(req.currentUser?.id)
         .populate("sync_bank")
-        .populate("funs")
-        .populate("followers")
-        .populate("following"),
+        .populate("friends")
+        .populate("funs"),
     });
   }
 );

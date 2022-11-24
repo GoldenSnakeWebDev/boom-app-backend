@@ -4,6 +4,7 @@ import { validateRequest } from "../../middlewares/validate-request";
 import { User } from "./../../models/user";
 import { BadRequestError } from "../../errors/bad-request-error";
 import { randomCode } from "../../utils/common";
+import { sendMail } from "./../../utils/mail";
 
 const router = Router();
 
@@ -13,21 +14,25 @@ const router = Router();
  *   post:
  *     tags:
  *        - Auth
- *     description: Enables user to be authenticated and authorized.
+ *     description: Enable user to request password reset.
  *     produces:
  *        - application/json
  *     consumes:
  *        - application/json
  *     parameters:
  *        - name: email
- *          description: Email Address
+ *          description: Email Address  or username
  *     responses:
  *       200:
- *         description: . Successfully logged in to your account.
+ *         description: . Successfully initiates the process of reseting password.
  */
 router.post(
   "/api/v1/users/request-password-reset",
-  [body("email").isEmail().withMessage("Please provide email address")],
+  [
+    body("email")
+      .notEmpty()
+      .withMessage("Please provide your email or username to proceed"),
+  ],
   validateRequest,
   async (req: Request, res: Response) => {
     const { email } = req.body;
@@ -53,6 +58,19 @@ router.post(
       },
       { new: true }
     );
+
+    await sendMail({
+      to: user.email,
+      from: "support@boom.dev",
+      subject: "Password Reset",
+      template: "info",
+      dynamic_template_data: {
+        full_name: `${user.username}`,
+        message: `Hello ${user.username}. your password reset code is: ${code}`,
+      },
+    }).catch((error) => {
+      console.log(`Error:${error}`);
+    });
 
     res.status(201).json({
       success: "success",

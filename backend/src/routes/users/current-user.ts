@@ -27,9 +27,8 @@ router.get(
   async (req: Request, res: Response) => {
     const user = await User.findById(req.currentUser?.id)
       .populate("sync_bank")
-      .populate("funs")
-      .populate("followers")
-      .populate("following");
+      .populate("friends")
+      .populate("funs");
 
     if (!user) {
       throw new NotAuthorizedError();
@@ -59,9 +58,8 @@ router.get(
 router.get("/api/v1/users/:id", async (req: Request, res: Response) => {
   const user = await User.findById(req.params.id)
     .populate("sync_bank")
-    .populate("funs")
-    .populate("followers")
-    .populate("following");
+    .populate("friends")
+    .populate("funs");
 
   if (!user) {
     throw new BadRequestError("User not found");

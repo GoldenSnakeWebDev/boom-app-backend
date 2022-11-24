@@ -17,4 +17,9 @@ export class PasswordManager {
 
     return buf.toString("hex") === hashedPassword;
   }
+
+  static async isCorrectFormat(password: string) {
+    const pattern = /^[0-9a-zA-Z]+$/;
+    return password.match(pattern);
+  }
 }

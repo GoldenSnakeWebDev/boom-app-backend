@@ -31,6 +31,9 @@ app.use(express.json());
 app.use(json());
 app.use(cors());
 
+app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + "/emails"));
+
 app.use(json({ limit: "350mb" }));
 app.use(
   cookieSession({
@@ -48,7 +51,7 @@ app.use("/api/v1/users/", express.static(path.join(__dirname, "public")));
 
 import "./routes/index";
 
-//API DOCS
+//API DOCScon
 app.use(
   "/api-docs",
   SwaggerUi.serve,

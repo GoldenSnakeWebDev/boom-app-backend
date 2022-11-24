@@ -10,7 +10,10 @@ export const config = {
   ENVIRONMENT: "development",
 
   FOLDER_NAME: "uploads",
-
+  MAIL: {
+    USER: "dev@kodeace.com",
+    PASS: "l;tLrXr7ML#D",
+  },
   PINATA_API_KEY: process.env.PINATA_API_KEY!,
   PINATA_SECRET_API_KEY: process.env.PINATA_SECRET_API_KEY!,
 };

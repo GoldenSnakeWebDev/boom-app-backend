@@ -3,6 +3,7 @@ import { body } from "express-validator";
 import { validateRequest } from "../../middlewares/validate-request";
 import { User } from "./../../models/user";
 import { BadRequestError } from "../../errors/bad-request-error";
+import { PasswordManager } from "../../utils/password-manager";
 
 const router = Router();
 
@@ -46,6 +47,17 @@ router.post(
     if (!user) {
       throw new BadRequestError(
         "User with supplied email does exist. Please try again later."
+      );
+    }
+
+    // check it the password meets the required format
+    if (
+      (await PasswordManager.isCorrectFormat(password)) ||
+      (await PasswordManager.isCorrectFormat(confirm_password))
+    ) {
+      throw new BadRequestError(
+        "Your password must be have at least; 6 characters long, 1 uppercase & lowercase characters and a number",
+        "password"
       );
     }
     // check if password and confirm password match

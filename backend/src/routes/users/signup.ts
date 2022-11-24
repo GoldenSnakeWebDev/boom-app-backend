@@ -5,6 +5,7 @@ import { User } from "./../../models/user";
 import { BadRequestError } from "../../errors/bad-request-error";
 import { createSyncBankForNewUser } from "../../utils/sync-bank";
 import { SyncBankType } from "./../../models";
+import { PasswordManager } from "./../../utils/password-manager";
 
 const router = Router();
 
@@ -49,6 +50,15 @@ router.post(
     if (user) {
       throw new BadRequestError(
         "A user with the same email or username already exists."
+      );
+    }
+
+    // check password
+
+    if (await PasswordManager.isCorrectFormat(password)) {
+      throw new BadRequestError(
+        "Your password must be have at least; 6 characters long, 1 uppercase & lowercase characters and a number",
+        "password"
       );
     }
 

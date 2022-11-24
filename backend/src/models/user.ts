@@ -6,9 +6,8 @@ interface IUser {
   first_name?: string;
   last_name?: string;
   booms?: Array<Schema.Types.ObjectId>;
-  followers?: Array<Schema.Types.ObjectId>;
+  friends?: Array<Schema.Types.ObjectId>;
   funs?: Array<Schema.Types.ObjectId>;
-  following?: Array<Schema.Types.ObjectId>;
   sync_bank?: Schema.Types.ObjectId;
   photo?: string;
   cover?: string;
@@ -55,9 +54,8 @@ const userSchema = new Schema<IUser>(
       default: UserType.NORAMAL,
     },
     booms: [{ type: Schema.Types.ObjectId, ref: "BoomBox" }],
-    followers: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    friends: [{ type: Schema.Types.ObjectId, ref: "User" }],
     funs: [{ type: Schema.Types.ObjectId, ref: "User" }],
-    following: [{ type: Schema.Types.ObjectId, ref: "User" }],
     password_reset: {
       is_changed: { type: Schema.Types.Boolean, default: false },
     },
