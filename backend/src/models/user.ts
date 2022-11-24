@@ -75,6 +75,8 @@ const userSchema = new Schema<IUser>(
         ret.id = ret._id;
         delete ret._id;
         delete ret.password;
+        delete ret.following;
+        delete ret.followes;
         delete ret.__v;
       },
     },
