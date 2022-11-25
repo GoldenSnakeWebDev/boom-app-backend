@@ -4,6 +4,7 @@ import { User } from "./../../models/user";
 import { NotAuthorizedError } from "../../errors/not-authorized-error";
 import { body } from "express-validator";
 import { validateRequest } from "../../middlewares/validate-request";
+import { BadRequestError } from "../../errors/bad-request-error";
 
 const router = Router();
 
@@ -57,6 +58,13 @@ router.post(
       cover,
     } = req.body;
     const user = await User.findById(req.currentUser?.id!);
+
+    if (username?.toLowerCase() !== user?.username?.toLowerCase()) {
+      const isUsernameTaken = await User.findOne({ username });
+      if (isUsernameTaken) {
+        throw new BadRequestError("Username is already taken");
+      }
+    }
 
     if (!user) {
       throw new NotAuthorizedError();

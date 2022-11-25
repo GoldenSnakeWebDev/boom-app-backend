@@ -29,6 +29,9 @@ interface IUser {
     instagram?: string;
     tiktok?: string;
     facebook?: string;
+    telegram?: string;
+    discord?: string;
+    medium?: string;
   };
 }
 
@@ -64,6 +67,9 @@ const userSchema = new Schema<IUser>(
       instagram: { type: Schema.Types.String, default: "" },
       tiktok: { type: Schema.Types.String, default: "" },
       facebook: { type: Schema.Types.String, default: "" },
+      telegram: { type: Schema.Types.String, default: "" },
+      discord: { type: Schema.Types.String, default: "" },
+      medium: { type: Schema.Types.String, default: "" },
     },
     is_admin: { type: Schema.Types.Boolean, default: false },
     password_reset_token: { type: String, default: "" },
