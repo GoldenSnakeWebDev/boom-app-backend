@@ -51,7 +51,7 @@ router.get("/api/v1/booms", async (req: Request, res: Response) => {
       .populate("reactions.smiles", "username photo first_name last_name")
       .populate("reactions.rebooms", "username photo first_name last_name")
       .populate("reactions.reports", "username photo first_name last_name")
-      .populate("user")
+      .populate("user", "username photo first_name last_name")
       .populate("comments")
       .populate("comments.user", "username photo first_name last_name"),
     req.query
@@ -99,7 +99,7 @@ router.get(
         .populate("reactions.smiles", "username photo first_name last_name")
         .populate("reactions.rebooms", "username photo first_name last_name")
         .populate("reactions.reports", "username photo first_name last_name")
-        .populate("user")
+        .populate("user", "username photo first_name last_name")
         .populate("comments")
         .populate("comments.user", "username photo first_name last_name"),
       req.query
@@ -148,7 +148,7 @@ router.get(
         .populate("reactions.smiles", "username photo first_name last_name")
         .populate("reactions.rebooms", "username photo first_name last_name")
         .populate("reactions.reports", "username photo first_name last_name")
-        .populate("user")
+        .populate("user", "username photo first_name last_name")
         .populate("comments")
         .populate("comments.user", "username photo first_name last_name"),
       req.query
@@ -193,7 +193,7 @@ router.get("/api/v1/booms/:id", async (req: Request, res: Response) => {
     .populate("reactions.smiles", "username photo first_name last_name")
     .populate("reactions.rebooms", "username photo first_name last_name")
     .populate("reactions.reports", "username photo first_name last_name")
-    .populate("user")
+    .populate("user", "username photo first_name last_name")
     .populate("comments")
     .populate("comments.user", "username photo first_name last_name");
   res.status(200).json({ status: "success", boom });

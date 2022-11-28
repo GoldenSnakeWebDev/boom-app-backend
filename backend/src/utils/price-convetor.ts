@@ -15,6 +15,8 @@ export const currencyConversion = async (
     url = `https://www.binance.com/api/v3/depth?symbol=XTZUSDT`;
   } else if (network === NetworkType.BINANCE) {
     url = `https://www.binance.com/api/v3/depth?symbol=BNBUSDT`;
+  } else {
+    url = `https://www.binance.com/api/v3/depth?symbol=${network}USDT`;
   }
 
   console.log("URL:", url);
