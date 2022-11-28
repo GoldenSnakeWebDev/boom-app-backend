@@ -82,7 +82,7 @@ const userSchema = new Schema<IUser>(
         delete ret._id;
         delete ret.password;
         delete ret.following;
-        delete ret.followes;
+        delete ret.followers;
         delete ret.__v;
       },
     },
