@@ -70,14 +70,14 @@ router.post(
       { new: true }
     )
       .populate("network")
-      .populate("reactions.likes")
-      .populate("reactions.loves")
-      .populate("reactions.smiles")
-      .populate("reactions.rebooms")
-      .populate("reactions.reports")
+      .populate("reactions.likes", "username photo first_name last_name")
+      .populate("reactions.loves", "username photo first_name last_name")
+      .populate("reactions.smiles", "username photo first_name last_name")
+      .populate("reactions.rebooms", "username photo first_name last_name")
+      .populate("reactions.reports", "username photo first_name last_name")
       .populate("user")
       .populate("comments")
-      .populate("comments.user");
+      .populate("comments.user", "username photo first_name last_name");
 
     res.status(201).json({
       status: "success",
@@ -117,14 +117,14 @@ router.patch(
 
     let boom = await Boom.findById(req.params.boomId)
       .populate("network")
-      .populate("reactions.likes")
-      .populate("reactions.loves")
-      .populate("reactions.smiles")
-      .populate("reactions.rebooms")
-      .populate("reactions.reports")
+      .populate("reactions.likes", "username photo first_name last_name")
+      .populate("reactions.loves", "username photo first_name last_name")
+      .populate("reactions.smiles", "username photo first_name last_name")
+      .populate("reactions.rebooms", "username photo first_name last_name")
+      .populate("reactions.reports", "username photo first_name last_name")
       .populate("user")
       .populate("comments")
-      .populate("comments.user");
+      .populate("comments.user", "username photo first_name last_name");
     res.status(200).json({
       status: "success",
       message: "Successfully updated comment",

@@ -46,14 +46,14 @@ router.get("/api/v1/booms", async (req: Request, res: Response) => {
     Boom.find()
       .populate({ path: "comments", options: { _recursed: true } })
       .populate("network")
-      .populate("reactions.likes")
-      .populate("reactions.loves")
-      .populate("reactions.smiles")
-      .populate("reactions.rebooms")
-      .populate("reactions.reports")
+      .populate("reactions.likes", "username photo first_name last_name")
+      .populate("reactions.loves", "username photo first_name last_name")
+      .populate("reactions.smiles", "username photo first_name last_name")
+      .populate("reactions.rebooms", "username photo first_name last_name")
+      .populate("reactions.reports", "username photo first_name last_name")
       .populate("user")
       .populate("comments")
-      .populate("comments.user"),
+      .populate("comments.user", "username photo first_name last_name"),
     req.query
   )
     .filter()
@@ -94,14 +94,14 @@ router.get(
       Boom.find({ user: req.params.userId })
         .populate({ path: "comments", options: { _recursed: true } })
         .populate("network")
-        .populate("reactions.likes")
-        .populate("reactions.loves")
-        .populate("reactions.smiles")
-        .populate("reactions.rebooms")
-        .populate("reactions.reports")
+        .populate("reactions.likes", "username photo first_name last_name")
+        .populate("reactions.loves", "username photo first_name last_name")
+        .populate("reactions.smiles", "username photo first_name last_name")
+        .populate("reactions.rebooms", "username photo first_name last_name")
+        .populate("reactions.reports", "username photo first_name last_name")
         .populate("user")
         .populate("comments")
-        .populate("comments.user"),
+        .populate("comments.user", "username photo first_name last_name"),
       req.query
     )
       .filter()
@@ -143,14 +143,14 @@ router.get(
     const response = new ApiResponse(
       Boom.find({ user: req.currentUser?.id })
         .populate("network")
-        .populate("reactions.likes")
-        .populate("reactions.loves")
-        .populate("reactions.smiles")
-        .populate("reactions.rebooms")
-        .populate("reactions.reports")
+        .populate("reactions.likes", "username photo first_name last_name")
+        .populate("reactions.loves", "username photo first_name last_name")
+        .populate("reactions.smiles", "username photo first_name last_name")
+        .populate("reactions.rebooms", "username photo first_name last_name")
+        .populate("reactions.reports", "username photo first_name last_name")
         .populate("user")
         .populate("comments")
-        .populate("comments.user"),
+        .populate("comments.user", "username photo first_name last_name"),
       req.query
     )
       .filter()
@@ -188,14 +188,14 @@ router.get(
 router.get("/api/v1/booms/:id", async (req: Request, res: Response) => {
   const boom = await Boom.findById(req.params.id)
     .populate("network")
-    .populate("reactions.likes")
-    .populate("reactions.loves")
-    .populate("reactions.smiles")
-    .populate("reactions.rebooms")
-    .populate("reactions.reports")
+    .populate("reactions.likes", "username photo first_name last_name")
+    .populate("reactions.loves", "username photo first_name last_name")
+    .populate("reactions.smiles", "username photo first_name last_name")
+    .populate("reactions.rebooms", "username photo first_name last_name")
+    .populate("reactions.reports", "username photo first_name last_name")
     .populate("user")
     .populate("comments")
-    .populate("comments.user");
+    .populate("comments.user", "username photo first_name last_name");
   res.status(200).json({ status: "success", boom });
 });
 

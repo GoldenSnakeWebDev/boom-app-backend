@@ -25,6 +25,7 @@ import { FriendsFollowersRoutes } from "./users/friends";
 import { TezosMintAndURLPrep } from "./tezos";
 import { TippingRoute } from "./sync-bank/tipping";
 import { BoomSearchRoutes } from "./searching/index";
+import { CallbackURLRoute } from "./callback-urls/google-pay";
 
 app.use([
   UserResetPasswordResetRoutes,
@@ -51,3 +52,4 @@ app.use([FriendsFollowersRoutes]);
 app.use([TezosMintAndURLPrep]);
 app.use([TippingRoute]);
 app.use([BoomSearchRoutes]);
+app.use([CallbackURLRoute]);
