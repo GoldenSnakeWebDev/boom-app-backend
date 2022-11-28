@@ -71,7 +71,6 @@ router.post(
     }
 
     // update profile
-
     const updatedUser = await User.findByIdAndUpdate(
       user.id,
       {

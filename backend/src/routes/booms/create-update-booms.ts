@@ -9,6 +9,7 @@ import { SyncBank } from "../../models/syncbank";
 import { updateWalletBalance } from "../../utils/sync-bank";
 import { ITransactionType } from "./../../models/transaction";
 import { Nofitication, NotificationType } from "../../models/notification";
+import { NetworkType } from "../../models/network";
 
 const router = Router();
 
@@ -38,6 +39,8 @@ const router = Router();
  *          description: Quantity
  *        - name: fixed_price
  *          description: Boom Fixed Price
+ *        - name: timestamp
+ *          description:  Provide the timestamp in the format e.g '11/25/2022, 5:12:29 PM'
  *        - name: price
  *          description: Boom Price
  *        - name: location
@@ -55,7 +58,14 @@ router.post(
         "please provide the network on which you want eventually mint the boom"
       ),
     body("image_url").notEmpty().withMessage("Please provide your boom image"),
+    body("tags")
+      .notEmpty()
+      .withMessage("Please add some tags, seperated with @/;/,"),
     body("title").notEmpty().withMessage("Please provide your boom title"),
+    body("timestamp")
+      .notEmpty()
+      .withMessage("please provide the device timestamp"),
+    body("location").notEmpty().withMessage("please provide the  location"),
     body("quantity")
       .notEmpty()
       .withMessage("Please provide your boom quantity"),
@@ -76,6 +86,7 @@ router.post(
       title,
       price,
       location,
+      timestamp,
       tags,
     } = req.body;
 
@@ -91,7 +102,9 @@ router.post(
     }
 
     if (tags) {
-      tags = tags.split(/[_/:\-;\\]+/);
+      tags = tags
+        .split(/[_/:\-;\/@/,/;/#\\]+/)
+        .map((item: string) => `@${item}`);
     }
 
     const boom = new Boom({
@@ -106,6 +119,7 @@ router.post(
       location,
       price,
       tags,
+      created_at: new Date(timestamp),
     });
 
     await boom.save();
@@ -207,9 +221,9 @@ router.patch(
       throw new BadRequestError("You are  not allowed to edit a minted NFT");
     }
 
-    if (tags) {
-      tags = tags.split(/[_/:\-;\\]+/);
-    }
+    // if (tags && tags.length > 0) {
+    //   tags = tags.split(/[_/:\-;\\]+/);
+    // }
 
     const boom = await Boom.findByIdAndUpdate(req.params.id, {
       description,
@@ -373,12 +387,30 @@ router.post(
       throw new BadRequestError("Your sync bank does not exist");
     }
 
+    const network = await Network.findById(existBoom.network);
+
+    let networkType: any;
+    if (!network) {
+      throw new BadRequestError("Your boom does belong in any of the network");
+    }
+
+    if (network.symbol === "BNB") {
+      networkType = NetworkType.BINANCE;
+    } else if (network.symbol === "") {
+      networkType = NetworkType.TEZOS;
+    } else if (network.symbol === "") {
+      networkType = NetworkType.POLYGON;
+    }
+
+    console.log("Network: ", networkType);
+
     // end of deductin  wallet amount
 
     const update = await updateWalletBalance({
       userId: req.currentUser?.id!,
       amount: parseFloat(existBoom?.price ? existBoom?.price : "0"),
       transaction_type: ITransactionType.WITHDRAW,
+      networkType: networkType,
     });
 
     if (!update.success) {

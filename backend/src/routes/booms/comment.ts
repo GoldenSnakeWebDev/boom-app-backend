@@ -24,6 +24,8 @@ const router = Router();
  *          description: Please provide your message
  *        - name: boom
  *          description: Please provide your boom
+ *        - name: timestamp
+ *          description:  Provide the timestamp in the format e.g '11/25/2022, 5:12:29 PM'
  *     responses:
  *       200:
  *         description: . Successfully created a message
@@ -34,11 +36,14 @@ router.post(
     body("message")
       .notEmpty()
       .withMessage("please provide your comment message"),
+    body("timestamp")
+      .notEmpty()
+      .withMessage("please provide comment timestamp"),
   ],
   validateRequest,
   requireAuth,
   async (req: Request, res: Response) => {
-    let { message } = req.body;
+    let { message, timestamp } = req.body;
 
     let boom = await Boom.findById(req.params.boomId);
 
@@ -50,6 +55,7 @@ router.post(
       message,
       user: req.currentUser?.id!,
       boom: req.params.boomId,
+      created_at: new Date(timestamp),
     });
 
     await comment.save();

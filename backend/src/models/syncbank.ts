@@ -7,9 +7,22 @@ export enum SyncBankType {
 
 export interface ISyncBank {
   syncID?: number;
-  amount_in?: number;
-  amount_out?: number;
-  amount_balance?: number;
+  tezos?: {
+    amount_in?: number;
+    amount_out?: number;
+    amount_balance?: number;
+  };
+  binance?: {
+    amount_in?: number;
+    amount_out?: number;
+    amount_balance?: number;
+  };
+
+  polygon?: {
+    amount_in?: number;
+    amount_out?: number;
+    amount_balance?: number;
+  };
   user?: Types.ObjectId;
   sync_bank_type?: SyncBankType;
   is_active?: boolean;
@@ -21,9 +34,23 @@ const syncBankSchema = new Schema<ISyncBank>(
       type: Schema.Types.String,
       unique: true,
     },
-    amount_in: { type: Schema.Types.Number, default: 0.0 },
-    amount_out: { type: Schema.Types.Number, default: 0.0 },
-    amount_balance: { type: Schema.Types.Number, default: 0.0 },
+
+    tezos: {
+      amount_in: { type: Schema.Types.Number, default: 0.0 },
+      amount_out: { type: Schema.Types.Number, default: 0.0 },
+      amount_balance: { type: Schema.Types.Number, default: 0.0 },
+    },
+    binance: {
+      amount_in: { type: Schema.Types.Number, default: 0.0 },
+      amount_out: { type: Schema.Types.Number, default: 0.0 },
+      amount_balance: { type: Schema.Types.Number, default: 0.0 },
+    },
+
+    polygon: {
+      amount_in: { type: Schema.Types.Number, default: 0.0 },
+      amount_out: { type: Schema.Types.Number, default: 0.0 },
+      amount_balance: { type: Schema.Types.Number, default: 0.0 },
+    },
     user: { type: Schema.Types.ObjectId, ref: "User" },
     sync_bank_type: {
       type: Schema.Types.String,
@@ -43,6 +70,9 @@ const syncBankSchema = new Schema<ISyncBank>(
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;
+        delete ret.amount_balance;
+        delete ret.amount_in;
+        delete ret.amount_out;
       },
     },
   }

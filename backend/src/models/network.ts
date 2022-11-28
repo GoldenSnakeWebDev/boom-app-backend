@@ -1,9 +1,16 @@
 import { Schema, model } from "mongoose";
 
+export enum NetworkType {
+  POLYGON = "polygon",
+  BINANCE = "binance",
+  TEZOS = "tezos",
+}
+
 export interface INetwork {
   name: string;
   image_url: string;
   symbol: string;
+  price?: number;
   is_active?: boolean;
 }
 
@@ -20,6 +27,10 @@ const networkSchema = new Schema<INetwork>(
     symbol: {
       type: Schema.Types.String,
       default: "",
+    },
+    price: {
+      type: Schema.Types.Number,
+      default: 0.0,
     },
     is_active: { type: Schema.Types.Boolean, default: true },
   },
