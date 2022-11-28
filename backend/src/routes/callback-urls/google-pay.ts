@@ -4,19 +4,19 @@ const router = Router();
 
 /**
  * @openapi
- * /api/v1/networks:
+ * /api/v1/callback-urls/google-playstore:
  *   get:
  *     tags:
- *        - CallbackURLS
- *     description: List of networks available to for the boom platform.
+ *        - CallbackUrl
+ *     description: Callback URL to access Google playstore request and response.
  *     produces:
  *        - application/json
  *     responses:
  *       200:
- *         description: . Returns a  list of blockchain networks.
+ *         description: . Returns a success message
  */
 router.post(
-  "/api/callback-urls/google-playstore",
+  "/api/v1/callback-urls/google-playstore",
   async (req: Request, res: Response) => {
     console.log(req.body);
 
