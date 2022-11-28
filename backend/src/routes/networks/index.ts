@@ -1,6 +1,8 @@
 import { Router, Response, Request } from "express";
 import { ApiResponse } from "./../../utils/api-response";
 import { Network, NetworkType } from "./../../models/network";
+import { BadRequestError } from "../../errors/bad-request-error";
+import { currencyConversion } from "../../utils/price-convetor";
 
 const router = Router();
 
@@ -50,6 +52,51 @@ router.get("/api/v1/networks", async (req: Request, res: Response) => {
     status: "success",
     page: response?.page_info,
     networks,
+  });
+});
+
+/**
+ * @openapi
+ * /api/v1/networks-pricing?symbol=TZ&amount=1:
+ *   get:
+ *     tags:
+ *        - Networks
+ *     description: Get network pricining
+ *     produces:
+ *        - application/json
+ *     responses:
+ *       200:
+ *         description: . Returns a network with its price.
+ */
+router.get("/api/v1/networks-pricing", async (req: Request, res: Response) => {
+  const symbol = req.query?.symbol?.toString();
+  const amount = req.query?.amount?.toString();
+
+  const network = await Network.findOne({ symbol: symbol?.toUpperCase() });
+
+  if (!network) {
+    throw new BadRequestError(
+      "Please provide the network symbol as ?symbol=BNB&amount=1"
+    );
+  }
+  let networkType: any;
+
+  if (symbol! === NetworkType.POLYGON) {
+    networkType = NetworkType.POLYGON;
+  } else if (symbol! === NetworkType.TEZOS) {
+    networkType = NetworkType.TEZOS;
+  } else if (symbol! === NetworkType.BINANCE) {
+    networkType = NetworkType.TEZOS;
+  }
+
+  const currentPrice = await currencyConversion(
+    networkType,
+    parseFloat(amount!)
+  );
+
+  res.status(200).json({
+    status: "success",
+    currentUSDPrice: currentPrice.amount,
   });
 });
 

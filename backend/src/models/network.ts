@@ -1,9 +1,9 @@
 import { Schema, model } from "mongoose";
 
 export enum NetworkType {
-  POLYGON = "polygon",
-  BINANCE = "binance",
-  TEZOS = "tezos",
+  POLYGON = "MATIC",
+  BINANCE = "BNB",
+  TEZOS = "TZ",
 }
 
 export interface INetwork {

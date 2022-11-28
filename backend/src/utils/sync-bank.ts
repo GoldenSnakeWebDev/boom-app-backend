@@ -4,7 +4,7 @@ import { ITransactionType, Transaction } from "./../models/transaction";
 import { config } from "../config";
 import { getNextTransaction } from "./transaction-common";
 import { Nofitication, NotificationType } from "./../models/notification";
-import { NetworkType } from "./price-convetor";
+import { NetworkType } from "./../models/network";
 
 export const createSyncBankForNewUser = async (opts: {
   user: string;

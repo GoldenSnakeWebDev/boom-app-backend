@@ -1,10 +1,5 @@
 import axios from "axios";
-import { load } from "cheerio";
-export enum NetworkType {
-  POLYGON = "polygon",
-  BINANCE = "binance",
-  TEZOS = "tezos",
-}
+import { NetworkType } from "./../models/network";
 
 export const currencyConversion = async (
   network: NetworkType,
@@ -13,26 +8,17 @@ export const currencyConversion = async (
   let url = "";
 
   if (network === NetworkType.POLYGON) {
-    url = `https://www.coingecko.com/en/coins/polygon`;
+    url = `https://www.binance.com/api/v3/depth?symbol=MATICUSDT`;
   } else if (network === NetworkType.TEZOS) {
-    url = `https://www.coingecko.com/en/coins/tezos`;
+    url = `https://www.binance.com/api/v3/depth?symbol=XTZUSDT`;
   } else if (network === NetworkType.BINANCE) {
-    url = `https://www.coingecko.com/en/coins/bnb`;
+    url = `https://www.binance.com/api/v3/depth?symbol=BNBUSDT`;
   }
-
-  console.log(url);
 
   try {
     const { data } = await axios.get(url);
-    let $ = load(data);
-    console.log($.html());
-    const htmlData = $("#unobtrusive-flash-messages").html();
 
-    console.log(htmlData);
-    const numberPattern = /\d+/g;
-
-    console.log(numberPattern, amount);
-    return { amount: 0, error: "" };
+    return { amount: parseFloat(data.bids[0][0]) * amount, error: "" };
   } catch (error) {
     return {
       amount: 0,
