@@ -7,6 +7,8 @@ export const currencyConversion = async (
 ) => {
   let url = "";
 
+  console.log(network);
+
   if (network === NetworkType.POLYGON) {
     url = `https://www.binance.com/api/v3/depth?symbol=MATICUSDT`;
   } else if (network === NetworkType.TEZOS) {
@@ -15,6 +17,7 @@ export const currencyConversion = async (
     url = `https://www.binance.com/api/v3/depth?symbol=BNBUSDT`;
   }
 
+  console.log("URL:", url);
   try {
     const { data } = await axios.get(url);
 
