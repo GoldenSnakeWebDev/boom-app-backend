@@ -25,6 +25,8 @@ const router = Router();
  *     parameters:
  *        - name: amount
  *          description: Please provide an amount to deposit
+ *        - name: networkType
+ *          description: Please provide which network type you are trying to access
  *     responses:
  *       200:
  *         description: . Returns an update transaction object.
@@ -35,10 +37,15 @@ router.post(
     body("amount")
       .notEmpty()
       .withMessage("please provide the amount you are willing to deposit"),
+    body("networkType")
+      .notEmpty()
+      .withMessage(
+        "please provide from which network are you withdrawing from"
+      ),
   ],
   requireAuth,
   async (req: Request, res: Response) => {
-    const { amount } = req.body;
+    const { amount, networkType } = req.body;
 
     const transactionRef = await getNextTransaction();
 
@@ -55,6 +62,7 @@ router.post(
       userId: req.currentUser?.id!,
       transaction_type: ITransactionType.DEPOSIT,
       amount,
+      networkType,
     });
     // end of update sync bank
     res.status(200).json({

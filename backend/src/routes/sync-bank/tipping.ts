@@ -30,6 +30,8 @@ const router = Router();
  *          description: Please provide an amount to deposit
  *        - name: user
  *          description: User informatin Id
+ *        - name: networkType
+ *          description: The network type you are access from
  *     responses:
  *       200:
  *         description: . Return current logged in user sync bank.
@@ -43,10 +45,13 @@ router.post(
     body("user")
       .notEmpty()
       .withMessage("please provide the user id you are trying to tip"),
+    body("networkType")
+      .notEmpty()
+      .withMessage("please provide  which network are you tipping from"),
   ],
   requireAuth,
   async (req: Request, res: Response) => {
-    const { amount, user } = req.body;
+    const { amount, user, networkType } = req.body;
 
     const tipedUser = await User.findById(user);
 
@@ -71,6 +76,7 @@ router.post(
       userId: req.currentUser?.id!,
       transaction_type: ITransactionType.TRANSFER,
       amount,
+      networkType,
     });
 
     // after approve that payments have reached to our bank
@@ -78,6 +84,7 @@ router.post(
       userId: tipedUser.id,
       transaction_type: ITransactionType.INCOME,
       amount,
+      networkType,
     });
     // end of update sync bank
     res.status(200).json({
