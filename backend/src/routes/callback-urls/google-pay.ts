@@ -5,7 +5,7 @@ const router = Router();
 /**
  * @openapi
  * /api/v1/callback-urls/google-playstore:
- *   get:
+ *   post:
  *     tags:
  *        - CallbackUrl
  *     description: Callback URL to access Google playstore request and response.
