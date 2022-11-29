@@ -11,6 +11,7 @@ import SwaggerUi from "swagger-ui-express";
 import { swaggerOptions } from "./docs/options";
 import { NotFoundError } from "./errors";
 import { errorHandler } from "./middlewares";
+import { WebSocket } from "ws";
 
 const app = express();
 
@@ -18,6 +19,81 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: { origin: "*", methods: ["GET", "POST"] },
+});
+
+const wss = new WebSocket.Server({ server });
+
+// connection
+
+// TO BE Moved
+
+// interface WebSocketType {
+//   box?: string;
+//   author: string;
+//   receiver: string;
+//   content?: string;
+//   command: string;
+// }
+
+wss.on("connection", (ws: WebSocket, request: http.IncomingMessage) => {
+  const clientIp = request.socket.remoteAddress;
+
+  console.log(`[Websocket]  Client with IP ${clientIp}  has connected`);
+  ws.send("Thanks for connect to server");
+
+  ws.on("message", async (message: any) => {
+    // join Room
+
+    console.log(message.toString());
+
+    if (message.command === "join_room") {
+      const boomBox = await wsCreateOrGetBoomBoxAndSendMessage({
+        ...message,
+        boomBoxType: BoomBoxType.PUBLIC,
+      });
+
+      console.log("Room Created", boomBox);
+      wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(`Successfully joined ${boomBox?.label}`);
+        }
+      });
+    }
+
+    // if the user has sent a message
+    if (message.command === "send_message") {
+      const boomBox = await wsCreateOrGetBoomBoxAndSendMessage({
+        ...message,
+        boomBoxType: BoomBoxType.PUBLIC,
+      });
+
+      console.log("Room Created", boomBox);
+
+      wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(message.toString());
+        }
+      });
+    }
+
+    wss.clients.forEach((client) => {
+      client.emit("recieve_message", (msg: any) => {
+        console.log("Message", msg);
+      });
+      client.send(message);
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(message.toString());
+      }
+    });
+
+    // disconnect from the server
+
+    console.log("Client has recieved the message", message.toString());
+  });
+});
+
+wss.on("close", () => {
+  console.log("Connection Lost");
 });
 
 import "./messaging/connection";
@@ -50,6 +126,8 @@ app.use(morgan("dev"));
 app.use("/api/v1/users/", express.static(path.join(__dirname, "public")));
 
 import "./routes/index";
+import { wsCreateOrGetBoomBoxAndSendMessage } from "./messaging/boom-box-helper";
+import { BoomBoxType } from "./models/boom-box";
 
 //API DOCScon
 app.use(

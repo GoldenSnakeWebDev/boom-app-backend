@@ -8,6 +8,7 @@ export enum BoomBoxType {
 export interface IBoomBox {
   box?: string;
   box_type?: string;
+  image_url?: string;
   label: string;
   messages?: Array<{
     content: string;
@@ -32,6 +33,7 @@ const boomBoxSchema = new Schema<IBoomBox>(
         )}`,
       },
     },
+    image_url: { type: Schema.Types.String, default: "" },
     label: { type: Schema.Types.String, default: "" },
     box: { type: Schema.Types.String, default: "" },
     messages: [

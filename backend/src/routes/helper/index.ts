@@ -43,8 +43,15 @@ const multerFilter = (_req: Request, file: any, cb: any) => {
     cb(new BadRequestError(`Not An image. Please  upload only images`), false);
   }
 };
+
+// export const maxSize = 1024; // 50MB
+const maxSize = 50 * 1024 * 1024; // 50MB
 const upload = multer({
   storage: multerStorage,
+  limits: {
+    fieldNameSize: 2048, // 2MB
+    fileSize: maxSize, // 50MB
+  },
   fileFilter: multerFilter,
 });
 
@@ -78,12 +85,6 @@ const docStorage = multer.diskStorage({
   },
   filename: function (_req, file, cb) {
     const ext = file.mimetype.split("/")[1].toLowerCase();
-    // const requireExt = ["png", "jpg", "pdf", "jpeg", "mp4", "mov", "jif", "mpg", "webm","ogg","m4p",];
-    // if (!requireExt.includes(ext)) {
-    //   throw new BadRequestError(
-    //     "You can only upload documents with the following extension. .pdf, .png, .jpeg, and jpg"
-    //   );
-    // }
     const name = `${FOLDER_NAME}-${fileName}-${Date.now()}.${ext}`;
     cb(null, name);
   },
@@ -91,13 +92,26 @@ const docStorage = multer.diskStorage({
 
 const docMulterFilter = (_req: Request, file: any, cb: any) => {
   if (file) {
+    // check for file size
+    if (file.size > maxSize) {
+      throw new BadRequestError(
+        "Failed to upload. Large file. should be less 50mbs"
+      );
+    }
     cb(null, true);
   } else {
     throw new BadRequestError(`No upload document`);
   }
 };
 
-const uploadDoc = multer({ storage: docStorage, fileFilter: docMulterFilter });
+const uploadDoc = multer({
+  storage: docStorage,
+  limits: {
+    fieldNameSize: 2048, // 2MB
+    fileSize: maxSize, // 50MB
+  },
+  fileFilter: docMulterFilter,
+});
 
 export const uploadDocument = uploadDoc.single("doc");
 

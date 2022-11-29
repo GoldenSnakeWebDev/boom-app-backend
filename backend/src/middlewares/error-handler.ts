@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { CustomError } from "../errors/custom-error";
+import multer from "multer";
 
 export const errorHandler = (
   err: Error,
@@ -11,7 +12,13 @@ export const errorHandler = (
     return res.status(err.statusCode).send({ errors: err.serializeErrors() });
   }
 
-  console.log(err);
+  if (err instanceof multer.MulterError) {
+    return res.status(400).send({
+      errors: [{ message: "File too large: Maximum size is 20MB" }],
+    });
+  }
+
+  console.log(err.message);
 
   res.status(400).send({
     errors: [{ message: "Oooops!! Something went wrong..." }],

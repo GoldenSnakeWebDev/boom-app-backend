@@ -49,6 +49,12 @@ router.patch(
       );
     } else {
       // remove being a friend
+      nextUser = await User.findByIdAndUpdate(
+        req.params.id,
+        { $pull: { funs: req.currentUser?.id } },
+        { new: true }
+      );
+      // remove the user
     }
 
     const isSenderYourFun = user?.funs

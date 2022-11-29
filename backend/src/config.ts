@@ -8,11 +8,18 @@ export const config = {
   RPC_URL: process.env.RPC_URL!,
   PORT: process.env.PORT!,
   ENVIRONMENT: "development",
-
   FOLDER_NAME: "uploads",
   MAIL: {
     USER: "dev@kodeace.com",
     PASS: "l;tLrXr7ML#D",
+  },
+  EXCHANGE: {
+    V2_ADDRESS: "0x10ED43C718714eb63d5aA57B78B54704E256024E",
+    PANCAKE_ADDRESS: {
+      TEZOS: "",
+      BNB: "",
+      MATIC: "",
+    },
   },
   PINATA_API_KEY: process.env.PINATA_API_KEY!,
   PINATA_SECRET_API_KEY: process.env.PINATA_SECRET_API_KEY!,
