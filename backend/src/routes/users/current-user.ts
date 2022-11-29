@@ -70,4 +70,36 @@ router.get("/api/v1/users/:id", async (req: Request, res: Response) => {
   });
 });
 
+/**
+ * @openapi
+ * /api/v1/users:
+ *   get:
+ *     tags:
+ *        - Auth
+ *     description: Get a list of all users .
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     responses:
+ *       200:
+ *         description: . Returns a list of all users.
+ */
+router.get(
+  "/api/v1/users",
+  requireAuth,
+  async (_req: Request, res: Response) => {
+    const users = await User.find({ $nor: [{ is_admin: true }] }).select(
+      "username photo first_name last_name"
+    );
+
+    if (!users) {
+      throw new BadRequestError("User not found");
+    }
+    res.status(200).json({
+      status: "success",
+      users,
+    });
+  }
+);
 export { router as CurrentUserRoutes };

@@ -32,7 +32,7 @@ router.get("/api/v1/boom-box-types", async (_req: Request, res: Response) => {
  *   get:
  *     tags:
  *        - BoomBox
- *     description: List of all platform booms.
+ *     description: List my DMS.
  *     produces:
  *        - application/json
  *     consumes:
