@@ -85,8 +85,11 @@ export const wsCreateOrGetBoomBoxAndSendMessage = async (message: {
       { $push: { messages: builMessage } },
       { new: true }
     )
-      .populate("messages.author", "username photo first_name last_name")
-      .populate("messages.receiver", "username photo first_name last_name");
+      .populate("messages.author", "username photo first_name last_name _id")
+      .populate(
+        "messages.receiver",
+        "username photo first_name last_name  _id"
+      );
 
     // message.socket.to(message.box!).emit("receive_message", {
     //   content: message?.content!,

@@ -39,7 +39,7 @@ wss.on("connection", (ws: WebSocket, request: http.IncomingMessage) => {
   const clientIp = request.socket.remoteAddress;
 
   console.log(`[Websocket]  Client with IP ${clientIp}  has connected`);
-  ws.send("Thanks for connect to server");
+  ws.send(JSON.stringify({}));
 
   // ws.onmessage = (e: RawData) => {
   //   console.log();
@@ -50,7 +50,7 @@ wss.on("connection", (ws: WebSocket, request: http.IncomingMessage) => {
     // join Room
     let message: WebSocketType = JSON.parse(msg.toString());
 
-    console.log("Message", message);
+    console.log("Message", message.author);
 
     if (message.command === "join_room") {
       const boomBox = await wsCreateOrGetBoomBoxAndSendMessage({
@@ -58,10 +58,24 @@ wss.on("connection", (ws: WebSocket, request: http.IncomingMessage) => {
         boomBoxType: BoomBoxType.PUBLIC,
       });
 
-      console.log("Room Created", boomBox);
-      wss.clients.forEach((client) => {
+      // console.log("Room Created", boomBox);
+      wss.clients.forEach(async (client) => {
         if (client.readyState === WebSocket.OPEN) {
-          client.send(`Successfully joined ${boomBox?.label}`);
+          // client.send(`Successfully joined ${boomBox?.label}`);
+
+          const box = await BoomBox.findOne({
+            box: boomBox?.box,
+            box_type: "public",
+          })
+            .populate(
+              "messages.author",
+              "username photo first_name last_name _id"
+            )
+            .populate(
+              "messages.receiver",
+              "username photo first_name last_name _id"
+            );
+          client.send(JSON.stringify({ ...box?.toObject() }));
         }
       });
     }
@@ -121,7 +135,7 @@ app.use("/api/v1/users/", express.static(path.join(__dirname, "public")));
 
 import "./routes/index";
 import { wsCreateOrGetBoomBoxAndSendMessage } from "./messaging/boom-box-helper";
-import { BoomBoxType } from "./models/boom-box";
+import { BoomBox, BoomBoxType } from "./models/boom-box";
 
 //API DOCScon
 app.use(

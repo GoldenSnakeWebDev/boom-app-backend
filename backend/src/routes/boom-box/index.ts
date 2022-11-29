@@ -53,8 +53,8 @@ router.get(
         ],
         box_type: "public",
       })
-        .populate("messages.author")
-        .populate("messages.receiver"),
+        .populate("messages.author", "username photo first_name last_name")
+        .populate("messages.receiver", "username photo first_name last_name"),
       req.query
     )
       .filter()

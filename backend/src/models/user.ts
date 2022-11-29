@@ -79,7 +79,6 @@ const userSchema = new Schema<IUser>(
     toJSON: {
       transform(_doc, ret) {
         ret.id = ret._id;
-        delete ret._id;
         delete ret.password;
         delete ret.following;
         delete ret.followers;
