@@ -82,9 +82,11 @@ export const wsCreateOrGetBoomBoxAndSendMessage = async (message: {
 
     boomBox = await BoomBox.findByIdAndUpdate(
       boomBox.id,
-      { ...builMessage },
+      { $push: { messages: builMessage } },
       { new: true }
-    );
+    )
+      .populate("messages.author", "username photo first_name last_name")
+      .populate("messages.receiver", "username photo first_name last_name");
 
     // message.socket.to(message.box!).emit("receive_message", {
     //   content: message?.content!,
@@ -97,6 +99,8 @@ export const wsCreateOrGetBoomBoxAndSendMessage = async (message: {
     return boomBox;
   }
 
+  console.log("Message REACHED");
+
   // create boom box and
   boomBox = new BoomBox({
     box: `${message.author}:${Date.now()}`,
@@ -104,9 +108,11 @@ export const wsCreateOrGetBoomBoxAndSendMessage = async (message: {
       ? `${receiver?.username}`
       : `${receiver?.first_name!} ${receiver?.last_name!}`,
     box_type: message.boomBoxType,
-    author: message.author,
-    receiver: message.receiver,
   });
 
-  return boomBox;
+  await boomBox.save();
+
+  return await BoomBox.findById(boomBox.id)
+    .populate("messages.author", "username photo first_name last_name")
+    .populate("messages.receiver", "username photo first_name last_name");
 };

@@ -11,7 +11,7 @@ import SwaggerUi from "swagger-ui-express";
 import { swaggerOptions } from "./docs/options";
 import { NotFoundError } from "./errors";
 import { errorHandler } from "./middlewares";
-import { WebSocket } from "ws";
+import { WebSocket, RawData } from "ws";
 
 const app = express();
 
@@ -27,13 +27,13 @@ const wss = new WebSocket.Server({ server });
 
 // TO BE Moved
 
-// interface WebSocketType {
-//   box?: string;
-//   author: string;
-//   receiver: string;
-//   content?: string;
-//   command: string;
-// }
+interface WebSocketType {
+  box?: string;
+  author: string;
+  receiver: string;
+  content?: string;
+  command: string;
+}
 
 wss.on("connection", (ws: WebSocket, request: http.IncomingMessage) => {
   const clientIp = request.socket.remoteAddress;
@@ -41,10 +41,16 @@ wss.on("connection", (ws: WebSocket, request: http.IncomingMessage) => {
   console.log(`[Websocket]  Client with IP ${clientIp}  has connected`);
   ws.send("Thanks for connect to server");
 
-  ws.on("message", async (message: any) => {
-    // join Room
+  // ws.onmessage = (e: RawData) => {
+  //   console.log();
+  //   // console.log(typeof JSON.parse(JSON.stringify(e.data)));
+  // };
 
-    console.log(message.toString());
+  ws.on("message", async (msg: RawData) => {
+    // join Room
+    let message: WebSocketType = JSON.parse(msg.toString());
+
+    console.log("Message", message);
 
     if (message.command === "join_room") {
       const boomBox = await wsCreateOrGetBoomBoxAndSendMessage({
@@ -67,28 +73,16 @@ wss.on("connection", (ws: WebSocket, request: http.IncomingMessage) => {
         boomBoxType: BoomBoxType.PUBLIC,
       });
 
-      console.log("Room Created", boomBox);
-
       wss.clients.forEach((client) => {
         if (client.readyState === WebSocket.OPEN) {
-          client.send(message.toString());
+          client.send(JSON.stringify({ ...boomBox?.toObject() }));
         }
       });
     }
 
-    wss.clients.forEach((client) => {
-      client.emit("recieve_message", (msg: any) => {
-        console.log("Message", msg);
-      });
-      client.send(message);
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(message.toString());
-      }
-    });
-
     // disconnect from the server
 
-    console.log("Client has recieved the message", message.toString());
+    console.log("Client has recieved the message", JSON.stringify(message));
   });
 });
 
