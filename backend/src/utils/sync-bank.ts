@@ -15,9 +15,21 @@ export const createSyncBankForNewUser = async (opts: {
       wallet_type: opts.wallet_type,
       user: opts.user,
       syncID: `BM/${Date.now()}`,
-      amount_in: config.ENVIRONMENT === "development" ? 1000 : 0.0,
-      amount_balance: config.ENVIRONMENT === "development" ? 1000 : 0.0,
-      amount_out: 0,
+      tezos: {
+        amount_in: config.ENVIRONMENT === "development" ? 2000 : 0.0,
+        amount_balance: config.ENVIRONMENT === "development" ? 2000 : 0.0,
+        amount_out: 0,
+      },
+      binance: {
+        amount_in: config.ENVIRONMENT === "development" ? 2000 : 0.0,
+        amount_balance: config.ENVIRONMENT === "development" ? 2000 : 0.0,
+        amount_out: 0,
+      },
+      polygon: {
+        amount_in: config.ENVIRONMENT === "development" ? 2000 : 0.0,
+        amount_balance: config.ENVIRONMENT === "development" ? 2000 : 0.0,
+        amount_out: 0,
+      },
     });
 
     return { wallet };
