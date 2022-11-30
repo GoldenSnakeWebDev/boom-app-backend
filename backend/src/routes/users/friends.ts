@@ -64,12 +64,28 @@ router.patch(
     if (
       nextUser?.funs
         ?.map((item) => item.toString())
-        .includes(req.currentUser?.id!) &&
+        .includes(req.currentUser?.id!) ||
       isSenderYourFun
     ) {
       await User.findByIdAndUpdate(
+        req.params.id,
+        { $push: { friends: req.currentUser?.id } },
+        { new: true }
+      );
+      await User.findByIdAndUpdate(
         req.currentUser?.id,
         { $push: { friends: req.params.id } },
+        { new: true }
+      );
+    } else {
+      await User.findByIdAndUpdate(
+        req.params.id,
+        { $pull: { friends: req.currentUser?.id } },
+        { new: true }
+      );
+      await User.findByIdAndUpdate(
+        req.currentUser?.id,
+        { $pull: { friends: req.params.id } },
         { new: true }
       );
     }
