@@ -184,7 +184,7 @@ router.post(
         : `${receiverUser?.first_name!} ${receiverUser?.last_name!}`,
       box_type:
         boombox_type === "private" ? BoomBoxType.PRIVATE : BoomBoxType.PUBLIC,
-      messages: { $push: { messages: builMessage } },
+      messages: builMessage,
     });
 
     await boomBox.save();
