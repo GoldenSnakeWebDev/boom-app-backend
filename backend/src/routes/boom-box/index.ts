@@ -138,26 +138,26 @@ router.post(
       .withMessage("Please provide who is sending to message and to who"),
     body("timestamp").notEmpty().withMessage("Please provide your timestamp"),
   ],
-
   validateRequest,
+  requireAuth,
   async (req: Request, res: Response) => {
-    const { content, box, author, receiver, timestamp, command, boombox_type } =
+    const { content, box, author, receiver, timestamp, boombox_type } =
       req.body;
 
     let boomBox = await BoomBox.findOne({ box: box });
     const receiverUser = await User.findById(receiver).populate("sync_bank");
+    const builMessage = {
+      content: content!,
+      author: author,
+      receiver: receiver,
+      is_delete: false,
+      timestamp: new Date(timestamp),
+    };
 
     if (boomBox) {
       // save message
-      const builMessage = {
-        content: content!,
-        author: author,
-        receiver: receiver,
-        is_delete: false,
-        timestamp: new Date(timestamp),
-      };
 
-      if (command !== "join_room") {
+      if (boomBox.messages?.length != 0) {
         boomBox = await BoomBox.findByIdAndUpdate(
           boomBox.id,
           { $push: { messages: builMessage } },
@@ -184,6 +184,7 @@ router.post(
         : `${receiverUser?.first_name!} ${receiverUser?.last_name!}`,
       box_type:
         boombox_type === "private" ? BoomBoxType.PRIVATE : BoomBoxType.PUBLIC,
+      messages: { $push: { messages: builMessage } },
     });
 
     await boomBox.save();
