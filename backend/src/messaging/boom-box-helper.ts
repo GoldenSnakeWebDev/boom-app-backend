@@ -66,6 +66,7 @@ export const wsCreateOrGetBoomBoxAndSendMessage = async (message: {
   author: string;
   receiver: string;
   boomBoxType: BoomBoxType;
+  command: string;
 }) => {
   let boomBox = await BoomBox.findOne({ box: message.box });
   const receiver = await User.findById(message.receiver).populate("sync_bank");
@@ -80,24 +81,18 @@ export const wsCreateOrGetBoomBoxAndSendMessage = async (message: {
       timestamp: Date.now(),
     };
 
-    boomBox = await BoomBox.findByIdAndUpdate(
-      boomBox.id,
-      { $push: { messages: builMessage } },
-      { new: true }
-    )
-      .populate("messages.author", "username photo first_name last_name _id")
-      .populate(
-        "messages.receiver",
-        "username photo first_name last_name  _id"
-      );
-
-    // message.socket.to(message.box!).emit("receive_message", {
-    //   content: message?.content!,
-    //   author: await User.findById(message.author).populate("sync_bank"),
-    //   receiver: await User.findById(message.receiver).populate("sync_bank"),
-    //   is_delete: false,
-    //   timestamp: Date.now(),
-    // });
+    if (message.command !== "join_room") {
+      boomBox = await BoomBox.findByIdAndUpdate(
+        boomBox.id,
+        { $push: { messages: builMessage } },
+        { new: true }
+      )
+        .populate("messages.author", "username photo first_name last_name _id")
+        .populate(
+          "messages.receiver",
+          "username photo first_name last_name  _id"
+        );
+    }
 
     return boomBox;
   }
