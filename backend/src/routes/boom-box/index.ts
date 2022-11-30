@@ -70,14 +70,14 @@ router.get(
  *   get:
  *     tags:
  *        - BoomBox
- *     description: List my DMS.
+ *     description: Get  DMS.
  *     produces:
  *        - application/json
  *     consumes:
  *        - application/json
  *     responses:
  *       200:
- *         description: . Returns a  list of booms.
+ *         description: . DMs.
  */
 router.get(
   "/api/v1/boom-boxes/:box/messages",
@@ -119,6 +119,8 @@ router.get(
  *          description: The reciever Id
  *        - name: timestamp
  *          description: Your current timestamp send from the send's phone  (app)
+ *        - name:  boombox_type
+ *          description: The boom type is optional default is public, other is privave
  *     responses:
  *       200:
  *         description: . Chart with user .
@@ -139,7 +141,8 @@ router.post(
 
   validateRequest,
   async (req: Request, res: Response) => {
-    const { content, box, author, receiver, timestamp, command } = req.body;
+    const { content, box, author, receiver, timestamp, command, boombox_type } =
+      req.body;
 
     let boomBox = await BoomBox.findOne({ box: box });
     const receiverUser = await User.findById(receiver).populate("sync_bank");
@@ -179,7 +182,8 @@ router.post(
       label: receiverUser?.username
         ? `${receiverUser?.username}`
         : `${receiverUser?.first_name!} ${receiverUser?.last_name!}`,
-      box_type: BoomBoxType.PUBLIC,
+      box_type:
+        boombox_type === "private" ? BoomBoxType.PRIVATE : BoomBoxType.PUBLIC,
     });
 
     await boomBox.save();
