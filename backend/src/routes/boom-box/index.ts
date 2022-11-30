@@ -66,7 +66,7 @@ router.get(
 
 /**
  * @openapi
- * /api/v1/boom-boxes:
+ * /api/v1/boom-boxes/:box/messages:
  *   get:
  *     tags:
  *        - BoomBox
