@@ -47,7 +47,6 @@ router.get(
  *       200:
  *         description: . list all epics epic/tales
  */
-
 router.get(
   "/api/v1/notifications",
   requireAuth,
