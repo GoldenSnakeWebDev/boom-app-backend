@@ -133,7 +133,6 @@ router.post(
   "/api/v1/boom-box",
   [
     body("command").notEmpty().withMessage("Please provide a command"),
-    body("box").notEmpty().withMessage("Please provide boom box BOX"),
     body("content").notEmpty().withMessage("Please provide your message"),
     body("author")
       .notEmpty()
