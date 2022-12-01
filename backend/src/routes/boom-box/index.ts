@@ -87,6 +87,7 @@ router.get(
       box: req.params.box,
       box_type: "public",
     })
+
       .populate("messages.author", "username photo first_name last_name")
       .populate("messages.receiver", "username photo first_name last_name");
 
@@ -111,6 +112,8 @@ router.get(
  *     parameters:
  *        - name: command
  *          description: join_room, send_message
+ *        - name:  box
+ *          description: Provide provide the box `box`
  *        - name: content
  *          description: Message content
  *        - name: author
@@ -129,6 +132,7 @@ router.post(
   "/api/v1/boom-box",
   [
     body("command").notEmpty().withMessage("Please provide a command"),
+    body("box").notEmpty().withMessage("Please provide boom box BOX"),
     body("content").notEmpty().withMessage("Please provide your message"),
     body("author")
       .notEmpty()
@@ -174,28 +178,27 @@ router.post(
       }
 
       res.status(200).json({ status: "success", boomBox });
+    } else {
+      // create boom box and
+      boomBox = new BoomBox({
+        box: `${author}:${Date.now()}`,
+        label: receiverUser?.username
+          ? `${receiverUser?.username}`
+          : `${receiverUser?.first_name!} ${receiverUser?.last_name!}`,
+        box_type:
+          boombox_type === "private" ? BoomBoxType.PRIVATE : BoomBoxType.PUBLIC,
+        messages: builMessage,
+      });
+
+      await boomBox.save();
     }
-
-    // create boom box and
-    boomBox = new BoomBox({
-      box: `${author}:${Date.now()}`,
-      label: receiverUser?.username
-        ? `${receiverUser?.username}`
-        : `${receiverUser?.first_name!} ${receiverUser?.last_name!}`,
-      box_type:
-        boombox_type === "private" ? BoomBoxType.PRIVATE : BoomBoxType.PUBLIC,
-      messages: builMessage,
-    });
-
-    await boomBox.save();
 
     res.status(200).json({
       status: "success",
-      boom_box: await BoomBox.findById(boomBox.id)
+      boom_box: await BoomBox.findById(boomBox?.id)
         .populate("messages.author", "username photo first_name last_name")
         .populate("messages.receiver", "username photo first_name last_name"),
     });
   }
 );
-
 export { router as BoomBoxRoutes };
