@@ -4,6 +4,7 @@ import { User } from "./../../models/user";
 import { requireAuth } from "../../middlewares/require-auth";
 import { validateRequest } from "../../middlewares/validate-request";
 import { body } from "express-validator";
+import { BadRequestError } from "../../errors/bad-request-error";
 
 const router = Router();
 
@@ -145,7 +146,7 @@ router.post(
   validateRequest,
   requireAuth,
   async (req: Request, res: Response) => {
-    const { content, box, author, receiver, timestamp, boombox_type } =
+    const { content, box, author, receiver, timestamp, command, boombox_type } =
       req.body;
 
     let boomBox = await BoomBox.findOne({ box: box });
@@ -158,9 +159,23 @@ router.post(
       timestamp: new Date(timestamp),
     };
 
-    if (boomBox) {
-      // save message
+    if (command === "join_room") {
+      const existBoom = await BoomBox.find({
+        $or: [
+          { "messages.author": req.currentUser?.id },
+          { "messages.receiver": receiver },
+        ],
+        box_type: "public",
+      });
 
+      if (existBoom) {
+        throw new BadRequestError(
+          `You already have a chat with ${receiverUser}`
+        );
+      }
+    }
+
+    if (boomBox) {
       if (boomBox.messages?.length != 0) {
         boomBox = await BoomBox.findByIdAndUpdate(
           boomBox.id,
