@@ -18,7 +18,7 @@ export const errorHandler = (
     });
   }
 
-  console.log(err.message);
+  console.log(err);
 
   res.status(400).send({
     errors: [{ message: "Oooops!! Something went wrong..." }],
