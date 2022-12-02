@@ -40,6 +40,77 @@ router.post(
       .withMessage("please provide the amount you are willing to deposit"),
     body("networkType")
       .notEmpty()
+      .withMessage("please provide from which network are you depositing to"),
+  ],
+  requireAuth,
+  async (req: Request, res: Response) => {
+    const { amount, networkType } = req.body;
+
+    const transactionRef = await getNextTransaction();
+
+    const transaction = Transaction.create({
+      transaction_number: transactionRef,
+      amount,
+      user: req.currentUser?.id!,
+      transaction_type: ITransactionType.DEPOSIT,
+      status: ITransactionStatus.PENDING,
+    });
+
+    // after approve that payments have reached to our bank
+    const syncBankResponse = await updateWalletBalance({
+      userId: req.currentUser?.id!,
+      transaction_type: ITransactionType.DEPOSIT,
+      amount,
+      networkType,
+    });
+
+    // automatically
+
+    // buy the assets
+    // TODO: Notification
+    await Notification.create({
+      notification_type: NotificationType.BOOM,
+      user: req.currentUser?.id,
+      message: `Successfully bought ${networkType} ${amount}`,
+    });
+
+    // end of update sync bank
+    res.status(200).json({
+      status: "success",
+      transaction,
+      message: syncBankResponse.message,
+    });
+  }
+);
+
+/**
+ * @openapi
+ * /api/v1/sync-bank/deposit:
+ *   post:
+ *     tags:
+ *        - SyncBank
+ *     description: Allows user to deposit to their sync bank
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     parameters:
+ *        - name: amount
+ *          description: Please provide an amount to deposit
+ *        - name: networkType
+ *          description: Please provide which network type you are trying to access
+ *     responses:
+ *       200:
+ *         description: . Returns an update transaction object.
+ */
+router.post(
+  "/api/v1/sync-bank/withdraw",
+  [
+    body("amount")
+      .notEmpty()
+      .withMessage("please provide the amount you are willing to deposit"),
+    body("networkType")
+      .notEmpty()
       .withMessage(
         "please provide from which network are you withdrawing from"
       ),
@@ -73,7 +144,7 @@ router.post(
     await Notification.create({
       notification_type: NotificationType.BOOM,
       user: req.currentUser?.id,
-      message: `${req.currentUser?.username} is unreported your boom`,
+      message: `Successfully withdraw ${networkType} ${amount}`,
     });
 
     // end of update sync bank
