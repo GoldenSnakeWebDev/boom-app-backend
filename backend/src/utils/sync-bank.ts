@@ -3,7 +3,7 @@ import { User } from "./../models/user";
 import { ITransactionType, Transaction } from "./../models/transaction";
 import { config } from "../config";
 import { getNextTransaction } from "./transaction-common";
-import { Nofitication, NotificationType } from "./../models/notification";
+import { Notification, NotificationType } from "./../models/notification";
 import { NetworkType } from "./../models/network";
 
 export const createSyncBankForNewUser = async (opts: {
@@ -302,13 +302,13 @@ export const updateWalletBalance = async (opts: {
   }
 
   // create a notification for updating the wallet balance
-  const notification = new Nofitication({
+  const notification = new Notification({
     user: opts.userId,
     notofication_type:
       opts.transaction_type === ITransactionType.DEPOSIT ||
       opts.transaction_type === ITransactionType.INCOME
         ? NotificationType.TRANSFER
-        : NotificationType.MINTING,
+        : NotificationType.TRANSFER,
     message: `You have made ${opts.transaction_type}`,
   });
 
