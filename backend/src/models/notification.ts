@@ -1,4 +1,5 @@
 import { Schema, model, Types } from "mongoose";
+import { User } from "./user";
 
 export enum NotificationType {
   BOOM = "boom",
@@ -28,6 +29,8 @@ const notificationSchema = new Schema<INotification>(
         ).join(",")}`,
       },
     },
+
+    message: { type: Schema.Types.String, default: "" },
     is_read: { type: Schema.Types.Boolean, default: false },
   },
   {
@@ -40,5 +43,14 @@ const notificationSchema = new Schema<INotification>(
     },
   }
 );
+
+notificationSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "user",
+    model: User,
+    select: "username photo first_name last_name",
+  });
+  next();
+});
 
 export const Notification = model("Notification", notificationSchema);
