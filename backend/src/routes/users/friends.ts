@@ -82,13 +82,13 @@ router.patch(
       isSenderYourFun
     ) {
       await User.findByIdAndUpdate(
-        req.params.id,
-        { $push: { friends: req.currentUser?.id } },
+        req.currentUser?.id,
+        { $push: { friends: req.params.id } },
         { new: true }
       );
       await User.findByIdAndUpdate(
-        req.currentUser?.id,
-        { $push: { friends: req.params.id } },
+        req.params.id,
+        { $push: { friends: req.currentUser?.id } },
         { new: true }
       );
 
