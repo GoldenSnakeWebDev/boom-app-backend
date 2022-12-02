@@ -176,7 +176,7 @@ router.post(
         ],
       });
 
-      console.log(existBoom);
+      // console.log(existBoom);
       if (existBoom) {
         throw new BadRequestError(
           `You already have a chat with ${receiverUser?.username}`

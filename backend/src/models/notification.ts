@@ -14,6 +14,7 @@ export interface INotification {
   boom?: string;
   notification_type: NotificationType;
   is_read?: boolean;
+  timestamp?: Date;
 }
 
 const notificationSchema = new Schema<INotification>(
@@ -33,6 +34,7 @@ const notificationSchema = new Schema<INotification>(
 
     message: { type: Schema.Types.String, default: "" },
     is_read: { type: Schema.Types.Boolean, default: false },
+    timestamp: { type: Schema.Types.Date, default: Date.now },
   },
   {
     toJSON: {

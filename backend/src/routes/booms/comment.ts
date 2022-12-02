@@ -5,6 +5,7 @@ import { Boom } from "./../../models/boom";
 import { validateRequest } from "../../middlewares/validate-request";
 import { requireAuth } from "../../middlewares/require-auth";
 import { BadRequestError } from "../../errors/bad-request-error";
+import { Notification, NotificationType } from "./../../models/notification";
 
 const router = Router();
 
@@ -59,6 +60,14 @@ router.post(
     });
 
     await comment.save();
+
+    await Notification.create({
+      notification_type: NotificationType.BOOM,
+      user: req.currentUser?.id,
+      boom: req.params.boomId,
+      message: `${req.currentUser?.username} commented on your boom`,
+      timestamp: new Date(timestamp),
+    });
 
     boom = await Boom.findByIdAndUpdate(
       boom.id,

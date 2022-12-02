@@ -272,7 +272,11 @@ router.patch(
   ],
   requireAuth,
   async (req: Request, res: Response) => {
-    let { react_type } = req.body;
+    let { react_type, timestamp } = req.body;
+
+    if (!timestamp) {
+      timestamp = Date.now();
+    }
     console.log("App", req.params.id);
 
     const boomMinted: any = await Boom.findById(req.params.id);
@@ -297,6 +301,7 @@ router.patch(
           user: boomMinted.user,
           boom: req.params.id,
           message: `${req.currentUser?.username} has liked  your boom`,
+          timestamp: new Date(timestamp),
         });
       } else {
         await Boom.findByIdAndUpdate(
@@ -312,6 +317,7 @@ router.patch(
           user: boomMinted.user,
           boom: req.params.id,
           message: `${req.currentUser?.username} has unliked  your boom`,
+          timestamp: new Date(timestamp),
         });
       }
     } else if (react_type === "loves") {
@@ -330,6 +336,7 @@ router.patch(
           user: boomMinted.user,
           boom: req.params.id,
           message: `${req.currentUser?.username} has loved  your boom`,
+          timestamp: new Date(timestamp),
         });
       } else {
         await Boom.findByIdAndUpdate(
@@ -345,6 +352,7 @@ router.patch(
           user: boomMinted.user,
           boom: req.params.id,
           message: `${req.currentUser?.username} has unloved  your boom`,
+          timestamp: new Date(timestamp),
         });
       }
     } else if (react_type === "smiles") {
@@ -362,6 +370,7 @@ router.patch(
           user: boomMinted.user,
           boom: req.params.id,
           message: `${req.currentUser?.username} has smiled for your boom`,
+          timestamp: new Date(timestamp),
         });
       } else {
         await Boom.findByIdAndUpdate(
@@ -377,6 +386,7 @@ router.patch(
           user: boomMinted.user,
           boom: req.params.id,
           message: `${req.currentUser?.username} is sad about  your boom`,
+          timestamp: new Date(timestamp),
         });
       }
     } else if (react_type === "rebooms") {
@@ -394,6 +404,7 @@ router.patch(
           user: boomMinted.user,
           boom: req.params.id,
           message: `${req.currentUser?.username} has reboomed your boom`,
+          timestamp: new Date(timestamp),
         });
       } else {
         await Boom.findByIdAndUpdate(
@@ -409,6 +420,7 @@ router.patch(
           user: boomMinted.user,
           boom: req.params.id,
           message: `${req.currentUser?.username} is reboomed your boom`,
+          timestamp: new Date(timestamp),
         });
       }
     } else if (react_type === "reports") {
@@ -426,6 +438,7 @@ router.patch(
           user: boomMinted.user,
           boom: req.params.id,
           message: `${req.currentUser?.username} has reported your boom`,
+          timestamp: new Date(timestamp),
         });
       } else {
         await Boom.findByIdAndUpdate(
@@ -441,6 +454,7 @@ router.patch(
           user: boomMinted.user,
           boom: req.params.id,
           message: `${req.currentUser?.username} is unreported your boom`,
+          timestamp: new Date(timestamp),
         });
       }
     }

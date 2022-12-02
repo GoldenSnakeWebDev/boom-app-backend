@@ -99,6 +99,8 @@ router.post(
  *          description: Please provide an amount to deposit
  *        - name: networkType
  *          description: Please provide which network type you are trying to access
+ *        - name: timestamp
+ *          description: Please provide the timestamp
  *     responses:
  *       200:
  *         description: . Returns an update transaction object.
@@ -117,7 +119,11 @@ router.post(
   ],
   requireAuth,
   async (req: Request, res: Response) => {
-    const { amount, networkType } = req.body;
+    let { amount, networkType, timestamp } = req.body;
+
+    if (timestamp) {
+      timestamp = Date.now();
+    }
 
     const transactionRef = await getNextTransaction();
 
@@ -145,6 +151,7 @@ router.post(
       notification_type: NotificationType.BOOM,
       user: req.currentUser?.id,
       message: `Successfully withdraw ${networkType} ${amount}`,
+      timestamp: new Date(timestamp),
     });
 
     // end of update sync bank

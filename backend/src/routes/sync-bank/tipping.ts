@@ -33,6 +33,8 @@ const router = Router();
  *          description: User informatin Id
  *        - name: networkType
  *          description: The network type you are access from
+ *        - name: timestamp
+ *          description: Please provide the timestamp
  *     responses:
  *       200:
  *         description: . Return current logged in user sync bank.
@@ -52,7 +54,11 @@ router.post(
   ],
   requireAuth,
   async (req: Request, res: Response) => {
-    const { amount, user, networkType } = req.body;
+    let { amount, user, networkType, timestamp } = req.body;
+
+    if (timestamp) {
+      timestamp = Date.now();
+    }
 
     const tipedUser = await User.findById(user);
 
@@ -85,6 +91,7 @@ router.post(
       notification_type: NotificationType.USER,
       user: req.currentUser?.id,
       message: `Successfully tipped ${tipedUser?.username}`,
+      timestamp: new Date(timestamp),
     });
 
     // after approve that payments have reached to our bank
@@ -101,6 +108,7 @@ router.post(
       notification_type: NotificationType.USER,
       user: req.currentUser?.id,
       message: `You have been tipped by ${req.currentUser?.username}`,
+      timestamp: new Date(timestamp),
     });
 
     res.status(200).json({
