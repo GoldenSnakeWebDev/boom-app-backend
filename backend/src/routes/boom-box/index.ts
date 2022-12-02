@@ -160,11 +160,21 @@ router.post(
 
     if (command === "join_room") {
       const existBoom = await BoomBox.find({
-        "messages.author": req.currentUser?.id,
-        "messages.receiver": receiver,
-        box_type: "public",
+        $or: [
+          {
+            $and: [
+              { "messages.author": req.currentUser?.id },
+              { "messages.receiver": receiver },
+            ],
+          },
+          {
+            $and: [
+              { "messages.author": receiver },
+              { "messages.receiver": req.currentUser?.id },
+            ],
+          },
+        ],
       });
-
       if (existBoom) {
         throw new BadRequestError(
           `You already have a chat with ${receiverUser?.username}`
