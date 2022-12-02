@@ -44,8 +44,8 @@ router.patch(
 
     if (!areYouNextUserFun) {
       nextUser = await User.findByIdAndUpdate(
-        req.currentUser?.id,
-        { $push: { funs: req.params.id } },
+        req.params.id,
+        { $push: { funs: req.currentUser?.id } },
         { new: true }
       );
 
@@ -59,8 +59,8 @@ router.patch(
     } else {
       // remove being a friend
       nextUser = await User.findByIdAndUpdate(
-        req.currentUser?.id,
-        { $pull: { funs: req.params.id } },
+        req.params.id,
+        { $pull: { funs: req.currentUser?.id } },
         { new: true }
       );
       // TODO: Notification
@@ -116,6 +116,20 @@ router.patch(
         { $pull: { friends: req.params.id } },
         { new: true }
       );
+
+      // TODO: Notification
+      await Notification.create({
+        notification_type: NotificationType.USER,
+        user: req.currentUser?.id,
+        message: `${nextUser?.username} left your friendship`,
+      });
+
+      // TODO: Notification
+      await Notification.create({
+        notification_type: NotificationType.USER,
+        user: req.params.id,
+        message: `${req.currentUser?.username} left your friendship`,
+      });
     }
 
     res.status(200).json({
