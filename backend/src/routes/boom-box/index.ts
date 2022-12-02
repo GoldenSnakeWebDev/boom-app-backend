@@ -160,20 +160,8 @@ router.post(
 
     if (command === "join_room") {
       const existBoom = await BoomBox.find({
-        $or: [
-          {
-            $and: [
-              { "messages.author": req.currentUser?.id },
-              { "messages.receiver": receiver },
-            ],
-          },
-          {
-            $and: [
-              { "messages.author": receiver },
-              { "messages.receiver": req.currentUser?.id },
-            ],
-          },
-        ],
+        "messages.author": req.currentUser?.id,
+        "messages.receiver": receiver,
       });
       if (existBoom) {
         throw new BadRequestError(
