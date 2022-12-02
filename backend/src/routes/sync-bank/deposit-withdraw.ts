@@ -8,6 +8,7 @@ import {
   ITransactionStatus,
 } from "../../models/transaction";
 import { getNextTransaction } from "../../utils/transaction-common";
+import { Notification, NotificationType } from "./../../models/notification";
 
 const router = Router();
 
@@ -64,6 +65,17 @@ router.post(
       amount,
       networkType,
     });
+
+    // automatically
+
+    // buy the assets
+    // TODO: Notification
+    await Notification.create({
+      notification_type: NotificationType.BOOM,
+      user: req.currentUser?.id,
+      message: `${req.currentUser?.username} is unreported your boom`,
+    });
+
     // end of update sync bank
     res.status(200).json({
       status: "success",

@@ -1,6 +1,6 @@
 import { Router, Request, Response } from "express";
 import { body } from "express-validator";
-import { Nofitication, NotificationType } from "./../../models";
+import { Notification, NotificationType } from "./../../models";
 import { validateRequest } from "../../middlewares/validate-request";
 import { requireAuth } from "../../middlewares/require-auth";
 import { ApiResponse } from "../../utils/api-response";
@@ -52,7 +52,7 @@ router.get(
   requireAuth,
   async (req: Request, res: Response) => {
     const response = new ApiResponse(
-      Nofitication.find({ user: req.currentUser?.id })
+      Notification.find({ user: req.currentUser?.id })
         .populate("user")
         .populate("boom"),
       req.query
@@ -111,7 +111,7 @@ router.post(
   async (req: Request, res: Response) => {
     const [message, boomId, notification_type] = req.body;
 
-    const notification = new Nofitication({
+    const notification = new Notification({
       message,
       boom: boomId,
       notification_type,
@@ -155,7 +155,7 @@ router.patch(
   requireAuth,
   validateRequest,
   async (req: Request, res: Response) => {
-    const notification = await Nofitication.findByIdAndUpdate(
+    const notification = await Notification.findByIdAndUpdate(
       req.params.id,
       {
         is_read: true,
@@ -170,4 +170,4 @@ router.patch(
   }
 );
 
-export { router as NofiticationRoutes };
+export { router as NotificationRoutes };

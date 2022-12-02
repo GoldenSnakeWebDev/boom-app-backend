@@ -8,8 +8,9 @@ import { requireAuth } from "../../middlewares/require-auth";
 import { SyncBank } from "../../models/syncbank";
 import { updateWalletBalance } from "../../utils/sync-bank";
 import { ITransactionType } from "./../../models/transaction";
-import { Nofitication, NotificationType } from "../../models/notification";
+import { Notification, NotificationType } from "../../models/notification";
 import { NetworkType } from "../../models/network";
+import { User } from "./../../models/user";
 
 const router = Router();
 
@@ -124,13 +125,13 @@ router.post(
 
     await boom.save();
 
-    const notification = new Nofitication({
+    await Notification.create({
       message: `Successfully created a boom`,
+      user: req.currentUser?.id,
       boom: boom.id,
-      notofication_type: NotificationType.BOOM_CREATED,
+      notofication_type: NotificationType.BOOM,
     });
 
-    await notification.save();
     res.status(201).json({
       status: "success",
       message: "Successfully create a new boom",
@@ -289,7 +290,29 @@ router.patch(
           },
           { new: true }
         );
+
+        // TODO: Notification
+        await Notification.create({
+          notification_type: NotificationType.BOOM,
+          user: boomMinted.user,
+          boom: req.params.id,
+          message: `${req.currentUser?.username} has liked  your boom`,
+        });
       } else {
+        await Boom.findByIdAndUpdate(
+          req.params.id,
+          {
+            $pull: { "reactions.likes": req.currentUser?.id! },
+          },
+          { new: true }
+        );
+        // TODO: Notification
+        await Notification.create({
+          notification_type: NotificationType.BOOM,
+          user: boomMinted.user,
+          boom: req.params.id,
+          message: `${req.currentUser?.username} has unliked  your boom`,
+        });
       }
     } else if (react_type === "loves") {
       if (!boomMinted?.reactions?.loves.includes(req.currentUser?.id!)) {
@@ -300,7 +323,29 @@ router.patch(
           },
           { new: true }
         );
+
+        // TODO: Notification
+        await Notification.create({
+          notification_type: NotificationType.BOOM,
+          user: boomMinted.user,
+          boom: req.params.id,
+          message: `${req.currentUser?.username} has loved  your boom`,
+        });
       } else {
+        await Boom.findByIdAndUpdate(
+          req.params.id,
+          {
+            $pull: { "reactions.likes": req.currentUser?.id! },
+          },
+          { new: true }
+        );
+        // TODO: Notification
+        await Notification.create({
+          notification_type: NotificationType.BOOM,
+          user: boomMinted.user,
+          boom: req.params.id,
+          message: `${req.currentUser?.username} has unloved  your boom`,
+        });
       }
     } else if (react_type === "smiles") {
       if (!boomMinted?.reactions?.smiles.includes(req.currentUser?.id!)) {
@@ -311,7 +356,28 @@ router.patch(
           },
           { new: true }
         );
+        // TODO: Notification
+        await Notification.create({
+          notification_type: NotificationType.BOOM,
+          user: boomMinted.user,
+          boom: req.params.id,
+          message: `${req.currentUser?.username} has smiled for your boom`,
+        });
       } else {
+        await Boom.findByIdAndUpdate(
+          req.params.id,
+          {
+            $pull: { "reactions.likes": req.currentUser?.id! },
+          },
+          { new: true }
+        );
+        // TODO: Notification
+        await Notification.create({
+          notification_type: NotificationType.BOOM,
+          user: boomMinted.user,
+          boom: req.params.id,
+          message: `${req.currentUser?.username} is sad about  your boom`,
+        });
       }
     } else if (react_type === "rebooms") {
       if (!boomMinted?.reactions?.rebooms.includes(req.currentUser?.id!)) {
@@ -322,7 +388,28 @@ router.patch(
           },
           { new: true }
         );
+        // TODO: Notification
+        await Notification.create({
+          notification_type: NotificationType.BOOM,
+          user: boomMinted.user,
+          boom: req.params.id,
+          message: `${req.currentUser?.username} has reboomed your boom`,
+        });
       } else {
+        await Boom.findByIdAndUpdate(
+          req.params.id,
+          {
+            $pull: { "reactions.likes": req.currentUser?.id! },
+          },
+          { new: true }
+        );
+        // TODO: Notification
+        await Notification.create({
+          notification_type: NotificationType.BOOM,
+          user: boomMinted.user,
+          boom: req.params.id,
+          message: `${req.currentUser?.username} is reboomed your boom`,
+        });
       }
     } else if (react_type === "reports") {
       if (!boomMinted?.reactions?.reports.includes(req.currentUser?.id!)) {
@@ -333,7 +420,28 @@ router.patch(
           },
           { new: true }
         );
+        // TODO: Notification
+        await Notification.create({
+          notification_type: NotificationType.BOOM,
+          user: boomMinted.user,
+          boom: req.params.id,
+          message: `${req.currentUser?.username} has reported your boom`,
+        });
       } else {
+        await Boom.findByIdAndUpdate(
+          req.params.id,
+          {
+            $pull: { "reactions.likes": req.currentUser?.id! },
+          },
+          { new: true }
+        );
+        // TODO: Notification
+        await Notification.create({
+          notification_type: NotificationType.BOOM,
+          user: boomMinted.user,
+          boom: req.params.id,
+          message: `${req.currentUser?.username} is unreported your boom`,
+        });
       }
     }
 
@@ -379,6 +487,12 @@ router.post(
       throw new BadRequestError("This boom does not exist");
     }
 
+    const oldOwner = await User.findById(existBoom.user);
+
+    if (!oldOwner) {
+      throw new BadRequestError("The boom owner does not exist");
+    }
+
     // DEDUCT SYNC WALLET AMOUNTS
 
     const syncBank = await SyncBank.findOne({ user: req.currentUser?.id! });
@@ -422,6 +536,22 @@ router.post(
       { user: req.currentUser?.id! },
       { new: true }
     );
+
+    // OLD OWNER's Notification
+    await Notification.create({
+      message: `${req.currentUser?.username} has bought your boom successfully at ${network.symbol} ${existBoom.price}`,
+      user: oldOwner.id,
+      boom: existBoom.id,
+      notofication_type: NotificationType.BOOM,
+    });
+
+    // New Owner's Notification
+    await Notification.create({
+      message: `You have successfully bought a boom`,
+      user: req.currentUser?.id,
+      boom: existBoom.id,
+      notofication_type: NotificationType.BOOM,
+    });
 
     res.status(200).json({
       status: "success",

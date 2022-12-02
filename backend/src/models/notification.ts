@@ -1,9 +1,8 @@
 import { Schema, model, Types } from "mongoose";
 
 export enum NotificationType {
-  MINTING = "minting",
-  FOLLOWER = "follower",
-  BOOM_CREATED = "boom created",
+  BOOM = "boom",
+  USER = "user",
   TRANSFER = "transfer",
 }
 
@@ -21,7 +20,7 @@ const notificationSchema = new Schema<INotification>(
     boom: { type: Schema.Types.ObjectId, ref: "Boom" },
     notofication_type: {
       type: Schema.Types.String,
-      default: NotificationType.MINTING,
+      default: NotificationType.USER,
       enum: {
         values: Object.values(NotificationType),
         message: `Notification types can only be ${Object.values(
@@ -42,4 +41,4 @@ const notificationSchema = new Schema<INotification>(
   }
 );
 
-export const Nofitication = model("Notification", notificationSchema);
+export const Notification = model("Notification", notificationSchema);

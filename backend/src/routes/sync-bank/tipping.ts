@@ -11,6 +11,7 @@ import { User } from "./../../models/user";
 
 import { getNextTransaction } from "../../utils/transaction-common";
 import { BadRequestError } from "../../errors/bad-request-error";
+import { NotificationType, Notification } from "./../../models/notification";
 
 const router = Router();
 
@@ -70,13 +71,20 @@ router.post(
       transaction_type: ITransactionType.DEPOSIT,
       status: ITransactionStatus.PENDING,
     });
-
     //for tiper
     await updateWalletBalance({
       userId: req.currentUser?.id!,
       transaction_type: ITransactionType.TRANSFER,
       amount,
       networkType,
+    });
+
+    // send notification for tipper
+
+    await Notification.create({
+      notification_type: NotificationType.USER,
+      user: req.currentUser?.id,
+      message: `Successfully tipped ${tipedUser?.username}`,
     });
 
     // after approve that payments have reached to our bank
@@ -87,6 +95,14 @@ router.post(
       networkType,
     });
     // end of update sync bank
+    // send notification for tipee
+
+    await Notification.create({
+      notification_type: NotificationType.USER,
+      user: req.currentUser?.id,
+      message: `You have been tipped by ${req.currentUser?.username}`,
+    });
+
     res.status(200).json({
       status: "success",
       transaction,

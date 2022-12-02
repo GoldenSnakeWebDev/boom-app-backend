@@ -1,4 +1,5 @@
 import { Request, Response, Router } from "express";
+import { NotificationType, Notification } from "./../../models/notification";
 import { requireAuth } from "../../middlewares/require-auth";
 import { User } from "../../models/user";
 
@@ -43,18 +44,31 @@ router.patch(
 
     if (!areYouNextUserFun) {
       nextUser = await User.findByIdAndUpdate(
-        req.params.id,
-        { $push: { funs: req.currentUser?.id } },
+        req.currentUser?.id,
+        { $push: { funs: req.params.id } },
         { new: true }
       );
+
+      // send notification for tipper
+      // TODO: Notification
+      await Notification.create({
+        notification_type: NotificationType.USER,
+        user: req.currentUser?.id,
+        message: `You have added ${nextUser?.username} as your fun`,
+      });
     } else {
       // remove being a friend
       nextUser = await User.findByIdAndUpdate(
-        req.params.id,
-        { $pull: { funs: req.currentUser?.id } },
+        req.currentUser?.id,
+        { $pull: { funs: req.params.id } },
         { new: true }
       );
-      // remove the user
+      // TODO: Notification
+      await Notification.create({
+        notification_type: NotificationType.USER,
+        user: req.currentUser?.id,
+        message: `You have removed ${nextUser?.username} from a list of your funs`,
+      });
     }
 
     const isSenderYourFun = user?.funs
@@ -77,6 +91,20 @@ router.patch(
         { $push: { friends: req.params.id } },
         { new: true }
       );
+
+      // TODO: Notification
+      await Notification.create({
+        notification_type: NotificationType.USER,
+        user: req.currentUser?.id,
+        message: `${nextUser?.username} is now your friend`,
+      });
+
+      // TODO: Notification
+      await Notification.create({
+        notification_type: NotificationType.USER,
+        user: req.params.id,
+        message: `${req.currentUser?.username} is now your friend`,
+      });
     } else {
       await User.findByIdAndUpdate(
         req.params.id,
