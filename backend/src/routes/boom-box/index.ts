@@ -159,10 +159,12 @@ router.post(
     };
 
     if (command === "join_room") {
-      const existBoom = await BoomBox.find({
+      const existBoom = await BoomBox.findOne({
         "messages.author": req.currentUser?.id,
         "messages.receiver": receiver,
       });
+
+      console.log(existBoom);
       if (existBoom) {
         throw new BadRequestError(
           `You already have a chat with ${receiverUser?.username}`
@@ -187,7 +189,7 @@ router.post(
           );
       }
 
-      res.status(200).json({ status: "success", boomBox });
+      return res.status(200).json({ status: "success", boomBox });
     } else {
       // create boom box and
       boomBox = new BoomBox({
@@ -203,7 +205,7 @@ router.post(
       await boomBox.save();
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       boom_box: await BoomBox.findById(boomBox?.id)
         .populate("messages.author", "username photo first_name last_name")
