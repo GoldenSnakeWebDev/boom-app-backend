@@ -1,5 +1,6 @@
 import { Schema, model, Types } from "mongoose";
 import { User } from "./user";
+import { Boom } from "./boom";
 
 export enum NotificationType {
   BOOM = "boom",
@@ -49,6 +50,15 @@ notificationSchema.pre(/^find/, function (next) {
     path: "user",
     model: User,
     select: "username photo first_name last_name",
+  });
+  next();
+});
+
+notificationSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "boom",
+    model: Boom,
+    select: "title price ",
   });
   next();
 });
