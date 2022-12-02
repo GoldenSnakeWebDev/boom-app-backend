@@ -129,7 +129,7 @@ router.post(
       message: `Successfully created a boom`,
       user: req.currentUser?.id,
       boom: boom.id,
-      notofication_type: NotificationType.BOOM,
+      notification_type: NotificationType.BOOM,
     });
 
     res.status(201).json({
@@ -542,7 +542,7 @@ router.post(
       message: `${req.currentUser?.username} has bought your boom successfully at ${network.symbol} ${existBoom.price}`,
       user: oldOwner.id,
       boom: existBoom.id,
-      notofication_type: NotificationType.BOOM,
+      notification_type: NotificationType.BOOM,
     });
 
     // New Owner's Notification
@@ -550,7 +550,7 @@ router.post(
       message: `You have successfully bought a boom`,
       user: req.currentUser?.id,
       boom: existBoom.id,
-      notofication_type: NotificationType.BOOM,
+      notification_type: NotificationType.BOOM,
     });
 
     res.status(200).json({

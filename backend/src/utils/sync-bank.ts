@@ -304,7 +304,7 @@ export const updateWalletBalance = async (opts: {
   // create a notification for updating the wallet balance
   const notification = new Notification({
     user: opts.userId,
-    notofication_type:
+    notification_type:
       opts.transaction_type === ITransactionType.DEPOSIT ||
       opts.transaction_type === ITransactionType.INCOME
         ? NotificationType.TRANSFER

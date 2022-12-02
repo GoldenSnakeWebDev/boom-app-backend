@@ -12,7 +12,7 @@ export interface INotification {
   user?: Types.ObjectId;
   message: string;
   boom?: string;
-  notofication_type: NotificationType;
+  notification_type: NotificationType;
   is_read?: boolean;
 }
 
@@ -20,7 +20,7 @@ const notificationSchema = new Schema<INotification>(
   {
     user: { type: Schema.Types.ObjectId, ref: "User" },
     boom: { type: Schema.Types.ObjectId, ref: "Boom" },
-    notofication_type: {
+    notification_type: {
       type: Schema.Types.String,
       default: NotificationType.USER,
       enum: {
