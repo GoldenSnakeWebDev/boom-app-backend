@@ -54,7 +54,7 @@ router.patch(
       await Notification.create({
         notification_type: NotificationType.USER,
         user: req.currentUser?.id,
-        message: `You have added ${nextUser?.username} as your fun`,
+        message: `You are now a fun with ${nextUser?.username}`,
       });
     } else {
       // remove being a friend
@@ -66,7 +66,7 @@ router.patch(
       // TODO: Notification
       await Notification.create({
         notification_type: NotificationType.USER,
-        user: req.currentUser?.id,
+        user: nextUser?.id,
         message: `You have removed ${nextUser?.username} from a list of your funs`,
       });
     }
@@ -95,7 +95,7 @@ router.patch(
       // TODO: Notification
       await Notification.create({
         notification_type: NotificationType.USER,
-        user: req.currentUser?.id,
+        user: nextUser?.id,
         message: `${nextUser?.username} is now your friend`,
       });
 
@@ -120,14 +120,14 @@ router.patch(
       // TODO: Notification
       await Notification.create({
         notification_type: NotificationType.USER,
-        user: req.currentUser?.id,
+        user: nextUser?.id,
         message: `${nextUser?.username} left your friendship`,
       });
 
       // TODO: Notification
       await Notification.create({
         notification_type: NotificationType.USER,
-        user: req.params.id,
+        user: req.currentUser?.id,
         message: `${req.currentUser?.username} left your friendship`,
       });
     }
