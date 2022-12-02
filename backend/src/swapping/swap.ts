@@ -21,16 +21,52 @@ export class V2PancakeSwap {
    * Swap USDT asset for a new assets
    * Buy BNB
    */
-  swap() {}
-
-  async approve(tok: string, amount: string) {
+  async swap(amount: string, asset: string) {
     try {
-      const token = Token.getToken(tok);
-      const resp = token.approve(this.address, amount, { gas: "3000000" });
-      console.log(resp);
-      return { success: true, error: null };
+      const treasuryToken = "";
+      const token = Token.getToken(asset);
+      const tokenAmountWei = ethers.utils.parseUnits(
+        amount,
+        await token.decimals()
+      );
+
+      const isApproved = await token.approve(this.address, tokenAmountWei, {
+        gas: "3000000",
+      });
+
+      if (isApproved) {
+        const amountOut = await this.contract.getAmountOut(
+          tokenAmountWei,
+          asset,
+          treasuryToken // newToken
+        );
+        const amounts = await this.contract.swapExactTokensForTokens(
+          tokenAmountWei,
+          amountOut,
+          [treasuryToken, asset],
+
+          web3Provider.authWallet.address,
+          new Date(Date.now() + 1 * 24 * 60 * 60 * 1000) // plus 1 day
+        );
+
+        return {
+          success: true,
+          error: null,
+          amounts,
+        };
+      }
+
+      return {
+        success: false,
+        error: null,
+        amounts: [],
+      };
     } catch (error) {
-      return { success: false, error: "" };
+      return {
+        success: false,
+        error: null,
+        amounts: [],
+      };
     }
   }
 }
