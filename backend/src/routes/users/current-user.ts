@@ -88,10 +88,10 @@ router.get("/api/v1/users/:id", async (req: Request, res: Response) => {
 router.get(
   "/api/v1/users",
   requireAuth,
-  async (_req: Request, res: Response) => {
-    const users = await User.find({ $nor: [{ is_admin: true }] }).select(
-      "username photo first_name last_name"
-    );
+  async (req: Request, res: Response) => {
+    const users = await User.find({
+      $nor: [{ is_admin: true, _id: req.currentUser?.id }],
+    }).select("username photo first_name last_name");
 
     if (!users) {
       throw new BadRequestError("User not found");
