@@ -1,8 +1,34 @@
 import {Request, Response, Router} from "express"
 import {Report} from "../../models"
 import {requireAuth} from "../../middlewares";
+import {ApiResponse} from "../../utils/api-response";
 
 const router = Router()
+
+
+/**
+ * @openapi
+ * /api/v1/reporting:
+ *   get:
+ *     tags:
+ *        - Reporting
+ *     description: Provide a list all reported users
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     responses:
+ *       200:
+ *         description: Provide a list all reported users
+ */
+router.get("/api/v1/reporting", async(req: Request, res: Response) => {
+    const response  = new ApiResponse(Report.find(), req.query);
+    const reporting = await response.query;
+    res.status(200).json({
+        status: "success",
+        reporting
+    })
+})
 
 /**
  * @openapi
