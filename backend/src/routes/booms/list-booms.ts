@@ -1,7 +1,7 @@
 import { Router, Response, Request } from "express";
-import { ApiResponse } from "./../../utils/api-response";
-import { Boom, BoomType } from "./../../models/boom";
-import { requireAuth } from "../../middlewares/require-auth";
+import { ApiResponse } from "../../utils/api-response";
+import { Boom, BoomType } from "../../models";
+import { requireAuth } from "../../middlewares";
 
 const router = Router();
 

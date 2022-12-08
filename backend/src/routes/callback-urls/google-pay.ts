@@ -4,11 +4,11 @@ const router = Router();
 
 /**
  * @openapi
- * /api/v1/callback-urls/google-playstore:
+ * /api/v1/callback-urls/google-plays-tore:
  *   post:
  *     tags:
  *        - CallbackUrl
- *     description: Callback URL to access Google playstore request and response.
+ *     description: Callback URL to access Google plays tore request and response.
  *     produces:
  *        - application/json
  *     responses:
@@ -16,7 +16,7 @@ const router = Router();
  *         description: . Returns a success message
  */
 router.post(
-  "/api/v1/callback-urls/google-playstore",
+  "/api/v1/callback-urls/google-plays-tore",
   async (req: Request, res: Response) => {
     console.log(req.body);
 

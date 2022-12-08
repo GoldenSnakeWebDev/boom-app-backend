@@ -36,6 +36,7 @@ export interface IBoom {
   boom_state?: BoomState;
   created_at?: Date;
   is_active?: boolean;
+  is_deleted?: boolean
 }
 
 const boomSchema = new Schema<IBoom>(
@@ -78,6 +79,7 @@ const boomSchema = new Schema<IBoom>(
     tags: { type: Schema.Types.Array, default: [] },
     created_at: { type: Schema.Types.Date, default: Date.now },
     is_active: { type: Schema.Types.Boolean, default: true },
+    is_deleted: { type: Schema.Types.Boolean, default: false },
   },
   {
     toJSON: {

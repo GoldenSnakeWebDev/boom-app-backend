@@ -1,11 +1,11 @@
-import { Router, Request, Response } from "express";
-import { body } from "express-validator";
-import { Comment } from "./../../models/comment";
-import { Boom } from "./../../models/boom";
-import { validateRequest } from "../../middlewares/validate-request";
-import { requireAuth } from "../../middlewares/require-auth";
-import { BadRequestError } from "../../errors/bad-request-error";
-import { Notification, NotificationType } from "./../../models/notification";
+import {Router, Request, Response} from "express";
+import {body} from "express-validator";
+import {Comment} from "../../models/comment";
+import {Boom} from "../../models";
+import {validateRequest} from "../../middlewares";
+import {requireAuth} from "../../middlewares";
+import {BadRequestError} from "../../errors";
+import {Notification, NotificationType} from "../../models";
 
 const router = Router();
 
@@ -32,68 +32,68 @@ const router = Router();
  *         description: . Successfully created a message
  */
 router.post(
-  "/api/v1/booms/:boomId/comments",
-  [
-    body("message")
-      .notEmpty()
-      .withMessage("please provide your comment message"),
-    body("timestamp")
-      .notEmpty()
-      .withMessage("please provide comment timestamp"),
-  ],
-  validateRequest,
-  requireAuth,
-  async (req: Request, res: Response) => {
-    let { message, timestamp } = req.body;
+    "/api/v1/booms/:boomId/comments",
+    [
+        body("message")
+            .notEmpty()
+            .withMessage("please provide your comment message"),
+        body("timestamp")
+            .notEmpty()
+            .withMessage("please provide comment timestamp"),
+    ],
+    validateRequest,
+    requireAuth,
+    async (req: Request, res: Response) => {
+        let {message, timestamp} = req.body;
 
-    let boom = await Boom.findById(req.params.boomId);
+        let boom = await Boom.findById(req.params.boomId);
 
-    if (!boom) {
-      throw new BadRequestError("This boom does not exist");
+        if (!boom) {
+            throw new BadRequestError("This boom does not exist");
+        }
+
+        const comment = new Comment({
+            message,
+            user: req.currentUser?.id!,
+            boom: req.params.boomId,
+            created_at: new Date(timestamp),
+        });
+
+        await comment.save();
+
+        await Notification.create({
+            notification_type: NotificationType.BOOM,
+            user: req.currentUser?.id,
+            boom: req.params.boomId,
+            message: `${req.currentUser?.username} commented on your boom`,
+            timestamp: new Date(timestamp),
+        });
+
+        boom = await Boom.findByIdAndUpdate(
+            boom.id,
+            {
+                $push: {
+                    comments: comment.id,
+                },
+            },
+            {new: true}
+        )
+            .populate("network")
+            .populate("reactions.likes", "username photo first_name last_name")
+            .populate("reactions.loves", "username photo first_name last_name")
+            .populate("reactions.smiles", "username photo first_name last_name")
+            .populate("reactions.rebooms", "username photo first_name last_name")
+            .populate("reactions.reports", "username photo first_name last_name")
+            .populate("user")
+            .populate("comments")
+            .populate("comments.user", "username photo first_name last_name");
+
+        res.status(201).json({
+            status: "success",
+            message: "Successfully create a new comment",
+            boom,
+        });
     }
-
-    const comment = new Comment({
-      message,
-      user: req.currentUser?.id!,
-      boom: req.params.boomId,
-      created_at: new Date(timestamp),
-    });
-
-    await comment.save();
-
-    await Notification.create({
-      notification_type: NotificationType.BOOM,
-      user: req.currentUser?.id,
-      boom: req.params.boomId,
-      message: `${req.currentUser?.username} commented on your boom`,
-      timestamp: new Date(timestamp),
-    });
-
-    boom = await Boom.findByIdAndUpdate(
-      boom.id,
-      {
-        $push: {
-          comments: comment.id,
-        },
-      },
-      { new: true }
-    )
-      .populate("network")
-      .populate("reactions.likes", "username photo first_name last_name")
-      .populate("reactions.loves", "username photo first_name last_name")
-      .populate("reactions.smiles", "username photo first_name last_name")
-      .populate("reactions.rebooms", "username photo first_name last_name")
-      .populate("reactions.reports", "username photo first_name last_name")
-      .populate("user")
-      .populate("comments")
-      .populate("comments.user", "username photo first_name last_name");
-
-    res.status(201).json({
-      status: "success",
-      message: "Successfully create a new comment",
-      boom,
-    });
-  }
 );
 
 /**
@@ -112,33 +112,33 @@ router.post(
  *         description: . update your comment
  */
 router.patch(
-  "/api/v1/booms/:boomId/comments/:id",
-  validateRequest,
-  requireAuth,
-  async (req: Request, res: Response) => {
-    let { message } = req.body;
+    "/api/v1/booms/:boomId/comments/:id",
+    validateRequest,
+    requireAuth,
+    async (req: Request, res: Response) => {
+        let {message} = req.body;
 
-    Comment.findByIdAndUpdate(
-      req.params.id,
-      { message, $push: { like: req.currentUser?.id } },
-      { new: true }
-    );
+        Comment.findByIdAndUpdate(
+            req.params.id,
+            {message, $push: {like: req.currentUser?.id}},
+            {new: true}
+        );
 
-    let boom = await Boom.findById(req.params.boomId)
-      .populate("network")
-      .populate("reactions.likes", "username photo first_name last_name")
-      .populate("reactions.loves", "username photo first_name last_name")
-      .populate("reactions.smiles", "username photo first_name last_name")
-      .populate("reactions.rebooms", "username photo first_name last_name")
-      .populate("reactions.reports", "username photo first_name last_name")
-      .populate("user", "username photo first_name last_name")
-      .populate("comments")
-      .populate("comments.user", "username photo first_name last_name");
-    res.status(200).json({
-      status: "success",
-      message: "Successfully updated comment",
-      boom,
-    });
-  }
+        let boom = await Boom.findById(req.params.boomId)
+            .populate("network")
+            .populate("reactions.likes", "username photo first_name last_name")
+            .populate("reactions.loves", "username photo first_name last_name")
+            .populate("reactions.smiles", "username photo first_name last_name")
+            .populate("reactions.rebooms", "username photo first_name last_name")
+            .populate("reactions.reports", "username photo first_name last_name")
+            .populate("user", "username photo first_name last_name")
+            .populate("comments")
+            .populate("comments.user", "username photo first_name last_name");
+        res.status(200).json({
+            status: "success",
+            message: "Successfully updated comment",
+            boom,
+        });
+    }
 );
-export { router as CommentRoutes };
+export {router as CommentRoutes};
