@@ -8,7 +8,7 @@ node_modules/
 dist/
 /dist
 venv/
-
+.idea
 # Ignores development broadcast logs
 !/broadcast
 broadcast/

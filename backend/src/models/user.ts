@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { PasswordManager } from "./../utils/password-manager";
+import { PasswordManager } from "../utils/password-manager";
 import { UserType } from "../types/user";
 
 interface IUser {
