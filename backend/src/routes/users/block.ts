@@ -6,8 +6,25 @@ import {User}  from  "../../models"
 
 
 const router  =  Router();
-
-router.post("/api/users/block",
+/**
+ * @openapi
+ * /api/v1/users/block:
+ *   post:
+ *     tags:
+ *        - Block User
+ *     description: Enables a user to block another user
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     parameters:
+ *        - name: userId
+ *          description: Please provide a userId
+ *     responses:
+ *       200:
+ *         description: Enable user to block and another user
+ */
+router.post("/api/v1/users/block",
     [
         body("userId").notEmpty().withMessage("please provide the userId")
     ],

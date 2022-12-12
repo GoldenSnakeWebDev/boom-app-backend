@@ -7,8 +7,6 @@ export const currencyConversion = async (
 ) => {
   let url: string;
 
-  console.log(network);
-
   if (network === NetworkType.POLYGON) {
     url = `https://www.binance.com/api/v3/depth?symbol=MATICUSDT`;
   } else if (network === NetworkType.TEZOS) {
