@@ -6,6 +6,7 @@ interface IUser {
   first_name?: string;
   last_name?: string;
   booms?: Array<Schema.Types.ObjectId>;
+  blocked_users?: Array<Schema.Types.ObjectId>;
   friends?: Array<Schema.Types.ObjectId>;
   funs?: Array<Schema.Types.ObjectId>;
   sync_bank?: Schema.Types.ObjectId;
@@ -57,6 +58,7 @@ const userSchema = new Schema<IUser>(
       default: UserType.NORAMAL,
     },
     booms: [{ type: Schema.Types.ObjectId, ref: "BoomBox" }],
+    blocked_users: [{ type: Schema.Types.ObjectId, ref: "User" }],
     friends: [{ type: Schema.Types.ObjectId, ref: "User" }],
     funs: [{ type: Schema.Types.ObjectId, ref: "User" }],
     password_reset: {

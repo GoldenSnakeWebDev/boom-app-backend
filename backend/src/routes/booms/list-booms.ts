@@ -43,7 +43,7 @@ router.get("/api/v1/booms-types", async (_req: Request, res: Response) => {
  */
 router.get("/api/v1/booms", async (req: Request, res: Response) => {
   const response = new ApiResponse(
-    Boom.find()
+    Boom.find({is_deleted:  false})
       .populate({ path: "comments", options: { _recursed: true } })
       .populate("network")
       .populate("reactions.likes", "username photo first_name last_name")
@@ -141,7 +141,7 @@ router.get(
   requireAuth,
   async (req: Request, res: Response) => {
     const response = new ApiResponse(
-      Boom.find({ user: req.currentUser?.id })
+      Boom.find({ user: req.currentUser?.id, is_deleted:  false })
         .populate("network")
         .populate("reactions.likes", "username photo first_name last_name")
         .populate("reactions.loves", "username photo first_name last_name")

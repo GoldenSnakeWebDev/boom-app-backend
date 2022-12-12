@@ -1,7 +1,7 @@
 /** @format */
 
 import nodemailer from "nodemailer";
-import { config } from "../config";
+import {config} from "../config";
 // const smtpTransport = require("nodemailer-smtp-transport");
 const hbs = require("nodemailer-express-handlebars");
 
@@ -40,7 +40,7 @@ const hbsOptions = {
 const sendMail = async (msgOptions: messageOption) => {
   console.log(await transporter.verify());
   transporter.use("compile", hbs(hbsOptions));
-  var mail = {
+  let mail = {
     from: "support@boom.dev",
     to: msgOptions.to,
     subject: msgOptions.subject,
@@ -48,8 +48,7 @@ const sendMail = async (msgOptions: messageOption) => {
     context: msgOptions.dynamic_template_data,
   };
 
-  const response = await transporter.sendMail(mail);
-  return response;
+  return await transporter.sendMail(mail);
 };
 
 export { sendMail };

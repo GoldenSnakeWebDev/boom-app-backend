@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { SyncBank } from "./../models/syncbank";
-import { User } from "./../models/user";
-import { Transaction } from "./../models/transaction";
+import { SyncBank, User, Transaction } from "../models";
 
 export const alphaNumericIncrementer = (str: any) => {
   if (str && str.length > 0) {
@@ -76,7 +74,7 @@ export const syncBankTransfer = async (
     };
   }
 
-  // reciever & check if found
+  // receiver & check if found
   const receiver: any = await User.findById(recieverId);
 
   if (!receiver) {
@@ -145,7 +143,7 @@ export const syncBankTransfer = async (
   );
 
   const receiverMsg = `Successfully recieved ${amount} from +${receiver.phone}`;
-  // transafer transctions
+  // transfer transactions
   await Transaction.create({
     user: receiver.id,
     transactionId: await getNextTransaction(),

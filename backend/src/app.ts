@@ -12,11 +12,8 @@ import { swaggerOptions } from "./docs/options";
 import { NotFoundError } from "./errors";
 import { errorHandler } from "./middlewares";
 import { WebSocket, RawData } from "ws";
-
 const app = express();
-
 const server = http.createServer(app);
-
 const io = new Server(server, {
   cors: { origin: "*", methods: ["GET", "POST"] },
 });

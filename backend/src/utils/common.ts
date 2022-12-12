@@ -5,7 +5,6 @@ import crypto from "crypto";
 export const randomInt = promisify(crypto.randomInt);
 
 const validChars = `0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,.-{}+!\"#$%/()=?`;
-/** PROMISIFY ARRAY */
 
 const fn = (v: any) => {
   return new Promise((resolve, _reject) => {
@@ -34,8 +33,7 @@ export const allowedFields = (obj: any, ...fields: any) => {
 
 export const randomCode = () => {
   const digits = 100000;
-  const multier = 9000;
-  return Math.floor(digits + Math.random() * multier).toString();
+  return Math.floor(digits + Math.random() * 9000).toString();
 };
 
 export const randomChars = async (length = 12) => {

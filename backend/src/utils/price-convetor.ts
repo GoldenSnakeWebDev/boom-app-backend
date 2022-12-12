@@ -1,11 +1,11 @@
 import axios from "axios";
-import { NetworkType } from "./../models/network";
+import { NetworkType } from "../models";
 
 export const currencyConversion = async (
   network: NetworkType,
   amount: number
 ) => {
-  let url = "";
+  let url: string;
 
   console.log(network);
 
@@ -19,7 +19,6 @@ export const currencyConversion = async (
     url = `https://www.binance.com/api/v3/depth?symbol=${network}USDT`;
   }
 
-  console.log("URL:", url);
   try {
     const { data } = await axios.get(url);
 

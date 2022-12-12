@@ -60,7 +60,7 @@ export class MpesaWrapper {
     });
   }
   /**
-   * It enables user to be to initial mpesa STK push process with phone numnber and specified amount
+   * It enables user to be to initial mpesa STK push process with phone number and specified amount
    * @param stkData This is a request body composed of {
    * phone:  string;
    * amount: string;
@@ -100,7 +100,7 @@ export class MpesaWrapper {
     return data; // save this response to database
   }
   /**
-   * Recieves a response from mpesa and returns a response object
+   * Receives a response from mpesa and returns a response object
    * @param stkPayload
    * @returns
    */
@@ -133,7 +133,7 @@ export class MpesaWrapper {
 
     switch (status) {
       case "DS timeout":
-        message = `Request failed. M-Pesa didn't respond. Try again in 5 seconds.`;
+        message = `Request failed. MPesa didn't respond. Try again in 5 seconds.`;
         break;
 
       case "SMSC ACK timeout":
@@ -160,7 +160,7 @@ export class MpesaWrapper {
 
     if (!status.includes("successful")) {
       /**
-       *  delete refered transaction, using checkoutId
+       *  delete referred transaction, using checkoutId
        *  send notification using MQTT
        *
        */
