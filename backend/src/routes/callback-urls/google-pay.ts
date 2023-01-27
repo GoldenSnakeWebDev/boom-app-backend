@@ -19,7 +19,6 @@ router.post(
   "/api/v1/callback-urls/google-plays-tore",
   async (req: Request, res: Response) => {
     console.log(req.body);
-
     res.status(200).json({ success: "success" });
   }
 );

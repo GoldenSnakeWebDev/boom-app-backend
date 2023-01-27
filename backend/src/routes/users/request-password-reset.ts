@@ -4,7 +4,8 @@ import { validateRequest } from "../../middlewares/validate-request";
 import { User } from "./../../models/user";
 import { BadRequestError } from "../../errors/bad-request-error";
 import { randomCode } from "../../utils/common";
-import { sendMail } from "./../../utils/mail";
+import { sendGridSendMail } from "./../../utils";
+import { config } from "../../config";
 
 const router = Router();
 
@@ -59,17 +60,12 @@ router.post(
       { new: true }
     );
 
-    await sendMail({
+    await sendGridSendMail({
       to: user.email,
-      from: "support@boom.dev",
-      subject: "Password Reset",
-      template: "info",
-      dynamic_template_data: {
-        full_name: `${user.username}`,
-        message: `Hello ${user.username}. your password reset code is: ${code}`,
-      },
-    }).catch((error) => {
-      console.log(`Error:${error}`);
+      from: config.MAIL.SENDER,
+      subject: "Reset Password",
+      text: "Reset Password",
+      html: `<strong> You reset password code is: ${code} </strong>`,
     });
 
     res.status(201).json({

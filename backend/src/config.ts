@@ -12,6 +12,9 @@ export const config = {
   MAIL: {
     USER: "dev@kodeace.com",
     PASS: "l;tLrXr7ML#D",
+    SEND_GRID:
+      "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",
+    SENDER: "omambiadauglous@gmail.com",
   },
   EXCHANGE: {
     V2_ADDRESS: "0x10ED43C718714eb63d5aA57B78B54704E256024E",
