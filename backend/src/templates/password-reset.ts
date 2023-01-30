@@ -1,4 +1,8 @@
-export const passwordResetTemplate = (opts: { code: string; name: string }) => {
+export const passwordResetTemplate = async (opts: {
+  code: string;
+  name: string;
+  host: string;
+}) => {
   return `
     <!DOCTYPE htmlPUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html lang="en">
@@ -14,7 +18,7 @@ export const passwordResetTemplate = (opts: { code: string; name: string }) => {
                 <div><!--[if mso | IE]>
                     <table role="presentation" width="100%" align="center" style="max-width:37.5em;margin:0 auto;background-color:#ffffff;border:1px solid #f0f0f0;width:600px;padding:45px;"><tr><td></td><td style="width:37.5em;background:#ffffff">
                 <![endif]--></div>
-                <div style="max-width:37.5em;margin:0 auto;background-color:#ffffff;border:1px solid #f0f0f0;width:600px;padding:45px"><img alt="Dropbox" src="https://react-email-demo-anci3ob47-resend.vercel.app/static/dropbox-logo.png" width="40" height="33" style="display:block;outline:none;border:none;text-decoration:none" />
+                <div style="max-width:37.5em;margin:0 auto;background-color:#ffffff;border:1px solid #f0f0f0;width:600px;padding:45px"><img alt="Dropbox" src="${opts.host}/LOGOS/boom_logo.png" width="40" height="33" style="display:block;outline:none;border:none;text-decoration:none" />
                     <table style="width:100%" align="center" border="0" cellPadding="0" cellSpacing="0" role="presentation">
                     <tbody>
                         <tr>
@@ -44,6 +48,7 @@ export const commonEmailMessage = (opts: {
   message: string;
   subject: string;
   name: string;
+  host: string;
 }) => {
   return `
       <!DOCTYPE htmlPUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -60,7 +65,7 @@ export const commonEmailMessage = (opts: {
                   <div><!--[if mso | IE]>
                       <table role="presentation" width="100%" align="center" style="max-width:37.5em;margin:0 auto;background-color:#ffffff;border:1px solid #f0f0f0;width:600px;padding:45px;"><tr><td></td><td style="width:37.5em;background:#ffffff">
                   <![endif]--></div>
-                  <div style="max-width:37.5em;margin:0 auto;background-color:#ffffff;border:1px solid #f0f0f0;width:600px;padding:45px"><img alt="Dropbox" src="https://react-email-demo-anci3ob47-resend.vercel.app/static/dropbox-logo.png" width="40" height="33" style="display:block;outline:none;border:none;text-decoration:none" />
+                  <div style="max-width:37.5em;margin:0 auto;background-color:#ffffff;border:1px solid #f0f0f0;width:600px;padding:45px"><img alt="Dropbox" src="${opts.host}/LOGOS/boom_logo.png" width="40" height="33" style="display:block;outline:none;border:none;text-decoration:none" />
                       <table style="width:100%" align="center" border="0" cellPadding="0" cellSpacing="0" role="presentation">
                       <tbody>
                           <tr>

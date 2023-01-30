@@ -6,6 +6,7 @@ import { BadRequestError } from "../../errors/bad-request-error";
 import { randomCode } from "../../utils/common";
 import { sendGridSendMail } from "./../../utils";
 import { config } from "../../config";
+import { passwordResetTemplate } from "./../../templates/password-reset";
 
 const router = Router();
 
@@ -65,7 +66,11 @@ router.post(
       from: config.MAIL.SENDER,
       subject: "Reset Password",
       text: "Reset Password",
-      html: `<strong> You reset password code is: ${code} </strong>`,
+      html: await passwordResetTemplate({
+        code,
+        name: `${user?.first_name!} ${user?.first_name!}`,
+        host: req.protocol + "://" + req.get("host"),
+      }),
     });
 
     res.status(201).json({

@@ -10,6 +10,7 @@ interface IUser {
   friends?: Array<Schema.Types.ObjectId>;
   funs?: Array<Schema.Types.ObjectId>;
   sync_bank?: Schema.Types.ObjectId;
+  device_id?: string;
   photo?: string;
   cover?: string;
   email: string;
@@ -45,6 +46,7 @@ const userSchema = new Schema<IUser>(
     cover: { type: String, default: "" },
     email: { type: String, default: "" },
     bio: { type: String, default: "" },
+    device_id: { type: String, default: "" },
     location: { type: String, default: "" },
     sync_bank: { type: Schema.Types.ObjectId, ref: "SyncBank" },
     user_type: {

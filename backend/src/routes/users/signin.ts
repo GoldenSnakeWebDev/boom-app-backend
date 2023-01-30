@@ -41,6 +41,8 @@ router.post(
   async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
+    // console.log(req.protocol + "://" + req.get("host"));
+
     const user = await User.findOne({
       $or: [{ email: email }, { username: email }],
     })
