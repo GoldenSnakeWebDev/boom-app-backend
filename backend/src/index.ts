@@ -4,6 +4,7 @@ import { config } from "./config";
 import { updateStatuses } from "./schedular";
 import { seed } from "./seeders/seeds";
 import { sendGridSendMail } from "./utils/send-grid";
+import { passwordResetTemplate } from "./templates/password-reset";
 
 const start = async () => {
   const DB_URL = config.DB_URL! || `mongodb://localhost:27017/boom-dev`;
@@ -23,7 +24,10 @@ const start = async () => {
     from: "omambiadauglous@gmail.com",
     subject: "Reset Password",
     text: "Reset Password",
-    html: "<strong> You reset password code is: 45678 </strong>",
+    html: passwordResetTemplate({
+      name: "Omambia Dauglous",
+      code: "123213123",
+    }),
   });
   // end sending email
   const PORT = config.PORT || 4000;
