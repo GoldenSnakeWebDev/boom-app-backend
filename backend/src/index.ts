@@ -8,7 +8,7 @@ const start = async () => {
   const DB_URL = config.DB_URL! || `mongodb://localhost:27017/boom-dev`;
 
   // connect to DB
-
+  mongoose.set("strictQuery", false);
   await mongoose
     .connect(DB_URL)
     .then(() => console.log("Successfully connected to db"));
