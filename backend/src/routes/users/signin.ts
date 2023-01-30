@@ -25,6 +25,8 @@ const router = Router();
  *          description: Email Address
  *        - name: password
  *          description: Password
+ *  *     - name: deviceId
+ *          description: Device ID
  *     responses:
  *       200:
  *         description: . Successfully logged in to your account.
