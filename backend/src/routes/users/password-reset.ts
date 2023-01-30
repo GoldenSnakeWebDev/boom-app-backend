@@ -71,6 +71,9 @@ router.post(
     user.password_reset = { token: "", is_changed: false };
 
     user.password = password;
+    user.password_reset_token = "";
+
+    await user.save();
 
     res.status(201).json({
       success: "success",
