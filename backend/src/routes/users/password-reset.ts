@@ -67,18 +67,14 @@ router.post(
         "Your password and confirm password does not match"
       );
     }
-    const updatedUser = await User.findByIdAndUpdate(
-      user.id,
-      {
-        password_reset: { code: "", is_changed: false },
-        password,
-      },
-      { new: true }
-    );
+
+    user.password_reset = { token: "", is_changed: false };
+
+    user.password = password;
 
     res.status(201).json({
       success: "success",
-      user: updatedUser,
+      user,
       message: `Your password was reset successfully`,
     });
   }
