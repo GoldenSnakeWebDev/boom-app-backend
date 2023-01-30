@@ -8,6 +8,7 @@ import {
 } from "../../models/transaction";
 import { getNextTransaction } from "../../utils/transaction-common";
 import { Notification, NotificationType } from "./../../models/notification";
+import { requireAuth } from "../../middlewares/require-auth";
 
 const router = Router();
 
@@ -28,6 +29,17 @@ export enum ActionType {
  *     responses:
  *       200:
  *         description: . Returns a success message
+ *     parameters:
+ *        - name: amount
+ *          description: The amount of the coin deposited/withdrawn
+ *        - name:  networkType
+ *          description: The network type e.g TZ/MATIC/BNB
+ *        - name: actionType
+ *          description: What action to use e.g deposit/withdraw
+ *        - name: timestamp
+ *          description: Your current timestamp send from the send's phone  (app)
+ *        - name:  boombox_type
+ *          description: The boom type is optional default is public, other is privave
  */
 router.post(
   "/api/v1/callback-urls/google-plays-tore",
@@ -46,6 +58,7 @@ router.post(
     body("timestamp").notEmpty().withMessage("please provide timestamp"),
     body("userId").notEmpty().withMessage("please provide timestamp"),
   ],
+  requireAuth,
   async (req: Request, res: Response) => {
     let { amount, networkType, timestamp, actionType } = req.body;
 
