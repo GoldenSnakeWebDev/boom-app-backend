@@ -35,13 +35,12 @@ router.post(
     body("email")
       .notEmpty()
       .withMessage("please provide email address  or username"),
+    body("deviceId").notEmpty().withMessage("please provide the device id"),
     body("password").notEmpty().withMessage("please provide your password"),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { email, password } = req.body;
-
-    // console.log(req.protocol + "://" + req.get("host"));
+    const { email, password, deviceId } = req.body;
 
     const user = await User.findOne({
       $or: [{ email: email }, { username: email }],
@@ -64,6 +63,13 @@ router.post(
       throw new BadRequestError(`Wrong credentials. Please try again`);
     }
 
+    // update device id
+
+    if (user.device_id !== deviceId) {
+      user.device_id = deviceId;
+      // save the device id
+      await user.save();
+    }
     // generate token
     const token = jwt.sign(
       {
@@ -77,8 +83,6 @@ router.post(
       },
       config.JWT_KEY
     );
-
-    // allow cookie session
 
     req.session = {
       jwt: token,
