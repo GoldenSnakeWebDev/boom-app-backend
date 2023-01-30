@@ -9,6 +9,7 @@ import {
 import { getNextTransaction } from "../../utils/transaction-common";
 import { Notification, NotificationType } from "./../../models/notification";
 import { requireAuth } from "../../middlewares/require-auth";
+import { onSignalSendNotification } from "../../utils/on-signal";
 
 const router = Router();
 
@@ -94,6 +95,14 @@ router.post(
       timestamp: new Date(timestamp),
     });
 
+    onSignalSendNotification({
+      contents: {
+        en: `Successfully ${actionType} ${networkType} ${amount}`,
+        es: `Successfully ${actionType} ${networkType} ${amount}`,
+      },
+      included_segments: [req.currentUser?.device_id!],
+      name: `PlayPay-${actionType}`,
+    });
     res.status(200).json({
       status: "success",
       transaction,

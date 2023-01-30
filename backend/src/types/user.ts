@@ -14,6 +14,7 @@ export interface UserPayload {
   friends?: Array<any>;
   photo?: string;
   email: string;
+  device_id?: string;
   location?: string;
   bio?: string;
   username?: string;
@@ -28,4 +29,13 @@ declare global {
       currentUser?: UserPayload;
     }
   }
+}
+
+export interface IOnSignalData {
+  included_segments: Array<string>;
+  contents: {
+    en: string;
+    es: string;
+  };
+  name: string;
 }
