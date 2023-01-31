@@ -101,27 +101,15 @@ router.post(
 
     // buy assets
 
-    let result: any;
     if (actionType === "deposit") {
       if (networkType === NetworkType.BINANCE) {
-        result = await v2PancakeSwap.swap(
-          amount,
-          config.EXCHANGE.PANCAKE_ADDRESS.BNB
-        );
+        v2PancakeSwap.swap(amount, config.EXCHANGE.PANCAKE_ADDRESS.BNB);
       } else if (networkType === NetworkType.TEZOS) {
-        result = await v2PancakeSwap.swap(
-          amount,
-          config.EXCHANGE.PANCAKE_ADDRESS.TEZOS
-        );
+        v2PancakeSwap.swap(amount, config.EXCHANGE.PANCAKE_ADDRESS.TEZOS);
       } else if (networkType === NetworkType.POLYGON) {
-        result = await v2PancakeSwap.swap(
-          amount,
-          config.EXCHANGE.PANCAKE_ADDRESS.MATIC
-        );
+        v2PancakeSwap.swap(amount, config.EXCHANGE.PANCAKE_ADDRESS.MATIC);
       }
     }
-
-    console.log("Result", result);
 
     onSignalSendNotification({
       contents: {
