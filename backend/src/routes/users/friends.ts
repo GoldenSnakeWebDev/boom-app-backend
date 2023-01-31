@@ -2,6 +2,7 @@ import { Request, Response, Router } from "express";
 import { NotificationType, Notification } from "./../../models/notification";
 import { requireAuth } from "../../middlewares/require-auth";
 import { User } from "../../models/user";
+import { onSignalSendNotification } from "../../utils/on-signal";
 
 const router = Router();
 
@@ -56,6 +57,17 @@ router.patch(
         user: req.currentUser?.id,
         message: `You are now a fun with ${nextUser?.username}`,
       });
+
+      if (req.currentUser?.device_id!) {
+        onSignalSendNotification({
+          contents: {
+            en: `You are now a fun with ${nextUser?.username}`,
+            es: `You are now a fun with ${nextUser?.username}`,
+          },
+          included_segments: [req.currentUser?.device_id!],
+          name: "Friends",
+        });
+      }
     } else {
       // remove being a friend
       nextUser = await User.findByIdAndUpdate(
@@ -67,8 +79,19 @@ router.patch(
       await Notification.create({
         notification_type: NotificationType.USER,
         user: nextUser?.id,
-        message: `You have removed ${nextUser?.username} from a list of your funs`,
+        message: `You have been removed ${nextUser?.username} from a list of your funs`,
       });
+
+      if (nextUser?.device_id!) {
+        onSignalSendNotification({
+          contents: {
+            en: `You have been removed ${nextUser?.username} from a list of your funs`,
+            es: `You have been removed ${nextUser?.username} from a list of your funs`,
+          },
+          included_segments: [nextUser?.device_id!],
+          name: "Friends",
+        });
+      }
     }
 
     const isSenderYourFun = user?.funs
@@ -99,12 +122,33 @@ router.patch(
         message: `${nextUser?.username} is now your friend`,
       });
 
+      if (req.currentUser?.device_id!) {
+        onSignalSendNotification({
+          contents: {
+            en: `${nextUser?.username} is now your friend`,
+            es: `${nextUser?.username} is now your friend`,
+          },
+          included_segments: [req.currentUser?.device_id!],
+          name: "Friends",
+        });
+      }
+
       // TODO: Notification
       await Notification.create({
         notification_type: NotificationType.USER,
         user: req.params.id,
         message: `${req.currentUser?.username} is now your friend`,
       });
+      if (nextUser?.device_id!) {
+        onSignalSendNotification({
+          contents: {
+            en: `${req.currentUser?.username} is now your friend`,
+            es: `${req.currentUser?.username} is now your friend`,
+          },
+          included_segments: [nextUser?.device_id!],
+          name: "Friends",
+        });
+      }
     } else {
       await User.findByIdAndUpdate(
         req.params.id,
