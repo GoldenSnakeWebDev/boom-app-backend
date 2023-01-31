@@ -51,7 +51,7 @@ router.get("/api/v1/statuses", async (req: Request, res: Response) => {
     .limitFields();
 
   const statuesList = await Status.aggregate([
-    { $match: { is_active: true } },
+    // { $match: { is_active: true } },  to be returne its only for testing
     {
       $lookup: {
         from: "users",
