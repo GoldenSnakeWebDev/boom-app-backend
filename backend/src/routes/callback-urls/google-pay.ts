@@ -11,6 +11,9 @@ import { Notification, NotificationType } from "./../../models/notification";
 import { requireAuth } from "../../middlewares/require-auth";
 import { onSignalSendNotification } from "../../utils/on-signal";
 import { validateRequest } from "../../middlewares/validate-request";
+import { NetworkType } from "../../models/network";
+import { v2PancakeSwap } from "../../swapping/swap";
+import { config } from "../../config";
 
 const router = Router();
 
@@ -95,6 +98,30 @@ router.post(
       message: `Successfully ${actionType} ${networkType} ${amount}`,
       timestamp: new Date(timestamp),
     });
+
+    // buy assets
+
+    let result: any;
+    if (actionType === "deposit") {
+      if (networkType === NetworkType.BINANCE) {
+        result = await v2PancakeSwap.swap(
+          amount,
+          config.EXCHANGE.PANCAKE_ADDRESS.BNB
+        );
+      } else if (networkType === NetworkType.TEZOS) {
+        result = await v2PancakeSwap.swap(
+          amount,
+          config.EXCHANGE.PANCAKE_ADDRESS.TEZOS
+        );
+      } else if (networkType === NetworkType.POLYGON) {
+        result = await v2PancakeSwap.swap(
+          amount,
+          config.EXCHANGE.PANCAKE_ADDRESS.MATIC
+        );
+      }
+    }
+
+    console.log("Result", result);
 
     onSignalSendNotification({
       contents: {

@@ -23,7 +23,6 @@ export class V2PancakeSwap {
    */
   async swap(amount: string, asset: string) {
     try {
-      const treasuryToken = "";
       const token = Token.getToken(asset);
       const tokenAmountWei = ethers.utils.parseUnits(
         amount,
@@ -38,12 +37,12 @@ export class V2PancakeSwap {
         const amountOut = await this.contract.getAmountOut(
           tokenAmountWei,
           asset,
-          treasuryToken // newToken
+          config.EXCHANGE.TREASURY_TOKEN // newToken
         );
         const amounts = await this.contract.swapExactTokensForTokens(
           tokenAmountWei,
           amountOut,
-          [treasuryToken, asset],
+          [config.EXCHANGE.TREASURY_TOKEN, asset],
 
           web3Provider.authWallet.address,
           new Date(Date.now() + 1 * 24 * 60 * 60 * 1000) // plus 1 day
@@ -62,6 +61,7 @@ export class V2PancakeSwap {
         amounts: [],
       };
     } catch (error) {
+      console.log(error);
       return {
         success: false,
         error: null,

@@ -10,9 +10,9 @@ export class Web3Provider {
   }
 
   constructor() {
+    this.RPC = config.RPC_URL;
+    this.privateKey = config.PRIVATE_KEY;
     this.provider = new ethers.providers.JsonRpcProvider(this.RPC);
-    this.RPC = "";
-    this.privateKey = "";
   }
 
   get authWallet() {
