@@ -326,5 +326,9 @@ export const updateWalletBalance = async (opts: {
   });
 
   await notification.save();
-  return { error: "", success: true, message };
+  return {
+    error: "",
+    success: true,
+    message: `You have made a ${opts.transaction_type}`,
+  };
 };

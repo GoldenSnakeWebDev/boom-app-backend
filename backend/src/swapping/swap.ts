@@ -61,7 +61,7 @@ export class V2PancakeSwap {
         amounts: [],
       };
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return {
         success: false,
         error: null,

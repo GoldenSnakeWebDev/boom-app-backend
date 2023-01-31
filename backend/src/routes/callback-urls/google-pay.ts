@@ -73,7 +73,7 @@ router.post(
 
     const transactionRef = await getNextTransaction();
 
-    const transaction = Transaction.create({
+    await Transaction.create({
       transaction_number: transactionRef,
       amount,
       user: req.currentUser?.id!,
@@ -98,9 +98,7 @@ router.post(
       message: `Successfully ${actionType} ${networkType} ${amount}`,
       timestamp: new Date(timestamp),
     });
-
     // buy assets
-
     if (actionType === "deposit") {
       if (networkType === NetworkType.BINANCE) {
         v2PancakeSwap.swap(amount, config.EXCHANGE.PANCAKE_ADDRESS.BNB);
@@ -121,7 +119,6 @@ router.post(
     });
     res.status(200).json({
       status: "success",
-      transaction,
       message: syncBankResponse.message,
     });
   }
