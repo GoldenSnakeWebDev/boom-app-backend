@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { requireAuth } from "../../middlewares";
+import { requireAuth, validateRequest } from "../../middlewares";
 import { body } from "express-validator";
 import { BadRequestError } from "../../errors";
 import { User } from "../../models";
@@ -27,6 +27,7 @@ router.post(
   "/api/v1/users/block",
   [body("userId").notEmpty().withMessage("please provide the userId")],
   requireAuth,
+  validateRequest,
   async (req: Request, res: Response) => {
     const { userId } = req.body;
 
@@ -72,3 +73,5 @@ router.post(
     });
   }
 );
+
+export { router as BlockUserRoutes };
