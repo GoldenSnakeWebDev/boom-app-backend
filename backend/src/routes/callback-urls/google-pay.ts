@@ -10,6 +10,7 @@ import { getNextTransaction } from "../../utils/transaction-common";
 import { Notification, NotificationType } from "./../../models/notification";
 import { requireAuth } from "../../middlewares/require-auth";
 import { onSignalSendNotification } from "../../utils/on-signal";
+import { validateRequest } from "../../middlewares/validate-request";
 
 const router = Router();
 
@@ -57,9 +58,9 @@ router.post(
       .notEmpty()
       .withMessage("please provide the action type e.g deposit/withdraw"),
     body("timestamp").notEmpty().withMessage("please provide timestamp"),
-    body("userId").notEmpty().withMessage("please provide timestamp"),
   ],
   requireAuth,
+  validateRequest,
   async (req: Request, res: Response) => {
     let { amount, networkType, timestamp, actionType } = req.body;
 

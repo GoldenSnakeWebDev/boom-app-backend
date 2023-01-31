@@ -7,9 +7,10 @@ import { IOnSignalData } from "../types/user";
  */
 export const onSignalSendNotification = async (data: IOnSignalData) => {
   const headers = {
-    "Content-Type": "application/json; charset=utf-8",
+    "Content-Type": "application/json",
     Authorization: `Basic ${config.PUSH_NOTIFICATION.ON_SIGNAL}`,
   };
+  console.log(headers);
   const options = {
     host: "onesignal.com",
     port: 443,
