@@ -51,7 +51,7 @@ router.get("/api/v1/statuses", async (req: Request, res: Response) => {
     .limitFields();
 
   const statuesList = await Status.aggregate([
-    // { $match: { is_active: true } },  to be returne its only for testing
+    { $match: { is_active: true } },
     {
       $lookup: {
         from: "users",
@@ -130,8 +130,10 @@ router.post(
     }
 
     const expiry_time = new Date(
-      new Date(Date.now()).getTime() + 60 * 60 * period * 1000
+      new Date(Date.now()).getTime() + period * 60 * 60 * 1000
     );
+
+    console.log("E.T", expiry_time);
     const status = new Status({
       status_type,
       image_url,
