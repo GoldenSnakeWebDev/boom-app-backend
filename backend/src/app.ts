@@ -6,9 +6,9 @@ import path from "path";
 import morgan from "morgan";
 import "express-async-errors";
 import cookieSession from "cookie-session";
-import SwaggerJSDoc from "swagger-jsdoc";
-import SwaggerUi from "swagger-ui-express";
-import { swaggerOptions } from "./docs/options";
+// import SwaggerJSDoc from "swagger-jsdoc";
+// import SwaggerUi from "swagger-ui-express";
+// import { swaggerOptions } from "./docs/options";
 import { NotFoundError } from "./errors";
 import { errorHandler } from "./middlewares";
 import { WebSocket, RawData } from "ws";
@@ -135,14 +135,14 @@ import { wsCreateOrGetBoomBoxAndSendMessage } from "./messaging/boom-box-helper"
 import { BoomBox, BoomBoxType } from "./models/boom-box";
 
 //API DOCScon
-app.use(
-  "/api-docs",
-  SwaggerUi.serve,
-  SwaggerUi.setup(SwaggerJSDoc(swaggerOptions), {
-    explorer: true,
-    customSiteTitle: "Boom App",
-  })
-);
+// app.use(
+//   "/api-docs",
+//   SwaggerUi.serve,
+//   SwaggerUi.setup(SwaggerJSDoc(swaggerOptions), {
+//     explorer: true,
+//     customSiteTitle: "Boom App",
+//   })
+// );
 
 // Not found Route
 app.all("*", async (_req, _res) => {

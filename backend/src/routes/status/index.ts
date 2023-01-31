@@ -51,6 +51,7 @@ router.get("/api/v1/statuses", async (req: Request, res: Response) => {
     .limitFields();
 
   const statuesList = await Status.aggregate([
+    { $match: { is_active: true } },
     {
       $lookup: {
         from: "users",
@@ -64,7 +65,11 @@ router.get("/api/v1/statuses", async (req: Request, res: Response) => {
     },
     {
       $group: {
-        _id: "$user.username",
+        _id: {
+          username: "$user.username",
+          id: "$user._id",
+          photo: "$user.photo",
+        },
         count: { $sum: 1 },
         statues: {
           $push: {

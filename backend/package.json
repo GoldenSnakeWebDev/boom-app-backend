@@ -4,10 +4,9 @@
   "description": "The Boom API",
   "main": "dist/src/index.js",
   "scripts": {
-    "dev": "ts-node-dev src/index.ts",
     "start": "node dist/src/index.js",
     "test": "ts-node-dev src/abis/test-common.ts",
-    "start-dev": "ts-node src/abis/index.ts",
+    "dev": "ts-node-dev src/index.ts",
     "compile": "tsc && cpx \"./src/public/**/*\" ./dist/src/public && cpx \"./src/emails/**/*\" ./dist/src/emails"
   },
   "keywords": [],
@@ -22,14 +21,16 @@
     "@types/jsonwebtoken": "^8.5.9",
     "@types/morgan": "^1.9.3",
     "@types/multer": "^1.4.7",
-    "@types/node": "^18.7.23",
+    "@types/node": "^18.11.18",
     "@types/node-cron": "^3.0.5",
     "@types/nodemailer": "^6.4.6",
     "@types/sharp": "^0.31.0",
     "@types/uuid": "^8.3.4",
     "@types/ws": "^8.5.3",
     "morgan": "^1.10.0",
+    "nodemon": "^2.0.20",
     "ts-node-dev": "^2.0.0",
+    "tslib": "^2.5.0",
     "typescript": "^4.8.3"
   },
   "dependencies": {
@@ -58,8 +59,8 @@
     "nodemailer-express-handlebars": "^5.0.0",
     "sharp": "^0.31.1",
     "socket.io": "^4.5.3",
-    "swagger-jsdoc": "^6.2.5",
-    "swagger-ui-express": "^4.5.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.0",
     "ts-node": "^10.9.1",
     "uuid": "^9.0.0",
     "ws": "^8.11.0"
