@@ -14,6 +14,7 @@ export interface UserPayload {
   friends?: Array<any>;
   photo?: string;
   email: string;
+  rebooms?: Array<any>;
   device_id?: string;
   location?: string;
   bio?: string;

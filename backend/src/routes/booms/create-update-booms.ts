@@ -466,6 +466,11 @@ router.patch(
           },
           { new: true }
         );
+
+        // add to user rebooms and show more rebooms to renny
+        await User.findByIdAndUpdate(req.currentUser?.id!, {
+          $push: { rebooms: boomMinted.id },
+        });
         // TODO: Notification
         await Notification.create({
           notification_type: NotificationType.BOOM,

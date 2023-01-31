@@ -142,7 +142,7 @@ router.get(
   requireAuth,
   async (req: Request, res: Response) => {
     const response = new ApiResponse(
-      Boom.find({ user: req.currentUser?.id, is_deleted:  false })
+      Boom.find({ user: req.currentUser?.id, is_deleted: false })
         .populate("network")
         .populate("reactions.likes", "username photo first_name last_name")
         .populate("reactions.loves", "username photo first_name last_name")
