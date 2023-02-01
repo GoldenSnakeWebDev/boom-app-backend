@@ -45,15 +45,12 @@ export const onSignalSendNotification = async (data: IOnSignalData) => {
 
     const notification = new OneSignal.Notification();
 
-    console.log(data);
-
     notification.app_id = config.PUSH_NOTIFICATION.ON_SIGNAL_APP_ID;
     notification.name = data.name;
     notification.included_segments = data.included_segments;
     notification.contents = data.contents;
     notification.headings = data.contents;
-    const notify = await client.createNotification(notification);
-    console.log(notify);
+    await client.createNotification(notification);
   } catch (error) {
     console.log(error);
   }

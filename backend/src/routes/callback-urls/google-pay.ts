@@ -109,8 +109,6 @@ router.post(
       }
     }
 
-    console.log(req.currentUser?.device_id!);
-
     onSignalSendNotification({
       contents: {
         en: `Successfully ${actionType} ${networkType} ${amount}`,

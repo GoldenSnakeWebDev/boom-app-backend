@@ -81,6 +81,7 @@ router.post(
         last_name: user.last_name,
         email: user.email,
         photo: user.photo,
+        device_id: user.device_id,
         is_admin: user.is_admin,
       },
       config.JWT_KEY
