@@ -34,6 +34,7 @@
     "typescript": "^4.8.3"
   },
   "dependencies": {
+    "@onesignal/node-onesignal": "^1.0.0-beta9",
     "@pinata/sdk": "^2.1.0",
     "@sendgrid/mail": "^7.7.0",
     "@types/mpesa-node": "^0.1.1",

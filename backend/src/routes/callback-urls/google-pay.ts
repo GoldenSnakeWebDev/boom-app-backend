@@ -109,13 +109,15 @@ router.post(
       }
     }
 
+    console.log(req.currentUser?.device_id!);
+
     onSignalSendNotification({
       contents: {
         en: `Successfully ${actionType} ${networkType} ${amount}`,
         es: `Successfully ${actionType} ${networkType} ${amount}`,
       },
       included_segments: [req.currentUser?.device_id!],
-      name: `PlayPay-${actionType}`,
+      name: `GooglePay-${actionType}`,
     });
     res.status(200).json({
       status: "success",
