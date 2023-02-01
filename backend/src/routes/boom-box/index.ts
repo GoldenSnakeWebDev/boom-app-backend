@@ -4,7 +4,6 @@ import { User } from "./../../models/user";
 import { requireAuth } from "../../middlewares/require-auth";
 import { validateRequest } from "../../middlewares/validate-request";
 import { body } from "express-validator";
-import { BadRequestError } from "../../errors/bad-request-error";
 
 const router = Router();
 
@@ -133,7 +132,6 @@ router.post(
   "/api/v1/boom-box",
   [
     body("command").notEmpty().withMessage("Please provide a command"),
-    body("content").notEmpty().withMessage("Please provide your message"),
     body("author")
       .notEmpty()
       .withMessage("Please provide who is sending to message and to who"),
@@ -151,7 +149,7 @@ router.post(
     let boomBox = await BoomBox.findOne({ box: box });
     const receiverUser = await User.findById(receiver).populate("sync_bank");
     const builMessage = {
-      content: content!,
+      content: content ? content : "",
       author: author,
       receiver: receiver,
       is_delete: false,
@@ -178,9 +176,16 @@ router.post(
 
       // console.log(existBoom);
       if (existBoom) {
-        throw new BadRequestError(
-          `You already have a chat with ${receiverUser?.username}`
-        );
+        // is boomBox Found continue chatting
+        return res.status(200).json({
+          status: "success",
+          boom_box: await BoomBox.findById(existBoom?.id)
+            .populate("messages.author", "username photo first_name last_name")
+            .populate(
+              "messages.receiver",
+              "username photo first_name last_name"
+            ),
+        });
       }
     }
 

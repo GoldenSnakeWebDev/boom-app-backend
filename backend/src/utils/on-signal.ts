@@ -1,14 +1,12 @@
-import { config } from "./../config";
 import https from "https";
+import { config } from "./../config";
 import { IOnSignalData } from "../types/user";
 
-/**
- *
- */
 export const onSignalSendNotification = async (data: IOnSignalData) => {
   const headers = {
-    "Content-Type": "application/json",
-    Authorization: `Basic ${config.PUSH_NOTIFICATION.ON_SIGNAL}`,
+    "Content-Type": "application/json; charset=utf-8",
+    Authorization: `Basic ${config.PUSH_NOTIFICATION.ON_SIGNAL_REST_API_KEY}`,
+    app_id: config.PUSH_NOTIFICATION.ON_SIGNAL_APP_ID,
   };
   console.log(headers);
   const options = {
@@ -35,3 +33,29 @@ export const onSignalSendNotification = async (data: IOnSignalData) => {
   req.write(JSON.stringify(data));
   req.end();
 };
+
+// export const onSignalSendNotification = async (data: IOnSignalData) => {
+//   const sdk = OneSignal(
+//     config.PUSH_NOTIFICATION.ON_SIGNAL_REST_API_KEY,
+//     config.PUSH_NOTIFICATION.ON_SIGNAL_APP_ID,
+//     true
+//   );
+
+//   console.log(data.contents);
+//   await sdk
+//     .createNotification(
+//       {
+//         included_segments: data.included_segments,
+//         contents: {
+//           en: data.contents.en?.toString(),
+//           es: data.contents.es?.toString(),
+//         },
+//         name: data.name.toString(),
+//       },
+//       {
+//         authorization: `Basic ${config.PUSH_NOTIFICATION.ON_SIGNAL_REST_API_KEY}`,
+//       }
+//     )
+//     .then((res: any) => console.log(res));
+//   // .catch((err: any) => console.error(err));
+// };
