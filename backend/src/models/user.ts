@@ -21,7 +21,7 @@ interface IUser {
     token?: string;
   };
   password_reset_token?: string;
-  is_admin?: string;
+  is_admin?: boolean;
   bio?: string;
   username?: string;
   password: string;
