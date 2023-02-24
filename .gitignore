@@ -18,7 +18,6 @@ broadcast/
 .env
 .ligoproject
 .ligo-work/
-# client
 
 
 node_modules/
