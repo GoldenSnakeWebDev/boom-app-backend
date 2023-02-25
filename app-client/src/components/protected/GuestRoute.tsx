@@ -9,7 +9,7 @@ const GuestRoute: FC = () => {
   console.log("Token", token);
   console.log("User", user);
   if (user && token) {
-    return <Navigate to="/" />;
+    return <Navigate to="/users/list" />;
   }
   return <Outlet />;
 };

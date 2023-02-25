@@ -106,7 +106,7 @@ router.get(
 
 /**
  * @openapi
- * /api/v1/users:
+ * /api/v1/users-list:
  *   get:
  *     tags:
  *        - Auth
@@ -134,6 +134,53 @@ router.get(
     res.status(200).json({
       status: "success",
       users,
+    });
+  }
+);
+
+//users/burn-admin-account
+
+/**
+ * @openapi
+ * /api/v1/users/burn-admin-account/:id:
+ *   get:
+ *     tags:
+ *        - Auth
+ *     description: Get a list of all users .
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     responses:
+ *       200:
+ *         description: . Returns a list of all users.
+ */
+router.patch(
+  "/api/v1/users/burn-admin-account/:id",
+  requireAuth,
+  requireSuperAdmin,
+  async (req: Request, res: Response) => {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      throw new BadRequestError("User not found");
+    }
+
+    const newUser = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        is_active: !user.is_active,
+      },
+      { new: true }
+    );
+
+    /**
+     * Burn user
+     */
+    res.status(200).json({
+      status: "success",
+      message: "Sucessfully burnt account",
+      user: newUser,
     });
   }
 );

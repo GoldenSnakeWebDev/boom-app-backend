@@ -49,3 +49,23 @@ export const getUsers = async (): Promise<IUser[] | []> => {
     return [];
   }
 };
+
+export const burnUserAccount = async (id: string) => {
+  console.log(endpoint.users.burnAccount(id));
+  try {
+    const { data } = await request.patch(`${endpoint.users.burnAccount(id)}`, {
+      burn: true,
+    });
+    console.log(data);
+  } catch (error) {
+    console.log("Error", error);
+  }
+};
+
+export const logoutUser = async () => {
+  try {
+    await request.post(endpoint.users.logout);
+  } catch (error) {
+    console.log("ERORR", error);
+  }
+};

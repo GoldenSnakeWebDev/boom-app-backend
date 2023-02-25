@@ -26,7 +26,7 @@ interface IUser {
   username?: string;
   password: string;
   user_type?: string;
-  is_active?: string;
+  is_active?: boolean;
   social_media?: {
     twitter?: string;
     instagram?: string;
@@ -77,6 +77,7 @@ const userSchema = new Schema<IUser>(
       discord: { type: Schema.Types.String, default: "" },
       medium: { type: Schema.Types.String, default: "" },
     },
+    is_active: { type: Schema.Types.Boolean, default: true },
     is_admin: { type: Schema.Types.Boolean, default: false },
     password_reset_token: { type: String, default: "" },
     password: { type: String, default: "" },

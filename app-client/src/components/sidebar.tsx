@@ -1,13 +1,10 @@
 import { Sidebar, TextInput } from "flowbite-react";
 import type { FC } from "react";
 import { useEffect, useState } from "react";
-import {
-  HiChartPie,
-  HiSearch,
-  HiUser,
-  HiUsers,
-  HiLogout,
-} from "react-icons/hi";
+import { HiChartPie, HiSearch, HiUsers, HiLogout } from "react-icons/hi";
+import { logoutUser } from "../apis/request";
+import { setToken, setUser } from "../store/local";
+import { Navigate } from "react-router";
 
 const MainSidebar: FC = function () {
   const [currentPage, setCurrentPage] = useState("");
@@ -17,6 +14,20 @@ const MainSidebar: FC = function () {
 
     setCurrentPage(newPage);
   }, [setCurrentPage]);
+
+  const logOutUser = async () => {
+    try {
+      await logoutUser();
+
+      //** Set Token to  ="", and use null */
+      setToken("");
+      setUser(null);
+      window.location.reload();
+      console.log("Clicked");
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
 
   return (
     <Sidebar aria-label="Sidebar with multi-level dropdown example">
@@ -33,7 +44,7 @@ const MainSidebar: FC = function () {
           </form>
           <Sidebar.Items>
             <Sidebar.ItemGroup>
-              <Sidebar.Item
+              {/* <Sidebar.Item
                 href="/"
                 icon={HiChartPie}
                 className={
@@ -41,7 +52,7 @@ const MainSidebar: FC = function () {
                 }
               >
                 Dashboard
-              </Sidebar.Item>
+              </Sidebar.Item> */}
               {/* <Sidebar.Item
                 href="/e-commerce/products"
                 icon={HiShoppingBag}
@@ -64,10 +75,14 @@ const MainSidebar: FC = function () {
               >
                 Users Management
               </Sidebar.Item>
-              <Sidebar.Item href="/auth/sign-in" icon={HiUser}>
+              {/* <Sidebar.Item href="/auth/sign-in" icon={HiUser}>
                 My Profile
-              </Sidebar.Item>
-              <Sidebar.Item href="/auth/sign-up" icon={HiLogout}>
+              </Sidebar.Item> */}
+              <Sidebar.Item
+                style={{ cursor: "pointer" }}
+                onClick={() => logOutUser()}
+                icon={HiLogout}
+              >
                 Log Out
               </Sidebar.Item>
             </Sidebar.ItemGroup>

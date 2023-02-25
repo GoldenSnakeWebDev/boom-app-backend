@@ -7,5 +7,7 @@ export default {
     passwordReset: `users/reset-password`,
     userResetPassword: `users/currentuser`,
     users: `users-list`,
+    logout: `users/signout`,
+    burnAccount: (id: string) => `users/burn-admin-account/${id}`,
   },
 };

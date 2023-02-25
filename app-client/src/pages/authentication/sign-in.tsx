@@ -20,6 +20,7 @@ const SignInPage: React.FC = function () {
         setUser(data.user!);
         // redirect to dashboard
         console.log("Ctx: ", context);
+        window.location.reload();
       }
     } catch (error) {
       console.log("Error ");
@@ -68,7 +69,7 @@ const SignInPage: React.FC = function () {
             }
           />
         </div>
-        <div className="mb-6 flex items-center justify-between">
+        {/* <div className="mb-6 flex items-center justify-between">
           <div className="flex items-center gap-x-3">
             <Checkbox id="rememberMe" name="rememberMe" />
             <Label htmlFor="rememberMe">Remember me</Label>
@@ -79,7 +80,7 @@ const SignInPage: React.FC = function () {
           >
             Lost Password?
           </a>
-        </div>
+        </div> */}
         <div className="mb-6">
           <Button
             type="submit"

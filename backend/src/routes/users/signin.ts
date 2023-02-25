@@ -65,6 +65,10 @@ router.post(
       throw new BadRequestError(`Wrong credentials. Please try again`);
     }
 
+    if (!user.is_active) {
+      throw new BadRequestError("Your account has been burned");
+    }
+
     // update device id
 
     if (user.device_id !== deviceId) {

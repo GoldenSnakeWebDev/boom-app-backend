@@ -4,7 +4,6 @@
 import {
   Breadcrumb,
   Button,
-  Checkbox,
   Label,
   Modal,
   Table,
@@ -16,7 +15,7 @@ import React from "react";
 import { HiDocumentDownload, HiOutlinePencilAlt } from "react-icons/hi";
 import NavbarSidebarLayout from "../../layouts/navbar-sidebar";
 import { IUser } from "../../types/user";
-import { getUsers } from "../../apis/request";
+import { getUsers, burnUserAccount } from "../../apis/request";
 
 const UserListPage: FC = function () {
   return (
@@ -81,6 +80,11 @@ const AllUsersTable: FC = function () {
 
     console.log(users);
   };
+
+  const burnAccount = async (id: string) => {
+    await burnUserAccount(id);
+    await getData();
+  };
   return (
     <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
       <Table.Head className="bg-gray-100 dark:bg-gray-700">
@@ -116,7 +120,7 @@ const AllUsersTable: FC = function () {
               </div>
             </Table.Cell>
             <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-              {user.phone ? user.phone : `N/A`}
+              {user.phone ? `+${user.phone}` : `N/A`}
             </Table.Cell>
             <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
               {user.user_type?.toUpperCase()}
@@ -132,7 +136,28 @@ const AllUsersTable: FC = function () {
                 className="flex items-center gap-x-3 whitespace-nowrap"
                 id={`selected-user-${user.id}-${index}`}
               >
-                <EditUserModal user={user} />
+                {/* <EditUserModal user={user} /> */}
+                {user.is_active ? (
+                  <Button color="warning">
+                    <div
+                      className="flex items-center gap-x-2"
+                      onClick={() => burnAccount(user.id!)}
+                    >
+                      <HiOutlinePencilAlt className="text-lg" />
+                      Un-Burn
+                    </div>
+                  </Button>
+                ) : (
+                  <Button color="primary" style={{ background: "red" }}>
+                    <div
+                      className="flex items-center gap-x-2"
+                      onClick={() => burnAccount(user.id!)}
+                    >
+                      <HiOutlinePencilAlt className="text-lg" />
+                      Burn
+                    </div>
+                  </Button>
+                )}
               </div>
             </Table.Cell>
           </Table.Row>
