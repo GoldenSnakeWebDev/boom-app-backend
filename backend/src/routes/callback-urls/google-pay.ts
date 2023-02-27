@@ -96,7 +96,7 @@ router.post(
       notification_type: NotificationType.BOOM,
       user: req.currentUser?.id,
       message: `Successfully ${actionType} ${networkType} ${amount}`,
-      timestamp: new Date(timestamp),
+      timestamp: timestamp,
     });
     // buy assets
     if (actionType === "deposit") {

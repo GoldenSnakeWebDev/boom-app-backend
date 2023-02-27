@@ -79,8 +79,6 @@ router.post(
         stripeId: session.id,
         stripeActions: `${actionType},${networkType}`,
       });
-
-      console.log(session);
     }
 
     res.status(200).json({ url: session.url });
@@ -103,10 +101,6 @@ router.post(
 
       let { networkType, timestamp, actionType } = req.body;
 
-      if (timestamp) {
-        timestamp = Date();
-      }
-
       const tx = await Transaction.findOne({
         stripeId: id,
         status: ITransactionStatus.PENDING,
@@ -114,6 +108,10 @@ router.post(
 
       if (!tx) {
         res.status(200).send({});
+      }
+
+      if (timestamp) {
+        timestamp = new Date(req.body.created);
       }
 
       // update transaction
@@ -159,7 +157,6 @@ router.post(
     } else {
       console.log(req.body.data);
     }
-    // Return a 200 response to acknowledge receipt of the event
     res.send();
   }
 );

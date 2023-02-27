@@ -28,15 +28,21 @@ export const stripeCheckOut = async (
       cancel_url,
     });
 
-    console.log(session);
     return {
       url: session.url,
       error: "",
       amount_total: session.amount_total,
       id: session.id,
+      createdAt: new Date(session.created),
     };
   } catch (error: any) {
-    return { url: "", error: error.message, amount_total: 0, id: "" };
+    return {
+      url: "",
+      error: error.message,
+      amount_total: 0,
+      id: "",
+      createdAt: "",
+    };
   }
 };
 
