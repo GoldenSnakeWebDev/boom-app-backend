@@ -13,19 +13,27 @@ import { Notification, NotificationType } from "./../../models/notification";
 import { onSignalSendNotification } from "../../utils/on-signal";
 import { NetworkType } from "../../models/network";
 import { v2PancakeSwap } from "../../swapping/swap";
+import { Product } from "../../models";
 import { config } from "../../config";
 import { ActionType } from "../callback-urls/google-pay";
 import { requireAuth } from "../../middlewares/require-auth";
 
-const storeItems = new Map([
-  [1, { priceInCents: 10000, name: "Learn ReactJs" }],
-  [2, { priceInCents: 20000, name: "learn CSS Today" }],
-]);
-
 const router = Router();
 
-router.get("/api/v1/subscription/items", (_req: Request, res: Response) => {
-  res.status(200).json({ items: storeItems });
+router.post("/api/v1/stripe/products", async (req: Request, res: Response) => {
+  const { name, description } = req.body;
+
+  const product = await Product.create({ name, description });
+
+  res.status(201).json({
+    product,
+    message: "Sucessfully created a product",
+  });
+});
+
+router.get("/api/v1/stripe/products", async (_req: Request, res: Response) => {
+  const products = await Product.find();
+  res.status(200).json({ products, status: "success" });
 });
 router.post(
   "/api/v1/stripe/checkout",
@@ -43,15 +51,15 @@ router.post(
   async (req: Request, res: Response) => {
     const { actionType, networkType } = req.body;
     const line_items = req.body.items.map(
-      (item: { id: number; quantity: number }) => {
-        const storeItem = storeItems.get(item.id);
+      async (item: { id: string; quantity: number }) => {
+        const storeItem = await Product.findById(item.id);
         return {
           price_data: {
             currency: "usd",
             product_data: {
               name: storeItem?.name,
             },
-            unit_amount: storeItem?.priceInCents,
+            unit_amount: storeItem?.price_in_cents,
           },
           quantity: item.quantity,
         };

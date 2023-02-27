@@ -5,3 +5,4 @@ export * from "./user";
 export * from "./notification";
 export * from "./report";
 export * from "./transaction";
+export * from "./product";
