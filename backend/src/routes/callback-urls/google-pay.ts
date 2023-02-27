@@ -78,7 +78,7 @@ router.post(
       amount,
       user: req.currentUser?.id!,
       transaction_type: ITransactionType.DEPOSIT,
-      status: ITransactionStatus.PENDING,
+      status: ITransactionStatus.SUCCESS,
     });
 
     // after approve that payments have reached to our bank

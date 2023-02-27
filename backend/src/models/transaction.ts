@@ -37,6 +37,8 @@ export interface ITransaction {
   status?: ITransactionStatus;
   narration?: string;
   transaction_date?: Date;
+  stripeActions?: string;
+  stripeId?: string;
 }
 
 const transactionSchema = new Schema<ITransaction>(
@@ -75,6 +77,8 @@ const transactionSchema = new Schema<ITransaction>(
         default: ITransactionStatus.FINAL,
       },
     },
+    stripeId: { type: Schema.Types.String, default: "" },
+    stripeActions: { type: Schema.Types.String, default: "" },
     narration: { type: Schema.Types.String, default: "" },
     transaction_date: { type: Schema.Types.Date, default: Date.now },
   },

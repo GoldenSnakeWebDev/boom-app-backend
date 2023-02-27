@@ -27,6 +27,7 @@ import { TippingRoute } from "./sync-bank/tipping";
 import { BoomSearchRoutes } from "./searching/index";
 import { CallbackURLRoute } from "./callback-urls/google-pay";
 import { BlockUserRoutes } from "./users/block";
+import { StripePaymentRoutes } from "./stripe";
 
 app.use([
   UserResetPasswordResetRoutes,
@@ -55,3 +56,4 @@ app.use([TippingRoute]);
 app.use([BoomSearchRoutes]);
 app.use([CallbackURLRoute]);
 app.use([BlockUserRoutes]);
+app.use([StripePaymentRoutes]);

@@ -2,12 +2,31 @@
 import { Dropdown, useTheme } from "flowbite-react";
 import type { FC } from "react";
 import Chart from "react-apexcharts";
+import endpoint from "../apis/endpoint";
+import { request } from "../apis/request";
 import NavbarSidebarLayout from "../layouts/navbar-sidebar";
 
 const DashboardPage: FC = function () {
+  const stripeCheckout = async () => {
+    try {
+      const { data } = await request.post(endpoint.users.processStripe, {
+        networkType: "BNB",
+        actionType: "deposit",
+        items: [
+          { id: 1, quantity: 2 },
+          { id: 2, quantity: 3 },
+        ],
+      });
+      console.log("Data", data);
+      window.location = data.url;
+    } catch (error) {}
+  };
   return (
     <NavbarSidebarLayout>
       <div className="px-4 pt-6">
+        <button onClick={() => stripeCheckout()} className="button">
+          CheckOut
+        </button>
         <SalesThisWeek />
       </div>
     </NavbarSidebarLayout>

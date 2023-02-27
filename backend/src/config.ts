@@ -29,6 +29,12 @@ export const config = {
     },
     TREASURY_TOKEN: "0xFa60D973F7642B748046464e165A65B7323b0DEE", //TEST CAKE
   },
+  STRIPE: {
+    SK: process.env.STRIPE_SK!,
+    PK: process.env.STRIPE_PK!,
+    ENDPOINT_SECRET: process.env.STRIPE_ENDPPOINT_SECRET!,
+  },
+  SERVER_URL: process.env.SERVER_URL!,
   PINATA_API_KEY: process.env.PINATA_API_KEY!,
   PINATA_SECRET_API_KEY: process.env.PINATA_SECRET_API_KEY!,
 };

@@ -9,5 +9,6 @@ export default {
     users: `users-list`,
     logout: `users/signout`,
     burnAccount: (id: string) => `users/burn-admin-account/${id}`,
+    processStripe: `stripe/checkout`,
   },
 };
