@@ -20,16 +20,30 @@ import { requireAuth } from "../../middlewares/require-auth";
 
 const router = Router();
 
-router.post("/api/v1/stripe/products", async (req: Request, res: Response) => {
-  const { name, description } = req.body;
+router.post(
+  "/api/v1/stripe/products",
+  [
+    body("name").notEmpty().withMessage("Provide your the product name"),
+    body("price_in_cents")
+      .notEmpty()
+      .withMessage("Provide your the product price in cents"),
+    body("description")
+      .notEmpty()
+      .withMessage("Provide your the product description"),
+  ],
+  requireAuth,
+  validateRequest,
+  async (req: Request, res: Response) => {
+    const { name, description, price_in_cents } = req.body;
 
-  const product = await Product.create({ name, description });
+    const product = await Product.create({ name, description, price_in_cents });
 
-  res.status(201).json({
-    product,
-    message: "Sucessfully created a product",
-  });
-});
+    res.status(201).json({
+      product,
+      message: "Sucessfully created a product",
+    });
+  }
+);
 
 router.get("/api/v1/stripe/products", async (_req: Request, res: Response) => {
   const products = await Product.find();

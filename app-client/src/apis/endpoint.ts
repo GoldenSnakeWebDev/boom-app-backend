@@ -11,4 +11,8 @@ export default {
     burnAccount: (id: string) => `users/burn-admin-account/${id}`,
     processStripe: `stripe/checkout`,
   },
+
+  products: {
+    stripe: `stripe/products`,
+  },
 };

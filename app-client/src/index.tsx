@@ -15,6 +15,7 @@ import type { UserType } from "./types/user";
 import RequireAuth from "./components/protected/RequireAuth";
 import GuestRoute from "./components/protected/GuestRoute";
 import { getToken, getUser } from "./store/local";
+import ProductListPage from "./pages/products";
 
 const container = document.getElementById("root");
 
@@ -59,6 +60,7 @@ const App = () => {
             <Route element={<RequireAuth />}>
               <Route path="/" element={<DashboardPage />} index />
               <Route path="/users/list" element={<UserListPage />} />
+              <Route path="/products" element={<ProductListPage />} />
             </Route>
             <Route element={<GuestRoute />}>
               <Route path="/auth/sign-in" element={<SignInPage />} />

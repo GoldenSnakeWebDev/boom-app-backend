@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getHeaders } from "../store/local";
-import type { IUser } from "../types/user";
+import type { IUser, Product } from "../types/user";
 import endpoint from "./endpoint";
 //  Base URL
 const BASE_URL = "http://localhost:4000/api/v1/";
@@ -67,5 +67,45 @@ export const logoutUser = async () => {
     await request.post(endpoint.users.logout);
   } catch (error) {
     console.log("ERORR", error);
+  }
+};
+
+export const getStripeProducts = async (): Promise<{
+  products: Product[] | [];
+  error?: string;
+}> => {
+  try {
+    const { data } = await request.get(endpoint.products.stripe);
+    return {
+      error: "",
+      products: data.products,
+    };
+  } catch (error) {
+    console.log("Error", error);
+    return {
+      error: `Error: ${error}`,
+      products: [],
+    };
+  }
+};
+
+export const createStripeProduct = async (opts: {
+  name: string;
+  description: string;
+  price_in_units: number;
+}): Promise<{
+  product: Product | null;
+  error?: string;
+}> => {
+  try {
+    const { data } = await request.post(endpoint.products.stripe, {
+      name: opts.name,
+      description: opts.description,
+      price_in_units: opts.price_in_units,
+    });
+    return { product: data.product, error: "" };
+  } catch (error) {
+    console.log("Error", error);
+    return { error: `Error: ${error}`, product: null };
   }
 };

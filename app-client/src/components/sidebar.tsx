@@ -1,7 +1,13 @@
 import { Sidebar, TextInput } from "flowbite-react";
 import type { FC } from "react";
 import { useEffect, useState } from "react";
-import { HiChartPie, HiSearch, HiUsers, HiLogout } from "react-icons/hi";
+import {
+  HiChartPie,
+  HiSearch,
+  HiUsers,
+  HiLogout,
+  HiShoppingBag,
+} from "react-icons/hi";
 import { logoutUser } from "../apis/request";
 import { setToken, setUser } from "../store/local";
 import { Navigate } from "react-router";
@@ -53,17 +59,17 @@ const MainSidebar: FC = function () {
               >
                 Dashboard
               </Sidebar.Item> */}
-              {/* <Sidebar.Item
-                href="/e-commerce/products"
+              <Sidebar.Item
+                href="/products"
                 icon={HiShoppingBag}
                 className={
-                  "/e-commerce/products" === currentPage
+                  "/products" === currentPage
                     ? "bg-gray-100 dark:bg-gray-700"
                     : ""
                 }
               >
                 Products
-              </Sidebar.Item> */}
+              </Sidebar.Item>
               <Sidebar.Item
                 href="/users/list"
                 icon={HiUsers}
