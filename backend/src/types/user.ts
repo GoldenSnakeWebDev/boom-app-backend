@@ -16,6 +16,7 @@ export interface UserPayload {
   email: string;
   rebooms?: Array<any>;
   device_id?: string;
+  blocked_users?: Array<any>;
   location?: string;
   bio?: string;
   username?: string;

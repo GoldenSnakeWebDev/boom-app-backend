@@ -58,7 +58,7 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route element={<RequireAuth />}>
-              <Route path="/" element={<UserListPage />} index />
+              <Route path="/" element={<ProductListPage />} index />
               <Route path="/users/list" element={<UserListPage />} />
               <Route path="/products" element={<ProductListPage />} />
             </Route>

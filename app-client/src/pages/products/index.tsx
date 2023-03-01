@@ -94,6 +94,7 @@ const AllProductsTable: FC = function () {
   return (
     <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
       <Table.Head className="bg-gray-100 dark:bg-gray-700">
+        <Table.HeadCell>#</Table.HeadCell>
         <Table.HeadCell>Name</Table.HeadCell>
         <Table.HeadCell>Description</Table.HeadCell>
         <Table.HeadCell>Price (USD)</Table.HeadCell>
@@ -106,6 +107,9 @@ const AllProductsTable: FC = function () {
             key={index}
             className="hover:bg-gray-100 dark:hover:bg-gray-700"
           >
+            <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
+              {index + 1}.
+            </Table.Cell>
             <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
               {product.name}
             </Table.Cell>

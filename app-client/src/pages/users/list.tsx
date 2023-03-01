@@ -88,6 +88,7 @@ const AllUsersTable: FC = function () {
   return (
     <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
       <Table.Head className="bg-gray-100 dark:bg-gray-700">
+        <Table.HeadCell>#</Table.HeadCell>
         <Table.HeadCell>Name</Table.HeadCell>
         <Table.HeadCell>Phone</Table.HeadCell>
         <Table.HeadCell>User Type</Table.HeadCell>
@@ -100,6 +101,9 @@ const AllUsersTable: FC = function () {
             key={index}
             className="hover:bg-gray-100 dark:hover:bg-gray-700"
           >
+            <Table.Cell className="whitespace-nowrap text-base font-medium text-gray-900 dark:text-white">
+              {index + 1}.
+            </Table.Cell>
             <Table.Cell className="mr-12 flex items-center space-x-6 whitespace-nowrap p-4 lg:mr-0">
               <img
                 className="h-10 w-10 rounded-full"
