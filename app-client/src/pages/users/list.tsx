@@ -30,7 +30,7 @@ const UserListPage: FC = function () {
           </div>
           <div className="sm:flex">
             <div className="mb-3 hidden items-center dark:divide-gray-700 sm:mb-0 sm:flex sm:divide-x sm:divide-gray-100">
-              <form className="lg:pr-3">
+              {/* <form className="lg:pr-3">
                 <Label htmlFor="users-search" className="sr-only">
                   Search
                 </Label>
@@ -41,15 +41,15 @@ const UserListPage: FC = function () {
                     placeholder="Search for users"
                   />
                 </div>
-              </form>
+              </form> */}
             </div>
             <div className="ml-auto flex items-center space-x-2 sm:space-x-3">
-              <Button color="gray">
+              {/* <Button color="gray">
                 <div className="flex items-center gap-x-3">
                   <HiDocumentDownload className="text-xl" />
                   <span>Export</span>
                 </div>
-              </Button>
+              </Button> */}
             </div>
           </div>
         </div>

@@ -7,18 +7,25 @@ import {
   Label,
   Modal,
   Table,
+  Textarea,
   TextInput,
 } from "flowbite-react";
 import type { FC } from "react";
 import { useState } from "react";
 import React from "react";
-import { HiDocumentDownload, HiOutlinePencilAlt } from "react-icons/hi";
+import {
+  HiDocumentDownload,
+  HiOutlinePencilAlt,
+  HiOutlinePlusCircle,
+} from "react-icons/hi";
 import NavbarSidebarLayout from "../../layouts/navbar-sidebar";
 import { IUser, Product } from "../../types/user";
 import {
   getUsers,
   burnUserAccount,
   getStripeProducts,
+  createStripeProduct,
+  updateStripeProduct,
 } from "../../apis/request";
 
 const ProductListPage: FC = function () {
@@ -34,7 +41,7 @@ const ProductListPage: FC = function () {
           </div>
           <div className="sm:flex">
             <div className="mb-3 hidden items-center dark:divide-gray-700 sm:mb-0 sm:flex sm:divide-x sm:divide-gray-100">
-              <form className="lg:pr-3">
+              {/* <form className="lg:pr-3">
                 <Label htmlFor="users-search" className="sr-only">
                   Search
                 </Label>
@@ -45,15 +52,10 @@ const ProductListPage: FC = function () {
                     placeholder="Search for users"
                   />
                 </div>
-              </form>
+              </form> */}
             </div>
             <div className="ml-auto flex items-center space-x-2 sm:space-x-3">
-              <Button color="gray">
-                <div className="flex items-center gap-x-3">
-                  <HiDocumentDownload className="text-xl" />
-                  <span>Export</span>
-                </div>
-              </Button>
+              <AddProductModal />
             </div>
           </div>
         </div>
@@ -124,7 +126,7 @@ const AllProductsTable: FC = function () {
                 className="flex items-center gap-x-3 whitespace-nowrap"
                 id={`selected-user-${product.id}-${index}`}
               >
-                {/* <EditProductModal product={product} /> */}
+                <EditProductModal product={product} />
                 {product.is_active ? (
                   <Button color="warning">
                     <div
@@ -155,24 +157,28 @@ const AllProductsTable: FC = function () {
   );
 };
 type EditProps = {
-  user: IUser;
+  product: Product;
 };
 
-const EditProductModal: FC = function ({ user }: EditProps) {
+const EditProductModal: FC = function ({ product }: EditProps) {
   const [isOpen, setOpen] = useState(false);
-  const [currentUser, _setCurrentUser] = useState({ ...user });
+  const [currentProduct, _setcurrentProduct] = useState({ ...product });
+
+  const updateProduct = async () => {
+    await updateStripeProduct(currentProduct);
+  };
 
   return (
     <>
       <Button color="primary" onClick={() => setOpen(true)}>
         <div className="flex items-center gap-x-2">
           <HiOutlinePencilAlt className="text-lg" />
-          Edit user
+          Edit Product
         </div>
       </Button>
       <Modal onClose={() => setOpen(false)} show={isOpen}>
         <Modal.Header className="border-b border-gray-200 !p-6 dark:border-gray-700">
-          <strong>Edit user</strong>
+          <strong>Edit Product</strong>
         </Modal.Header>
         <Modal.Body>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -181,29 +187,29 @@ const EditProductModal: FC = function ({ user }: EditProps) {
               <div className="mt-1">
                 <TextInput
                   id="firstName"
-                  value={currentUser.first_name}
+                  value={currentProduct.name}
                   name="firstName"
                   placeholder="Bonnie"
                   onChange={(e) => {
-                    _setCurrentUser({
-                      ...currentUser,
-                      first_name: e.target.value,
+                    _setcurrentProduct({
+                      ...currentProduct,
+                      name: e.target.value,
                     });
                   }}
                 />
               </div>
             </div>
             <div>
-              <Label htmlFor="lastName">Last name</Label>
+              <Label htmlFor="lastName">Price In Cents (USD)</Label>
               <div className="mt-1">
                 <TextInput
                   id="lastName"
-                  value={currentUser.last_name}
+                  value={currentProduct.price_in_cents}
                   name="lastName"
                   onChange={(e) => {
-                    _setCurrentUser({
-                      ...currentUser,
-                      last_name: e.target.value,
+                    _setcurrentProduct({
+                      ...currentProduct,
+                      price_in_cents: Number(e.target.value),
                     });
                   }}
                   placeholder="Green"
@@ -216,75 +222,130 @@ const EditProductModal: FC = function ({ user }: EditProps) {
                 <TextInput
                   id="email"
                   name="email"
-                  value={currentUser.email}
+                  value={currentProduct.description}
                   placeholder="yoyr@email.com"
-                  onChange={() => {}}
-                  type="email"
-                />
-              </div>
-            </div>
-            <div>
-              <Label htmlFor="phone">Phone number</Label>
-              <div className="mt-1">
-                <TextInput
-                  id="phone"
-                  name="phone"
-                  value={currentUser.phone}
-                  placeholder="e.g., +(12)3456 789"
-                  onChange={() => {}}
-                  type="tel"
-                />
-              </div>
-            </div>
-            <div>
-              <Label htmlFor="department">Department</Label>
-              <div className="mt-1">
-                <TextInput
-                  id="department"
-                  name="department"
-                  placeholder="Development"
-                />
-              </div>
-            </div>
-            <div>
-              <Label htmlFor="company">Company</Label>
-              <div className="mt-1">
-                <TextInput
-                  id="company"
-                  name="company"
-                  placeholder="Somewhere"
-                />
-              </div>
-            </div>
-            <div>
-              <Label htmlFor="userame">Username</Label>
-              <div className="mt-1">
-                <TextInput
-                  id="userame"
-                  name="userame"
-                  value={currentUser.username}
-                  placeholder="username"
-                  onChange={() => {}}
+                  onChange={(e) => {
+                    _setcurrentProduct({
+                      ...currentProduct,
+                      description: e.target.value,
+                    });
+                  }}
                   type="text"
-                />
-              </div>
-            </div>
-            <div>
-              <Label htmlFor="passwordNew">New password</Label>
-              <div className="mt-1">
-                <TextInput
-                  id="passwordNew"
-                  name="passwordNew"
-                  placeholder="••••••••"
-                  type="password"
                 />
               </div>
             </div>
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button color="primary" onClick={() => setOpen(false)}>
-            Save all
+          <Button
+            color="primary"
+            onClick={() => {
+              updateProduct();
+              setOpen(false);
+            }}
+          >
+            Update
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
+};
+
+const AddProductModal: FC = function () {
+  const [isOpen, setOpen] = useState(false);
+  const [product, _setProduct] = useState<{
+    name: string;
+    price_in_units: number;
+    description: string;
+  }>({
+    name: "",
+    price_in_units: 0,
+    description: "",
+  });
+
+  const saveRecord = async () => {
+    await createStripeProduct({ ...product });
+    // window.location.reload();
+  };
+
+  return (
+    <>
+      <Button color="primary" onClick={() => setOpen(true)}>
+        <div className="flex items-center gap-x-2">
+          <HiOutlinePlusCircle className="text-lg" />
+          Add Product
+        </div>
+      </Button>
+      <Modal onClose={() => setOpen(false)} show={isOpen}>
+        <Modal.Header className="border-b border-gray-200 !p-6 dark:border-gray-700">
+          <strong>Add Product</strong>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <div>
+              <Label htmlFor="name">Name</Label>
+              <div className="mt-1">
+                <TextInput
+                  id="name"
+                  value={product.name}
+                  name="name"
+                  placeholder="Basic Package"
+                  onChange={(e) => {
+                    _setProduct({
+                      ...product,
+                      name: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="amount">Amount In Cents (USD)</Label>
+              <div className="mt-1">
+                <TextInput
+                  id="amount"
+                  value={product.price_in_units}
+                  name="amount"
+                  onChange={(e) => {
+                    _setProduct({
+                      ...product,
+                      price_in_units: Number(e.target.value),
+                    });
+                  }}
+                  placeholder="Amount In Cents"
+                />
+              </div>
+            </div>
+            <div style={{ width: "100%" }}>
+              <Label htmlFor="email">Description</Label>
+              <div className="mt-1">
+                <Textarea
+                  id="email"
+                  value={product.description}
+                  placeholder="Description"
+                  onChange={(e) => {
+                    _setProduct({
+                      ...product,
+                      description: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            color="primary"
+            onClick={() => {
+              // save record
+              saveRecord();
+              // close popup
+              setOpen(false);
+            }}
+          >
+            Save
           </Button>
         </Modal.Footer>
       </Modal>

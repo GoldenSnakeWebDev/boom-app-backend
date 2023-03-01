@@ -20,6 +20,24 @@ import { requireAuth } from "../../middlewares/require-auth";
 
 const router = Router();
 
+/**
+ * @openapi
+ * /api/v1/stripe/products:
+ *   post:
+ *     tags:
+ *        - Stripe
+ *     description: Enables users to buy sync bank coins
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     parameters:
+ *        - name: name
+ *          description: Please provide the product name
+ *     responses:
+ *       200:
+ *         description: Successfully created a product
+ */
 router.post(
   "/api/v1/stripe/products",
   [
@@ -41,6 +59,35 @@ router.post(
     res.status(201).json({
       product,
       message: "Sucessfully created a product",
+    });
+  }
+);
+
+router.patch(
+  "/api/v1/stripe/products/:id",
+  [
+    body("name").notEmpty().withMessage("Provide your the product name"),
+    body("price_in_cents")
+      .notEmpty()
+      .withMessage("Provide your the product price in cents"),
+    body("description")
+      .notEmpty()
+      .withMessage("Provide your the product description"),
+  ],
+  requireAuth,
+  validateRequest,
+  async (req: Request, res: Response) => {
+    const { name, description, price_in_cents } = req.body;
+
+    const product = await Product.findByIdAndUpdate(
+      req.params.id,
+      { name, description, price_in_cents },
+      { new: true }
+    );
+
+    res.status(201).json({
+      product,
+      message: "Sucessfully updated a product",
     });
   }
 );

@@ -101,8 +101,32 @@ export const createStripeProduct = async (opts: {
     const { data } = await request.post(endpoint.products.stripe, {
       name: opts.name,
       description: opts.description,
-      price_in_units: opts.price_in_units,
+      price_in_cents: opts.price_in_units,
     });
+
+    window.location.reload();
+    return { product: data.product, error: "" };
+  } catch (error) {
+    console.log("Error", error);
+    return { error: `Error: ${error}`, product: null };
+  }
+};
+
+export const updateStripeProduct = async (
+  product: Product
+): Promise<{
+  product: Product | null;
+  error?: string;
+}> => {
+  try {
+    const { data } = await request.patch(
+      `${endpoint.products.stripe}/${product.id}`,
+      {
+        ...product,
+      }
+    );
+
+    window.location.reload();
     return { product: data.product, error: "" };
   } catch (error) {
     console.log("Error", error);
