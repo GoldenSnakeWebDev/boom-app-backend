@@ -70,8 +70,7 @@
     "parserOptions": {
       "ecmaFeatures": {
         "jsx": true
-      },
-      "project": "./tsconfig.json"
+      }
     },
     "root": true,
     "rules": {

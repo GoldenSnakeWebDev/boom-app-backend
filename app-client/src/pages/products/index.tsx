@@ -160,7 +160,7 @@ type EditProps = {
   product: Product;
 };
 
-const EditProductModal: FC = function ({ product }: EditProps) {
+const EditProductModal: FC = function ({ product }: any) {
   const [isOpen, setOpen] = useState(false);
   const [currentProduct, _setcurrentProduct] = useState({ ...product });
 
