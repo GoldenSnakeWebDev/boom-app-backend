@@ -34,6 +34,11 @@ export const config = {
     PK: process.env.STRIPE_PK!,
     ENDPOINT_SECRET: process.env.STRIPE_ENDPPOINT_SECRET!,
   },
+  PAYPAL: {
+    PAYPAL_CLIENT_ID: process.env.PAYPAL_CLIENT_ID!,
+    PAYPAL_CLIENT_SECRET: process.env.PAYPAL_CLIENT_SECRET!,
+    PAYPAL_CLIENT_ENV: process.env.PAYPAL_CLIENT_ENV!,
+  },
   SERVER_URL: process.env.SERVER_URL!,
   PINATA_API_KEY: process.env.PINATA_API_KEY!,
   PINATA_SECRET_API_KEY: process.env.PINATA_SECRET_API_KEY!,
