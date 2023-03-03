@@ -28,6 +28,7 @@ import { BoomSearchRoutes } from "./searching/index";
 import { CallbackURLRoute } from "./callback-urls/google-pay";
 import { BlockUserRoutes } from "./users/block";
 import { StripePaymentRoutes } from "./stripe";
+import { PayPalRoutes } from "./paypal";
 
 app.use([
   UserResetPasswordResetRoutes,
@@ -57,3 +58,4 @@ app.use([BoomSearchRoutes]);
 app.use([CallbackURLRoute]);
 app.use([BlockUserRoutes]);
 app.use([StripePaymentRoutes]);
+app.use([PayPalRoutes]);
