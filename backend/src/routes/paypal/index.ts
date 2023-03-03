@@ -202,6 +202,7 @@ router.post(
         status: ITransactionStatus.SUCCESS,
       });
 
+      // update the user's wallet 
       await updateWalletBalance({
         userId: req.currentUser?.id!,
         transaction_type:
@@ -229,6 +230,7 @@ router.post(
         }
       }
 
+      // send on signal
       onSignalSendNotification({
         contents: {
           en: `Successfully ${actionType} ${networkType} ${amount}`,

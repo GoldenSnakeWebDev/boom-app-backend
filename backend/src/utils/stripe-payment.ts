@@ -49,3 +49,34 @@ export const stripeCheckOut = async (
 export const stripeProcessCallBack = (body: any) => {
   console.log(body);
 };
+
+/**
+ * Create a payout
+ * @param opts 
+ * @returns 
+ */
+export const stripeCreatePayout = async (opts: {
+  amount: number;
+  currency: string;
+}) => {
+  try {
+    const session = await stripe.payouts.create({
+      amount: opts.amount,
+      method: "instant",
+      currency: "USD",
+      source_type: "card",
+      description: "Successfully you have recieved a payment",
+    });
+    return {
+      error: "",
+      amount_total: session.amount,
+      createdAt: new Date(session.arrival_date),
+    };
+  } catch (error: any) {
+    return {
+      error: error.message,
+      amount_total: 0,
+      createdAt: new Date(Date.now())
+    };
+  }
+};
