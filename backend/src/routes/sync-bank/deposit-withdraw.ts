@@ -9,6 +9,7 @@ import {
 } from "../../models/transaction";
 import { getNextTransaction } from "../../utils/transaction-common";
 import { Notification, NotificationType } from "./../../models/notification";
+import {onSignalSendNotification}  from  "./../../utils/on-signal"
 
 const router = Router();
 
@@ -68,10 +69,20 @@ router.post(
 
     // buy the assets
     // TODO: Notification
+    const msg  =  `You have successfully bought ${networkType} ${amount}`
     await Notification.create({
       notification_type: NotificationType.BOOM,
       user: req.currentUser?.id,
-      message: `Successfully bought ${networkType} ${amount}`,
+      message: msg,
+    });
+
+    onSignalSendNotification({
+      contents: {
+        en: msg,
+        es: msg,
+      },
+      included_segments: [req.currentUser?.device_id!],
+      name: `deposit-withdraw`,
     });
 
     // end of update sync bank
@@ -147,11 +158,21 @@ router.post(
 
     // buy the assets
     // TODO: Notification
+    const msg  =  `You have successfully withdraw ${networkType} ${amount}`;
     await Notification.create({
       notification_type: NotificationType.BOOM,
       user: req.currentUser?.id,
-      message: `Successfully withdraw ${networkType} ${amount}`,
+      message: msg,
       timestamp: new Date(timestamp),
+    });
+
+    onSignalSendNotification({
+      contents: {
+        en: msg,
+        es: msg,
+      },
+      included_segments: [req.currentUser?.device_id!],
+      name: `deposit-withdraw`,
     });
 
     // end of update sync bank

@@ -138,8 +138,8 @@ router.post(
     });
     await onSignalSendNotification({
       contents: {
-        en: `Successfully created a boom`,
-        es: `Successfully created a boom`,
+        en: `You have successfully created a boom`,
+        es: `You have successfully created a boom`,
       },
       included_segments: [req.currentUser?.device_id!],
       name: "Boom Creation",
@@ -343,14 +343,14 @@ router.patch(
           notification_type: NotificationType.BOOM,
           user: boomMinted.user,
           boom: req.params.id,
-          message: `${req.currentUser?.username} has unliked  your boom`,
+          message: `${req.currentUser?.username} has disliked  your boom`,
           timestamp: new Date(timestamp),
         });
 
         await onSignalSendNotification({
           contents: {
-            en: `${req.currentUser?.username} has unliked your boom`,
-            es: `${req.currentUser?.username} has unliked your boom`,
+            en: `${req.currentUser?.username} has disliked your boom`,
+            es: `${req.currentUser?.username} has disliked your boom`,
           },
           included_segments: [boomOwner.device_id!],
           name: "Reaction",
@@ -371,13 +371,13 @@ router.patch(
           notification_type: NotificationType.BOOM,
           user: boomMinted.user,
           boom: req.params.id,
-          message: `${req.currentUser?.username} has ♥️ your boom`,
+          message: `${req.currentUser?.username} has loved your boom`,
           timestamp: new Date(timestamp),
         });
         await onSignalSendNotification({
           contents: {
-            en: `${req.currentUser?.username} has ♥️ your boom`,
-            es: `${req.currentUser?.username} has ♥️ your boom`,
+            en: `${req.currentUser?.username} has loved your boom`,
+            es: `${req.currentUser?.username} has loved your boom`,
           },
           included_segments: [boomOwner.device_id!],
           name: "Reaction",
@@ -395,13 +395,13 @@ router.patch(
           notification_type: NotificationType.BOOM,
           user: boomMinted.user,
           boom: req.params.id,
-          message: `${req.currentUser?.username} has 👎 your boom`,
+          message: `${req.currentUser?.username} has disliked your boom`,
           timestamp: new Date(timestamp),
         });
         await onSignalSendNotification({
           contents: {
-            en: `${req.currentUser?.username} has 👎 your boom`,
-            es: `${req.currentUser?.username} has 👎 your boom`,
+            en: `${req.currentUser?.username} has disliked your boom`,
+            es: `${req.currentUser?.username} has disliked your boom`,
           },
           included_segments: [boomOwner.device_id!],
           name: "Reaction",
@@ -476,13 +476,13 @@ router.patch(
           notification_type: NotificationType.BOOM,
           user: boomMinted.user,
           boom: req.params.id,
-          message: `${req.currentUser?.username} has reboomed your boom`,
+          message: `${req.currentUser?.username} has re-boomed your boom`,
           timestamp: new Date(timestamp),
         });
         await onSignalSendNotification({
           contents: {
-            en: `${req.currentUser?.username} has reboomed your boom`,
-            es: `${req.currentUser?.username} has reboomed your boom`,
+            en: `${req.currentUser?.username} has re-boomed your boom`,
+            es: `${req.currentUser?.username} has re-boomed your boom`,
           },
           included_segments: [boomOwner.device_id!],
           name: "Reaction",
@@ -500,13 +500,13 @@ router.patch(
           notification_type: NotificationType.BOOM,
           user: boomMinted.user,
           boom: req.params.id,
-          message: `${req.currentUser?.username} is reboomed your boom`,
+          message: `${req.currentUser?.username} is re-boomed your boom`,
           timestamp: new Date(timestamp),
         });
         await onSignalSendNotification({
           contents: {
-            en: `${req.currentUser?.username} is reboomed your boom`,
-            es: `${req.currentUser?.username} is reboomed your boom`,
+            en: `${req.currentUser?.username} is re-boomed your boom`,
+            es: `${req.currentUser?.username} is re-boomed your boom`,
           },
           included_segments: [boomOwner.device_id!],
           name: "Reaction",
@@ -550,13 +550,13 @@ router.patch(
           notification_type: NotificationType.BOOM,
           user: boomMinted.user,
           boom: req.params.id,
-          message: `${req.currentUser?.username} is unreported your boom`,
+          message: `${req.currentUser?.username} has withheld his/her reporting on your boom`,
           timestamp: new Date(timestamp),
         });
         await onSignalSendNotification({
           contents: {
-            en: `${req.currentUser?.username} is unreported your boom`,
-            es: `${req.currentUser?.username} is unreported your boom`,
+            en: `${req.currentUser?.username} has withheld his/her reporting on your boom`,
+            es: `${req.currentUser?.username} has withheld his/her reporting on your boom`,
           },
           included_segments: [boomOwner.device_id!],
           name: "Reaction",

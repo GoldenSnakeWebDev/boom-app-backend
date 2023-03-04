@@ -52,17 +52,18 @@ router.patch(
 
       // send notification for tipper
       // TODO: Notification
+      const msgFriend  =  `You are now a fun with ${nextUser?.username}`;
       await Notification.create({
         notification_type: NotificationType.USER,
         user: req.currentUser?.id,
-        message: `You are now a fun with ${nextUser?.username}`,
+        message: msgFriend,
       });
 
       if (req.currentUser?.device_id!) {
         onSignalSendNotification({
           contents: {
-            en: `You are now a fun with ${nextUser?.username}`,
-            es: `You are now a fun with ${nextUser?.username}`,
+            en: msgFriend,
+            es: msgFriend,
           },
           included_segments: [req.currentUser?.device_id!],
           name: "Friends",
@@ -76,17 +77,18 @@ router.patch(
         { new: true }
       );
       // TODO: Notification
+      const msgRemovedFrd = `You have been removed ${nextUser?.username} from a list of your funs`
       await Notification.create({
         notification_type: NotificationType.USER,
         user: nextUser?.id,
-        message: `You have been removed ${nextUser?.username} from a list of your funs`,
+        message: msgRemovedFrd,
       });
 
       if (nextUser?.device_id!) {
         onSignalSendNotification({
           contents: {
-            en: `You have been removed ${nextUser?.username} from a list of your funs`,
-            es: `You have been removed ${nextUser?.username} from a list of your funs`,
+            en: msgRemovedFrd,
+            es: msgRemovedFrd,
           },
           included_segments: [nextUser?.device_id!],
           name: "Friends",
@@ -116,17 +118,18 @@ router.patch(
       );
 
       // TODO: Notification
+      const msgFrd =  `You have added ${nextUser?.username} as your friend`
       await Notification.create({
         notification_type: NotificationType.USER,
         user: nextUser?.id,
-        message: `${nextUser?.username} is now your friend`,
+        message: msgFrd,
       });
 
       if (req.currentUser?.device_id!) {
         onSignalSendNotification({
           contents: {
-            en: `${nextUser?.username} is now your friend`,
-            es: `${nextUser?.username} is now your friend`,
+            en: msgFrd,
+            es: msgFrd,
           },
           included_segments: [req.currentUser?.device_id!],
           name: "Friends",

@@ -48,6 +48,8 @@ export class V2PancakeSwap {
           new Date(Date.now() + 1 * 24 * 60 * 60 * 1000) // plus 1 day
         );
 
+        console.log("App", amounts);
+
         return {
           success: true,
           error: null,

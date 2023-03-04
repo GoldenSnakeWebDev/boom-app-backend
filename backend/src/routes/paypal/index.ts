@@ -216,7 +216,7 @@ router.post(
       await Notification.create({
         notification_type: NotificationType.BOOM,
         user: req.currentUser?.id,
-        message: `Successfully ${actionType} ${networkType} ${amount}`,
+        message: `You have successfully ${actionType} ${networkType} ${amount}`,
         timestamp: timestamp,
       });
       // buy assets
@@ -233,8 +233,8 @@ router.post(
       // send on signal
       onSignalSendNotification({
         contents: {
-          en: `Successfully ${actionType} ${networkType} ${amount}`,
-          es: `Successfully ${actionType} ${networkType} ${amount}`,
+          en: `You have successfully ${actionType} ${networkType} ${amount}`,
+          es: `You have successfully ${actionType} ${networkType} ${amount}`,
         },
         included_segments: [req.currentUser?.device_id!],
         name: `GooglePay-${actionType}`,
