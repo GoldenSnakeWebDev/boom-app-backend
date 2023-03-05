@@ -1,5 +1,5 @@
-import dotenv from 'dotenv';
-dotenv.config({ path: '.env' });
+import dotenv from 'dotenv'
+dotenv.config({ path: '.env' })
 // get the current app Environment
 const appEnv = process.env.APP_ENV! === 'testing' ? `development` : `production`
 /**
@@ -10,7 +10,10 @@ export const config = {
   DB_URL: process.env.DB_URL!,
   PRIVATE_KEY: process.env.PRIVATE_KEY!,
   PUBLIC_KEY: process.env.PUBLIC_KEY!,
-  RPC_URL: process.env.RPC_URL!,
+  RPC_URL:
+    appEnv === 'development'
+      ? `https://data-seed-prebsc-1-s3.binance.org:8545`
+      : process.env.RPC_URL!,
   PORT: process.env.PORT!,
   ENVIRONMENT: appEnv,
   FOLDER_NAME: 'uploads',
