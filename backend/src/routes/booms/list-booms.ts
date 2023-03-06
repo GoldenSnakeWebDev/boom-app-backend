@@ -46,17 +46,9 @@ router.get("/api/v1/booms", async (req: Request, res: Response) => {
    * Only fetch booms for unblocked users
    */
 
-  let blockedUsers = req.currentUser?.blocked_users?.map((id: any) => id);
-
-  if (blockedUsers!.length > 0) {
-    blockedUsers = blockedUsers;
-  } else {
-    blockedUsers = [];
-  }
-
   const response = new ApiResponse(
     /*Boom.find({is_deleted:  false})*/
-    Boom.find({ user: { $nin: blockedUsers } })
+    Boom.find()
       .populate({ path: "comments", options: { _recursed: true } })
       .populate("network")
       .populate("reactions.likes", "username photo first_name last_name")
