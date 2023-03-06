@@ -17,6 +17,7 @@ import { Product } from "../../models";
 import { config } from "../../config";
 import { ActionType } from "../callback-urls/google-pay";
 import { requireAuth } from "../../middlewares/require-auth";
+import { ApiResponse } from "../../utils/api-response";
 
 const router = Router();
 
@@ -77,11 +78,9 @@ router.patch(
   requireAuth,
   validateRequest,
   async (req: Request, res: Response) => {
-    const { name, description, price_in_cents } = req.body;
-
     const product = await Product.findByIdAndUpdate(
       req.params.id,
-      { name, description, price_in_cents },
+      { ...req.body},
       { new: true }
     );
 
@@ -92,8 +91,18 @@ router.patch(
   }
 );
 
-router.get("/api/v1/stripe/products", async (_req: Request, res: Response) => {
-  const products = await Product.find();
+router.get("/api/v1/stripe/products", async (req: Request, res: Response) => {
+
+  const response = new ApiResponse(
+    /*Boom.find({is_deleted:  false})*/
+    Product.find(),
+    req.query
+  )
+    .filter()
+    .sort()
+    .limitFields();
+
+  const products = await await response.query;
   res.status(200).json({ products, status: "success" });
 });
 router.post(
@@ -163,7 +172,6 @@ router.post(
 router.post(
   "/api/v1/stripe-checkout-callback-url",
   async (req: Request, res: Response) => {
-    console.log(req.body);
 
     const data: any = req.body?.data.object;
 

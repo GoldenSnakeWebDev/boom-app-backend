@@ -174,6 +174,8 @@ router.patch(
       { new: true }
     );
 
+    console.log(newUser);
+
     /**
      * Burn user
      */

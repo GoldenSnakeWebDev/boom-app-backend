@@ -143,26 +143,27 @@ const AllUsersTable: FC = function () {
                 id={`selected-user-${user.id}-${index}`}
               >
                 {/* <EditUserModal user={user} /> */}
-                {user.is_active ? (
-                  <Button color="warning">
-                    <div
-                      className="flex items-center gap-x-2"
-                      onClick={() => burnAccount(user.id!)}
-                    >
-                      <HiOutlinePencilAlt className="text-lg" />
-                      Un-Burn
-                    </div>
-                  </Button>
-                ) : (
+                {!user.is_active ? (
                   <Button color="primary" style={{ background: "red" }}>
-                    <div
-                      className="flex items-center gap-x-2"
-                      onClick={() => burnAccount(user.id!)}
-                    >
-                      <HiOutlinePencilAlt className="text-lg" />
-                      Burn
-                    </div>
-                  </Button>
+                  <div
+                    className="flex items-center gap-x-2"
+                    onClick={() => burnAccount(user.id!)}
+                  >
+                    <HiOutlinePencilAlt className="text-lg" />
+                    Burn
+                  </div>
+                </Button>
+                ) : (
+                  
+                  <Button color="warning">
+                  <div
+                    className="flex items-center gap-x-2"
+                    onClick={() => burnAccount(user.id!)}
+                  >
+                    <HiOutlinePencilAlt className="text-lg" />
+                    Un-Burn
+                  </div>
+                </Button>
                 )}
               </div>
             </Table.Cell>

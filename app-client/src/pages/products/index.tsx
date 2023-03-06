@@ -87,10 +87,12 @@ const AllProductsTable: FC = function () {
     console.log(users);
   };
 
-  const burnAccount = async (id: string) => {
-    await burnUserAccount(id);
+
+  const updateProduct = async (currentProduct: any) => {
+    await updateStripeProduct(currentProduct);
     await getData();
   };
+
   return (
     <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
       <Table.Head className="bg-gray-100 dark:bg-gray-700">
@@ -135,17 +137,17 @@ const AllProductsTable: FC = function () {
                   <Button color="warning">
                     <div
                       className="flex items-center gap-x-2"
-                      onClick={() => burnAccount(product.id!)}
+                      onClick={() => updateProduct({...product, is_active:  false})}
                     >
                       <HiOutlinePencilAlt className="text-lg" />
-                      De-activatE
+                      De-activate
                     </div>
                   </Button>
                 ) : (
                   <Button color="primary" style={{ background: "red" }}>
                     <div
                       className="flex items-center gap-x-2"
-                      onClick={() => burnAccount(product.id!)}
+                      onClick={() => updateProduct({...product, is_active:  true})}
                     >
                       <HiOutlinePencilAlt className="text-lg" />
                       Activate

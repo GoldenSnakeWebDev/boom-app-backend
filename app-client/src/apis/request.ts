@@ -126,7 +126,8 @@ export const updateStripeProduct = async (
       }
     );
 
-    window.location.reload();
+    // window.location.reload();
+    console.log(product)
     return { product: data.product, error: "" };
   } catch (error) {
     console.log("Error", error);
