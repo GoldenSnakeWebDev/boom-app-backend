@@ -132,10 +132,15 @@ const AllUsersTable: FC = function () {
               {user.user_type?.toUpperCase()}
             </Table.Cell>
             <Table.Cell className="whitespace-nowrap p-4 text-base font-normal text-gray-900 dark:text-white">
-              <div className="flex items-center">
+              {
+                user.is_active ? (<div className="flex items-center">
                 <div className="mr-2 h-2.5 w-2.5 rounded-full bg-green-400"></div>
                 Active
-              </div>
+              </div>) :  (<div className="flex items-center">
+                <div className="mr-2 h-2.5 w-2.5 rounded-full bg-red-400"></div>
+                Not Active
+              </div>)
+              }
             </Table.Cell>
             <Table.Cell>
               <div
@@ -143,7 +148,7 @@ const AllUsersTable: FC = function () {
                 id={`selected-user-${user.id}-${index}`}
               >
                 {/* <EditUserModal user={user} /> */}
-                {!user.is_active ? (
+                {user.is_active ? (
                   <Button color="primary" style={{ background: "red" }}>
                   <div
                     className="flex items-center gap-x-2"
