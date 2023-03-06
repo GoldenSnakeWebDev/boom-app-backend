@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express";
 import { body } from "express-validator";
 import { validateRequest } from "./../../middlewares";
-import { stripeCheckOut } from "../../utils/stripe-payment";
+import { stripeCheckOut, StripeItem } from "../../utils/stripe-payment";
 import { updateWalletBalance } from "../../utils/sync-bank";
 import {
   Transaction,
@@ -110,22 +110,26 @@ router.post(
   validateRequest,
   requireAuth,
   async (req: Request, res: Response) => {
-    const { actionType, networkType } = req.body;
-    const line_items = req.body.items.map(
-      async (item: { id: string; quantity: number }) => {
-        const storeItem = await Product.findById(item.id);
-        return {
-          price_data: {
-            currency: "usd",
-            product_data: {
-              name: storeItem?.name,
-            },
-            unit_amount: storeItem?.price_in_cents,
+    const { actionType, networkType, items } = req.body;
+    const products = await Product.find({
+      _id: { $in: items.map((it: any) => it.id) },
+    });
+
+
+    const line_items : StripeItem[] = products?.map((storeItem) => {
+      const item = items.find((i: any) => i.id === storeItem.id);
+      return {
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: storeItem?.name,
           },
-          quantity: item.quantity,
-        };
-      }
-    );
+          unit_amount: storeItem?.price_in_cents,
+        },
+        quantity: item.quantity,
+      };
+    });
+
 
     const session = await stripeCheckOut(
       line_items,
@@ -148,9 +152,11 @@ router.post(
         stripeId: session.id,
         stripeActions: `${actionType},${networkType}`,
       });
+
+      return res.status(200).json({ url: session.url });
     }
 
-    res.status(200).json({ url: session.url });
+    return res.status(200).json({ url: session.url });
   }
 );
 
@@ -162,8 +168,6 @@ router.post(
     const data: any = req.body?.data.object;
 
     const id = data.id;
-
-    console.log(id);
 
     if (data.payment_status === "paid" && data.status === "complete") {
       const amount = data.amount_total;

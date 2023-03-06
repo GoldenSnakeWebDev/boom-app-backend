@@ -5,6 +5,18 @@ export const stripe = new Stripe(config.STRIPE.SK, {
   apiVersion: "2022-11-15",
 });
 
+export interface StripeItem {
+    price_data: {
+      currency: "usd";
+      product_data: {
+        name: string;
+      };
+      unit_amount: number;
+    };
+    quantity: number;
+  }
+
+
 export const stripeCheckOut = async (
   items: Array<{
     price_data: {
@@ -36,6 +48,7 @@ export const stripeCheckOut = async (
       createdAt: new Date(session.created),
     };
   } catch (error: any) {
+    console.log(error)
     return {
       url: "",
       error: error.message,
