@@ -59,13 +59,19 @@ router.get("/api/v1/searching", async (req: Request, res: Response) => {
   // const count = await response.query;
   const booms = await response.paginate().query;
 
-  console.log(booms);
+  const accounts  =  await User.find({"_id": {"$in": booms.map((boom: any) => boom.user.id)}})
+  .populate("sync_bank")
+  .populate("friends", "username photo first_name last_name")
+  .populate("funs", "username photo first_name last_name");
 
   res.status(200).json({
     status: "success",
     page: response?.page_info,
     // count: count.length,
-    booms,
+    search: {
+      booms,
+      accounts
+    }
   });
 });
 
