@@ -80,7 +80,7 @@ router.patch(
   async (req: Request, res: Response) => {
     const product = await Product.findByIdAndUpdate(
       req.params.id,
-      { ...req.body},
+      { ...req.body },
       { new: true }
     );
 
@@ -92,18 +92,15 @@ router.patch(
 );
 
 router.get("/api/v1/stripe/products", async (req: Request, res: Response) => {
-
-  const response = new ApiResponse(
-    /*Boom.find({is_deleted:  false})*/
-    Product.find(),
-    req.query
-  )
+  const response = new ApiResponse(Product.find(), req.query)
     .filter()
     .sort()
     .limitFields();
 
-  const products = await await response.query;
-  res.status(200).json({ products, status: "success" });
+  const products = await response.paginate().query;
+  res
+    .status(200)
+    .json({ products, status: "success", page: response.page_info });
 });
 router.post(
   "/api/v1/stripe/checkout",
@@ -124,8 +121,7 @@ router.post(
       _id: { $in: items.map((it: any) => it.id) },
     });
 
-
-    const line_items : StripeItem[] = products?.map((storeItem) => {
+    const line_items: StripeItem[] = products?.map((storeItem) => {
       const item = items.find((i: any) => i.id === storeItem.id);
       return {
         price_data: {
@@ -138,7 +134,6 @@ router.post(
         quantity: item.quantity,
       };
     });
-
 
     const session = await stripeCheckOut(
       line_items,
@@ -172,7 +167,6 @@ router.post(
 router.post(
   "/api/v1/stripe-checkout-callback-url",
   async (req: Request, res: Response) => {
-
     const data: any = req.body?.data.object;
 
     const id = data.id;

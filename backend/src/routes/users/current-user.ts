@@ -4,6 +4,7 @@ import { User } from "../../models/user";
 import { NotAuthorizedError } from "../../errors/not-authorized-error";
 import { BadRequestError } from "../../errors/bad-request-error";
 import { requireSuperAdmin } from "../../middlewares/require-super-admin";
+import { ApiResponse } from "../../utils/api-response";
 
 const router = Router();
 
@@ -124,16 +125,21 @@ router.get(
   requireAuth,
   requireSuperAdmin,
   async (req: Request, res: Response) => {
-    const users = await User.find({
-      $nor: [{ is_admin: true, _id: req.currentUser?.id }],
-    });
+    const response = new ApiResponse(
+      User.find({
+        $nor: [{ is_admin: true, _id: req.currentUser?.id }],
+      }),
+      req.query
+    )
+      .sort()
+      .limitFields()
+      .filter();
 
-    if (!users) {
-      throw new BadRequestError("User not found");
-    }
+    const users = await response.paginate().query;
     res.status(200).json({
       status: "success",
       users,
+      page: response.page_info,
     });
   }
 );

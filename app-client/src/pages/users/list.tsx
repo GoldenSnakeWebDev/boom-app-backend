@@ -16,6 +16,7 @@ import { HiDocumentDownload, HiOutlinePencilAlt } from "react-icons/hi";
 import NavbarSidebarLayout from "../../layouts/navbar-sidebar";
 import { IUser } from "../../types/user";
 import { getUsers, burnUserAccount } from "../../apis/request";
+import { Pagination } from "../../components/Pagination/Pagination";
 
 const UserListPage: FC = function () {
   return (
@@ -70,156 +71,137 @@ const UserListPage: FC = function () {
 const AllUsersTable: FC = function () {
   const [users, setUsers] = useState<IUser[]>([]);
 
+  const [limit, _setLimit] = useState(8);
+  const [page, setPage] = useState({});
+  const [newPage, setNewPage] = useState(1);
+  const [pages, setPages] = useState([1, 2, 3]);
+
   React.useEffect(() => {
     getData();
   }, []);
 
-  const getData = async () => {
-    const userData = await getUsers();
-    setUsers(userData);
+  const setCurrentPage = async (new_page: number) => {
+    await getData(new_page);
+    if (users.length > 0) {
+      setNewPage(new_page);
+    } else {
+      const _page = new_page > 1 ? new_page - 1 : 1;
+      setNewPage(_page);
+      await getData(_page);
+    }
+  };
 
-    console.log(users);
+  const getData = async (_page = newPage) => {
+    const userData = await getUsers(_page, limit);
+    setNewPage(userData.page.current);
+    setPage(userData.page);
+    setUsers(userData.users);
   };
 
   const burnAccount = async (id: string) => {
     await burnUserAccount(id);
-    await getData();
+    await getData(newPage);
   };
   return (
-    <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
-      <Table.Head className="bg-gray-100 dark:bg-gray-700">
-        <Table.HeadCell>#</Table.HeadCell>
-        <Table.HeadCell>Name</Table.HeadCell>
-        <Table.HeadCell>Phone</Table.HeadCell>
-        <Table.HeadCell>User Type</Table.HeadCell>
-        <Table.HeadCell>Status</Table.HeadCell>
-        <Table.HeadCell>Actions</Table.HeadCell>
-      </Table.Head>
-      <Table.Body className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-        {users.map((user, index) => (
-          <Table.Row
-            key={index}
-            className="hover:bg-gray-100 dark:hover:bg-gray-700"
-          >
-            <Table.Cell className="whitespace-nowrap text-base font-medium text-gray-900 dark:text-white">
-              {index + 1}.
-            </Table.Cell>
-            <Table.Cell className="mr-12 flex items-center space-x-6 whitespace-nowrap p-4 lg:mr-0">
-              <img
-                className="h-10 w-10 rounded-full"
-                src={
-                  user.photo
-                    ? user.photo.replace(":9443", "/backend")
-                    : `http://128.199.191.206/backend/uploads/uploads-6df7988e-7008-11ed-9234-0123456789ab-1669742153412.jpeg`
-                }
-                alt={`${user.first_name} ${user.last_name}`}
-              />
-              <div className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                <div className="text-base font-semibold text-gray-900 dark:text-white">
-                  {user.first_name
-                    ? `${user.first_name} ${user.last_name}`
-                    : user.username}
-                </div>
+    <div>
+      <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
+        <Table.Head className="bg-gray-100 dark:bg-gray-700">
+          <Table.HeadCell>#</Table.HeadCell>
+          <Table.HeadCell>Name</Table.HeadCell>
+          <Table.HeadCell>Phone</Table.HeadCell>
+          <Table.HeadCell>User Type</Table.HeadCell>
+          <Table.HeadCell>Status</Table.HeadCell>
+          <Table.HeadCell>Actions</Table.HeadCell>
+        </Table.Head>
+        <Table.Body className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
+          {users.map((user, index) => (
+            <Table.Row
+              key={index}
+              className="hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              <Table.Cell className="whitespace-nowrap text-base font-medium text-gray-900 dark:text-white">
+                {index + 1}.
+              </Table.Cell>
+              <Table.Cell className="mr-12 flex items-center space-x-6 whitespace-nowrap p-4 lg:mr-0">
+                <img
+                  className="h-10 w-10 rounded-full"
+                  src={
+                    user.photo
+                      ? user.photo.replace(":9443", "/backend")
+                      : `http://128.199.191.206/backend/uploads/uploads-6df7988e-7008-11ed-9234-0123456789ab-1669742153412.jpeg`
+                  }
+                  alt={`${user.first_name} ${user.last_name}`}
+                />
                 <div className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                  {user.email}
+                  <div className="text-base font-semibold text-gray-900 dark:text-white">
+                    {user.first_name
+                      ? `${user.first_name} ${user.last_name}`
+                      : user.username}
+                  </div>
+                  <div className="text-sm font-normal text-gray-500 dark:text-gray-400">
+                    {user.email}
+                  </div>
                 </div>
-              </div>
-            </Table.Cell>
-            <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-              {user.phone ? `+${user.phone}` : `N/A`}
-            </Table.Cell>
-            <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-              {user.user_type?.toUpperCase()}
-            </Table.Cell>
-            <Table.Cell className="whitespace-nowrap p-4 text-base font-normal text-gray-900 dark:text-white">
-              {user.is_active ? (
-                <div className="flex items-center">
-                  <div className="mr-2 h-2.5 w-2.5 rounded-full bg-green-400"></div>
-                  Active
-                </div>
-              ) : (
-                <div className="flex items-center">
-                  <div className="mr-2 h-2.5 w-2.5 rounded-full bg-red-400"></div>
-                  Not Active
-                </div>
-              )}
-            </Table.Cell>
-            <Table.Cell>
-              <div
-                className="flex items-center gap-x-3 whitespace-nowrap"
-                id={`selected-user-${user.id}-${index}`}
-              >
-                {/* <EditUserModal user={user} /> */}
+              </Table.Cell>
+              <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
+                {user.phone ? `+${user.phone}` : `N/A`}
+              </Table.Cell>
+              <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
+                {user.user_type?.toUpperCase()}
+              </Table.Cell>
+              <Table.Cell className="whitespace-nowrap p-4 text-base font-normal text-gray-900 dark:text-white">
                 {user.is_active ? (
-                  <Button color="primary" style={{ background: "red" }}>
-                    <div
-                      className="flex items-center gap-x-2"
-                      onClick={() => burnAccount(user.id!)}
-                    >
-                      <HiOutlinePencilAlt className="text-lg" />
-                      Burn
-                    </div>
-                  </Button>
+                  <div className="flex items-center">
+                    <div className="mr-2 h-2.5 w-2.5 rounded-full bg-green-400"></div>
+                    Active
+                  </div>
                 ) : (
-                  <Button color="warning">
-                    <div
-                      className="flex items-center gap-x-2"
-                      onClick={() => burnAccount(user.id!)}
-                    >
-                      <HiOutlinePencilAlt className="text-lg" />
-                      Un-Burn
-                    </div>
-                  </Button>
+                  <div className="flex items-center">
+                    <div className="mr-2 h-2.5 w-2.5 rounded-full bg-red-400"></div>
+                    Not Active
+                  </div>
                 )}
-              </div>
-            </Table.Cell>
-          </Table.Row>
-        ))}
-      </Table.Body>
-      {/* <div
-        className="w-full p-6 bg-white w-100"
-        style={{ width: "100% !important" }}
-      >
-        <a
-          href="#"
-          className="inline-flex items-center px-4 py-2 mr-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-        >
-          <svg
-            aria-hidden="true"
-            className="w-5 h-5 mr-2"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
-          Previous
-        </a>
-        <a
-          href="#"
-          className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-        >
-          Next
-          <svg
-            aria-hidden="true"
-            className="w-5 h-5 ml-2"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
-        </a>
-      </div> */}
-    </Table>
+              </Table.Cell>
+              <Table.Cell>
+                <div
+                  className="flex items-center gap-x-3 whitespace-nowrap"
+                  id={`selected-user-${user.id}-${index}`}
+                >
+                  {/* <EditUserModal user={user} /> */}
+                  {user.is_active ? (
+                    <Button color="primary" style={{ background: "red" }}>
+                      <div
+                        className="flex items-center gap-x-2"
+                        onClick={() => burnAccount(user.id!)}
+                      >
+                        <HiOutlinePencilAlt className="text-lg" />
+                        Burn
+                      </div>
+                    </Button>
+                  ) : (
+                    <Button color="warning">
+                      <div
+                        className="flex items-center gap-x-2"
+                        onClick={() => burnAccount(user.id!)}
+                      >
+                        <HiOutlinePencilAlt className="text-lg" />
+                        Un-Burn
+                      </div>
+                    </Button>
+                  )}
+                </div>
+              </Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table>
+      <Pagination
+        pages={[1, 2, 4]}
+        page={page}
+        currentPage={1}
+        pagedChanged={setCurrentPage}
+      />
+    </div>
   );
 };
 type EditProps = {

@@ -40,13 +40,21 @@ export const loginUser = async (email: string, password: string) => {
   }
 };
 
-export const getUsers = async (): Promise<IUser[] | []> => {
+export const getUsers = async (
+  _page = 1,
+  _limit = 10
+): Promise<{
+  users: IUser[] | [];
+  page: any;
+}> => {
   try {
-    const { data } = await request.get(endpoint.users.users);
-    return data.users as IUser[];
+    const { data } = await request.get(
+      `${endpoint.users.users}?limit=${_limit}&page=${_page}`
+    );
+    return { users: data.users as IUser[], page: data.page };
   } catch (error) {
     console.log("Error", error);
-    return [];
+    return { users: [], page: null };
   }
 };
 
@@ -70,21 +78,29 @@ export const logoutUser = async () => {
   }
 };
 
-export const getStripeProducts = async (): Promise<{
+export const getStripeProducts = async (
+  page = 1,
+  limit = 10
+): Promise<{
   products: Product[] | [];
   error?: string;
+  page: any;
 }> => {
   try {
-    const { data } = await request.get(endpoint.products.stripe);
+    const { data } = await request.get(
+      `${endpoint.products.stripe}?page=${page}&limit=${limit}`
+    );
     return {
       error: "",
       products: data.products,
+      page: data.page,
     };
   } catch (error) {
     console.log("Error", error);
     return {
       error: `Error: ${error}`,
       products: [],
+      page: null,
     };
   }
 };
@@ -127,7 +143,7 @@ export const updateStripeProduct = async (
     );
 
     // window.location.reload();
-    console.log(product)
+    console.log(product);
     return { product: data.product, error: "" };
   } catch (error) {
     console.log("Error", error);

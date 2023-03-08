@@ -19,15 +19,14 @@ import {
   HiOutlinePlusCircle,
 } from "react-icons/hi";
 import NavbarSidebarLayout from "../../layouts/navbar-sidebar";
-import { IUser, Product } from "../../types/user";
+import { Product } from "../../types/user";
 import {
-  getUsers,
-  burnUserAccount,
   getStripeProducts,
   createStripeProduct,
   updateStripeProduct,
 } from "../../apis/request";
 
+import { Pagination } from "./../../components/Pagination/Pagination";
 const ProductListPage: FC = function () {
   return (
     <NavbarSidebarLayout isFooter={false}>
@@ -74,92 +73,112 @@ const ProductListPage: FC = function () {
 };
 
 const AllProductsTable: FC = function () {
-  const [users, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [limit, _setLimit] = useState(3);
+  const [page, setPage] = useState({});
+  const [newPage, setNewPage] = useState(1);
+  const [pages, setPages] = useState([1, 2, 3]);
 
   React.useEffect(() => {
     getData();
   }, []);
 
-  const getData = async () => {
-    const productData = await getStripeProducts();
+  const getData = async (_page = newPage) => {
+    const productData = await getStripeProducts(_page, limit);
     setProducts(productData.products);
-
-    console.log(users);
+    setNewPage(productData.page.current);
+    setPage(productData.page);
   };
-
 
   const updateProduct = async (currentProduct: any) => {
     await updateStripeProduct(currentProduct);
-    await getData();
+    await getData(newPage);
+  };
+
+  const setCurrentPage = async (new_page: number) => {
+    setNewPage(new_page);
+    await getData(new_page);
   };
 
   return (
-    <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
-      <Table.Head className="bg-gray-100 dark:bg-gray-700">
-        <Table.HeadCell>#</Table.HeadCell>
-        <Table.HeadCell>Name</Table.HeadCell>
-        <Table.HeadCell>Description</Table.HeadCell>
-        <Table.HeadCell>Price (USD)</Table.HeadCell>
-        <Table.HeadCell>Status</Table.HeadCell>
-        <Table.HeadCell>Actions</Table.HeadCell>
-      </Table.Head>
-      <Table.Body className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-        {users.map((product, index) => (
-          <Table.Row
-            key={index}
-            className="hover:bg-gray-100 dark:hover:bg-gray-700"
-          >
-            <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-              {index + 1}.
-            </Table.Cell>
-            <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-              {product.name}
-            </Table.Cell>
-            <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-              {product.description}
-            </Table.Cell>
-            <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-              ${Number(product.price_in_cents) / 100}
-            </Table.Cell>
-            <Table.Cell className="whitespace-nowrap p-4 text-base font-normal text-gray-900 dark:text-white">
-              <div className="flex items-center">
-                <div className="mr-2 h-2.5 w-2.5 rounded-full bg-green-400"></div>
-                Active
-              </div>
-            </Table.Cell>
-            <Table.Cell>
-              <div
-                className="flex items-center gap-x-3 whitespace-nowrap"
-                id={`selected-user-${product.id}-${index}`}
-              >
-                <EditProductModal product={product} />
-                {product.is_active ? (
-                  <Button color="warning">
-                    <div
-                      className="flex items-center gap-x-2"
-                      onClick={() => updateProduct({...product, is_active:  false})}
-                    >
-                      <HiOutlinePencilAlt className="text-lg" />
-                      De-activate
-                    </div>
-                  </Button>
-                ) : (
-                  <Button color="primary" style={{ background: "red" }}>
-                    <div
-                      className="flex items-center gap-x-2"
-                      onClick={() => updateProduct({...product, is_active:  true})}
-                    >
-                      <HiOutlinePencilAlt className="text-lg" />
-                      Activate
-                    </div>
-                  </Button>
-                )}
-              </div>
-            </Table.Cell>
-          </Table.Row>
-        ))}
-      </Table.Body>
-    </Table>
+    <div>
+      <Table className="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
+        <Table.Head className="bg-gray-100 dark:bg-gray-700">
+          <Table.HeadCell>#</Table.HeadCell>
+          <Table.HeadCell>Name</Table.HeadCell>
+          <Table.HeadCell>Description</Table.HeadCell>
+          <Table.HeadCell>Price (USD)</Table.HeadCell>
+          <Table.HeadCell>Status</Table.HeadCell>
+          <Table.HeadCell>Actions</Table.HeadCell>
+        </Table.Head>
+        <Table.Body className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
+          {products.map((product, index) => (
+            <Table.Row
+              key={index}
+              className="hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
+                {index + 1}.
+              </Table.Cell>
+              <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
+                {product.name}
+              </Table.Cell>
+              <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
+                {product.description}
+              </Table.Cell>
+              <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
+                ${Number(product.price_in_cents) / 100}
+              </Table.Cell>
+              <Table.Cell className="whitespace-nowrap p-4 text-base font-normal text-gray-900 dark:text-white">
+                <div className="flex items-center">
+                  <div className="mr-2 h-2.5 w-2.5 rounded-full bg-green-400"></div>
+                  Active
+                </div>
+              </Table.Cell>
+              <Table.Cell>
+                <div
+                  className="flex items-center gap-x-3 whitespace-nowrap"
+                  id={`selected-user-${product.id}-${index}`}
+                >
+                  <EditProductModal product={product} />
+                  {product.is_active ? (
+                    <Button color="warning">
+                      <div
+                        className="flex items-center gap-x-2"
+                        onClick={() =>
+                          updateProduct({ ...product, is_active: false })
+                        }
+                      >
+                        <HiOutlinePencilAlt className="text-lg" />
+                        De-activate
+                      </div>
+                    </Button>
+                  ) : (
+                    <Button color="primary" style={{ background: "red" }}>
+                      <div
+                        className="flex items-center gap-x-2"
+                        onClick={() =>
+                          updateProduct({ ...product, is_active: true })
+                        }
+                      >
+                        <HiOutlinePencilAlt className="text-lg" />
+                        Activate
+                      </div>
+                    </Button>
+                  )}
+                </div>
+              </Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table>
+      <Pagination
+        pages={[1, 2, 4]}
+        page={page}
+        currentPage={1}
+        pagedChanged={setCurrentPage}
+      />
+    </div>
   );
 };
 type EditProps = {
