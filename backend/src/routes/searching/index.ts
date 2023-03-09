@@ -27,8 +27,6 @@ router.get("/api/v1/searching", async (req: Request, res: Response) => {
   const userProfile = await User.findOne({
     $or: [
       { username: new RegExp(`${searchQuery}`, "i") },
-      { first_name: new RegExp(`${searchQuery}`, "i") },
-      { username: new RegExp(`${searchQuery}`, "i") },
     ],
   });
 
