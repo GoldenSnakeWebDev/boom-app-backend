@@ -143,11 +143,12 @@ router.post(
   validateRequest,
   requireAuth,
   async (req: Request, res: Response) => {
-    const { content, box, author, receiver, timestamp, command, boombox_type } =
+    let { content, box, author, receiver, timestamp, command, boombox_type } =
       req.body;
 
     let boomBox = await BoomBox.findOne({ box: box });
     const receiverUser = await User.findById(receiver).populate("sync_bank");
+    // build the message
     const builMessage = {
       content: content ? content : "",
       author: author,
@@ -156,7 +157,7 @@ router.post(
       timestamp: new Date(timestamp),
     };
 
-    if (command === "join_room") {
+    if (!boomBox && command === "join_room") {
       const existBoom = await BoomBox.findOne({
         $or: [
           {
@@ -173,8 +174,7 @@ router.post(
           },
         ],
       });
-
-      // console.log(existBoom);
+      console.log("Exists Boom", existBoom);
       if (existBoom) {
         // is boomBox Found continue chatting
         return res.status(200).json({
