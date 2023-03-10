@@ -127,7 +127,7 @@ const AllProductsTable: FC = function () {
                 {product.description}
               </Table.Cell>
               <Table.Cell className="whitespace-nowrap p-4 text-base font-medium text-gray-900 dark:text-white">
-                ${Number(product.price_in_cents) / 100}
+                ${Number(product.price_in_cents)}
               </Table.Cell>
               <Table.Cell className="whitespace-nowrap p-4 text-base font-normal text-gray-900 dark:text-white">
                 <div className="flex items-center">
