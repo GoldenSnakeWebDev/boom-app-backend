@@ -218,7 +218,6 @@ router.post(
           boombox_type === "private" ? BoomBoxType.PRIVATE : BoomBoxType.PUBLIC,
         messages: builMessage,
       });
-
       await boomBox.save();
     }
 
