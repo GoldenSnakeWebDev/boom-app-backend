@@ -71,7 +71,7 @@ router.post(
           name: storeItem?.name,
           sku: `${storeItem?.name}-${randomCode()}`,
           quantity: item.quantity,
-          price: (storeItem?.price_in_cents! / 100).toFixed(2).toString(),
+          price: storeItem?.price_in_cents!.toFixed(2).toString(),
           currency: "USD",
         };
       });
@@ -106,7 +106,7 @@ router.post(
           transaction_number: transactionRef,
           amount: total,
           user: req.currentUser?.id!,
-          transaction_type:ActionType.DEPOSIT,
+          transaction_type: ActionType.DEPOSIT,
           status: ITransactionStatus.PENDING,
           stripeId: response.payment,
           stripeActions: `${actionType},${networkType}`,
@@ -120,7 +120,7 @@ router.post(
         return {
           recipient_type: "EMAIL",
           amount: {
-            value: (storeItem?.price_in_cents! / 100).toFixed(2).toString(),
+            value: storeItem?.price_in_cents!.toFixed(2).toString(),
             currency: "USD",
           },
           receiver: req.currentUser?.email!,
@@ -134,7 +134,7 @@ router.post(
       }, 0);
 
       //  create the payment
-      const payout:  any = await createPayout({
+      const payout: any = await createPayout({
         sender_batch_header: {
           sender_batch_id: "",
           email_subject: "You have a payment",
@@ -151,7 +151,7 @@ router.post(
           transaction_number: transactionRef,
           amount: total,
           user: req.currentUser?.id!,
-          transaction_type:ActionType.WITHDRAW,
+          transaction_type: ActionType.WITHDRAW,
           status: ITransactionStatus.PENDING,
           stripeId: payout.payment,
           stripeActions: `${actionType},${networkType}`,
@@ -159,14 +159,13 @@ router.post(
 
         return res.status(200).json({ url: payout?.url });
       }
-
     }
     return res.status(200).json({ error: "Error occurred" });
   }
 );
 
 /**
- * 
+ *
  */
 router.post(
   "/api/v1/stripe-checkout-callback-url",
@@ -202,7 +201,7 @@ router.post(
         status: ITransactionStatus.SUCCESS,
       });
 
-      // update the user's wallet 
+      // update the user's wallet
       await updateWalletBalance({
         userId: req.currentUser?.id!,
         transaction_type:

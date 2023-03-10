@@ -129,7 +129,7 @@ router.post(
           product_data: {
             name: storeItem?.name,
           },
-          unit_amount: storeItem?.price_in_cents,
+          unit_amount: storeItem?.price_in_cents * 100,
         },
         quantity: item.quantity,
       };
@@ -146,7 +146,7 @@ router.post(
 
       await Transaction.create({
         transaction_number: transactionRef,
-        amount: Number(session.amount_total) / 100,
+        amount: Number(session.amount_total),
         user: req.currentUser?.id!,
         transaction_type:
           actionType === ActionType.DEPOSIT
