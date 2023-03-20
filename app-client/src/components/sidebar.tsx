@@ -59,17 +59,7 @@ const MainSidebar: FC = function () {
               >
                 Dashboard
               </Sidebar.Item> */}
-              <Sidebar.Item
-                href="/products"
-                icon={HiShoppingBag}
-                className={
-                  "/products" === currentPage
-                    ? "bg-gray-100 dark:bg-gray-700"
-                    : ""
-                }
-              >
-                Products
-              </Sidebar.Item>
+
               <Sidebar.Item
                 href="/users/list"
                 icon={HiUsers}
@@ -81,9 +71,17 @@ const MainSidebar: FC = function () {
               >
                 Users Management
               </Sidebar.Item>
-              {/* <Sidebar.Item href="/auth/sign-in" icon={HiUser}>
-                My Profile
-              </Sidebar.Item> */}
+              <Sidebar.Item
+                href="/products"
+                icon={HiShoppingBag}
+                className={
+                  "/products" === currentPage
+                    ? "bg-gray-100 dark:bg-gray-700"
+                    : ""
+                }
+              >
+                Price Tiers
+              </Sidebar.Item>
               <Sidebar.Item
                 style={{ cursor: "pointer" }}
                 onClick={() => logOutUser()}

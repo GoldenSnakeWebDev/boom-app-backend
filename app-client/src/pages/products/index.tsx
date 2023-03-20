@@ -35,7 +35,7 @@ const ProductListPage: FC = function () {
           <div className="mb-4">
             <Breadcrumb className="mb-4"></Breadcrumb>
             <h1 className="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
-              All products
+              Price Tiers
             </h1>
           </div>
           <div className="sm:flex">
@@ -74,7 +74,7 @@ const ProductListPage: FC = function () {
 
 const AllProductsTable: FC = function () {
   const [products, setProducts] = useState<Product[]>([]);
-  const [limit, _setLimit] = useState(3);
+  const [limit, _setLimit] = useState(8);
   const [page, setPage] = useState({});
   const [newPage, setNewPage] = useState(1);
   const [pages, setPages] = useState([1, 2, 3]);
@@ -191,6 +191,7 @@ const EditProductModal: FC = function ({ product }: any) {
 
   const updateProduct = async () => {
     await updateStripeProduct(currentProduct);
+    window.location.reload();
   };
 
   return (
@@ -225,7 +226,7 @@ const EditProductModal: FC = function ({ product }: any) {
               </div>
             </div>
             <div>
-              <Label htmlFor="lastName">Price In Cents (USD)</Label>
+              <Label htmlFor="lastName">Price:(USD)</Label>
               <div className="mt-1">
                 <TextInput
                   id="lastName"
@@ -326,7 +327,7 @@ const AddProductModal: FC = function () {
               </div>
             </div>
             <div>
-              <Label htmlFor="amount">Amount In Cents (USD)</Label>
+              <Label htmlFor="amount">Price:(USD)</Label>
               <div className="mt-1">
                 <TextInput
                   id="amount"

@@ -47,8 +47,8 @@ router.get("/api/v1/booms", async (req: Request, res: Response) => {
    */
 
   const response = new ApiResponse(
-    /*Boom.find({is_deleted:  false})*/
-    Boom.find()
+    // Boom.find()
+    Boom.find({ is_deleted: false })
       .populate({ path: "comments", options: { _recursed: true } })
       .populate("network")
       .populate("reactions.likes", "username photo first_name last_name")

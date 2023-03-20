@@ -55,6 +55,7 @@ router.post(
         { $push: { blocked_users: userId } },
         { new: true }
       );
+      // blocked user
       action = "blocked";
     } else {
       //remove user from bocked users

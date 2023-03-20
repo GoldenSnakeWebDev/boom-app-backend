@@ -21,6 +21,10 @@ const ptroductSchema = new Schema<IProduct>(
     is_active: { type: Schema.Types.Boolean, default: true },
   },
   {
+    timestamps: {
+      createdAt: "created_at",
+      updatedAt: "updated_at",
+    },
     toJSON: {
       transform(_doc, ret) {
         ret.id = ret._id;

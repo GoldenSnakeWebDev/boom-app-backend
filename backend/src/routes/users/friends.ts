@@ -52,7 +52,7 @@ router.patch(
 
       // send notification for tipper
       // TODO: Notification
-      const msgFriend  =  `You are now a fun with ${nextUser?.username}`;
+      const msgFriend = `You are now a fan with ${nextUser?.username}`;
       await Notification.create({
         notification_type: NotificationType.USER,
         user: req.currentUser?.id,
@@ -77,7 +77,7 @@ router.patch(
         { new: true }
       );
       // TODO: Notification
-      const msgRemovedFrd = `You have been removed ${nextUser?.username} from a list of your funs`
+      const msgRemovedFrd = `You have been removed ${nextUser?.username} from a list of your fans`;
       await Notification.create({
         notification_type: NotificationType.USER,
         user: nextUser?.id,
@@ -118,7 +118,7 @@ router.patch(
       );
 
       // TODO: Notification
-      const msgFrd =  `You have added ${nextUser?.username} as your friend`
+      const msgFrd = `You have added ${nextUser?.username} as your fren`;
       await Notification.create({
         notification_type: NotificationType.USER,
         user: nextUser?.id,
@@ -132,7 +132,7 @@ router.patch(
             es: msgFrd,
           },
           included_segments: [req.currentUser?.device_id!],
-          name: "Friends",
+          name: "frens",
         });
       }
 
@@ -140,13 +140,13 @@ router.patch(
       await Notification.create({
         notification_type: NotificationType.USER,
         user: req.params.id,
-        message: `${req.currentUser?.username} is now your friend`,
+        message: `${req.currentUser?.username} is now your fren`,
       });
       if (nextUser?.device_id!) {
         onSignalSendNotification({
           contents: {
-            en: `${req.currentUser?.username} is now your friend`,
-            es: `${req.currentUser?.username} is now your friend`,
+            en: `${req.currentUser?.username} is now your fren`,
+            es: `${req.currentUser?.username} is now your fren`,
           },
           included_segments: [nextUser?.device_id!],
           name: "Friends",
@@ -168,14 +168,14 @@ router.patch(
       await Notification.create({
         notification_type: NotificationType.USER,
         user: nextUser?.id,
-        message: `${nextUser?.username} left your friendship`,
+        message: `${nextUser?.username} left your fren`,
       });
 
       // TODO: Notification
       await Notification.create({
         notification_type: NotificationType.USER,
         user: req.currentUser?.id,
-        message: `${req.currentUser?.username} left your friendship`,
+        message: `${req.currentUser?.username} left your fren`,
       });
     }
 

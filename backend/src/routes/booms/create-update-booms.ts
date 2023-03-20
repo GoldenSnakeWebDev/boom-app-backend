@@ -476,13 +476,13 @@ router.patch(
           notification_type: NotificationType.BOOM,
           user: boomMinted.user,
           boom: req.params.id,
-          message: `${req.currentUser?.username} has re-boomed your boom`,
+          message: `${req.currentUser?.username} has re-boomed`,
           timestamp: new Date(timestamp),
         });
         await onSignalSendNotification({
           contents: {
-            en: `${req.currentUser?.username} has re-boomed your boom`,
-            es: `${req.currentUser?.username} has re-boomed your boom`,
+            en: `${req.currentUser?.username} has re-boomed`,
+            es: `${req.currentUser?.username} has re-boomed`,
           },
           included_segments: [boomOwner.device_id!],
           name: "Reaction",
@@ -500,13 +500,13 @@ router.patch(
           notification_type: NotificationType.BOOM,
           user: boomMinted.user,
           boom: req.params.id,
-          message: `${req.currentUser?.username} is re-boomed your boom`,
+          message: `${req.currentUser?.username} is re-boomed`,
           timestamp: new Date(timestamp),
         });
         await onSignalSendNotification({
           contents: {
-            en: `${req.currentUser?.username} is re-boomed your boom`,
-            es: `${req.currentUser?.username} is re-boomed your boom`,
+            en: `${req.currentUser?.username} is re-boomed`,
+            es: `${req.currentUser?.username} is re-boomed`,
           },
           included_segments: [boomOwner.device_id!],
           name: "Reaction",
@@ -550,13 +550,13 @@ router.patch(
           notification_type: NotificationType.BOOM,
           user: boomMinted.user,
           boom: req.params.id,
-          message: `${req.currentUser?.username} has withheld his/her reporting on your boom`,
+          message: `${req.currentUser?.username} has withheld the reporting on your boom`,
           timestamp: new Date(timestamp),
         });
         await onSignalSendNotification({
           contents: {
-            en: `${req.currentUser?.username} has withheld his/her reporting on your boom`,
-            es: `${req.currentUser?.username} has withheld his/her reporting on your boom`,
+            en: `${req.currentUser?.username} has withheld the reporting on your boom`,
+            es: `${req.currentUser?.username} has withheld the reporting on your boom`,
           },
           included_segments: [boomOwner.device_id!],
           name: "Reaction",
