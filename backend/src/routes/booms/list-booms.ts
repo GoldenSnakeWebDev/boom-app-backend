@@ -1,6 +1,6 @@
 import { Router, Response, Request } from "express";
 import { ApiResponse } from "../../utils/api-response";
-import { Boom, BoomType } from "../../models";
+import { Boom, BoomType, User } from "../../models";
 import { requireAuth } from "../../middlewares";
 
 const router = Router();
@@ -41,41 +41,111 @@ router.get("/api/v1/booms-types", async (_req: Request, res: Response) => {
  *       200:
  *         description: . Returns a  list of booms.
  */
-router.get("/api/v1/booms", async (req: Request, res: Response) => {
-  /**
-   * Only fetch booms for unblocked users
-   */
+router.get(
+  "/api/v1/booms",
 
-  const response = new ApiResponse(
-    // Boom.find()
-    Boom.find({ is_deleted: false })
-      .populate({ path: "comments", options: { _recursed: true } })
-      .populate("network")
-      .populate("reactions.likes", "username photo first_name last_name")
-      .populate("reactions.loves", "username photo first_name last_name")
-      .populate("reactions.smiles", "username photo first_name last_name")
-      .populate("reactions.rebooms", "username photo first_name last_name")
-      .populate("reactions.reports", "username photo first_name last_name")
-      .populate("user", "username photo first_name last_name")
-      .populate("comments")
-      .populate("comments.user", "username photo first_name last_name"),
-    req.query
-  )
-    .filter()
-    .sort()
-    .limitFields();
+  async (req: Request, res: Response) => {
+    /**
+     * Only fetch booms for unblocked users
+     */
 
-  // const count = await response.query;
+    const blockedUsers = await User.findById(req.currentUser?.id).populate(
+      "blocked_users",
+      "_id"
+    );
+    console.log(blockedUsers);
 
-  const booms = await response.paginate().query;
+    const response = new ApiResponse(
+      // Boom.find()
+      Boom.find({ is_deleted: false })
+        .populate({ path: "comments", options: { _recursed: true } })
+        .populate("network")
+        .populate("reactions.likes", "username photo first_name last_name")
+        .populate("reactions.loves", "username photo first_name last_name")
+        .populate("reactions.smiles", "username photo first_name last_name")
+        .populate("reactions.rebooms", "username photo first_name last_name")
+        .populate("reactions.reports", "username photo first_name last_name")
+        .populate("user", "username photo first_name last_name")
+        .populate("comments")
+        .populate("comments.user", "username photo first_name last_name"),
+      req.query
+    )
+      .filter()
+      .sort()
+      .limitFields();
 
-  res.status(200).json({
-    status: "success",
-    page: response?.page_info,
-    // count: count.length,
-    booms,
-  });
-});
+    // const count = await response.query;
+
+    const booms = await response.paginate().query;
+
+    res.status(200).json({
+      status: "success",
+      page: response?.page_info,
+      // count: count.length,
+      booms,
+    });
+  }
+);
+
+/**
+ * @openapi
+ * /api/v1/booms/only-auth:
+ *   get:
+ *     tags:
+ *        - Booms
+ *     description: List of all platform booms.
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     responses:
+ *       200:
+ *         description: . Returns a  list of booms.
+ */
+router.get(
+  "/api/v1/booms/only-auth",
+  requireAuth,
+  async (req: Request, res: Response) => {
+    const blockedUsers = await User.findById(req.currentUser?.id).populate(
+      "blocked_users",
+      "_id"
+    );
+    const response = new ApiResponse(
+      // Boom.find()
+      Boom.find({
+        is_deleted: false,
+        user: {
+          $nin: blockedUsers?.blocked_users!.map((user: any) => user._id),
+        },
+      })
+        .populate({ path: "comments", options: { _recursed: true } })
+        .populate("network")
+        .populate("reactions.likes", "username photo first_name last_name")
+        .populate("reactions.loves", "username photo first_name last_name")
+        .populate("reactions.smiles", "username photo first_name last_name")
+        .populate("reactions.rebooms", "username photo first_name last_name")
+        .populate("reactions.reports", "username photo first_name last_name")
+        .populate("user", "username photo first_name last_name")
+        .populate("comments")
+        .populate("comments.user", "username photo first_name last_name"),
+      req.query
+    )
+      .filter()
+      .sort()
+      .limitFields();
+
+    // const count = await response.query;
+
+    const booms = await response.paginate().query;
+
+    res.status(200).json({
+      status: "success",
+      page: response?.page_info,
+      // count: count.length,
+      booms,
+    });
+  }
+);
 
 /**
  * @openapi
