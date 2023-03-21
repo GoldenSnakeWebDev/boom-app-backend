@@ -22,6 +22,8 @@ const router = Router();
  *         description: . Returns a  list of network types.
  */
 router.get("/api/v1/network-types", async (_req: Request, res: Response) => {
+  // const full_url = req.protocol + "://" + req.get("host");
+  // console.log(full_url, LOGOS/TezosLogo_Icon_Blue.png);
   res
     .status(200)
     .json({ status: "success", network_types: Object.values(NetworkType) });
@@ -47,11 +49,30 @@ router.get("/api/v1/networks", async (req: Request, res: Response) => {
     .limitFields();
 
   const networks = await response.paginate().query;
+  const full_url = req.protocol + "://" + req.get("host");
+  const new_networks = networks.map((item: any) => {
+    if (item.symbol === "TZ") {
+      return {
+        name: item.name,
+        image_url: `${full_url}/backend/LOGOS/TezosLogo_Icon_Blue.png`,
+        symbol: item.symbol,
+        is_active: item.is_active,
+        id: item._id,
+      };
+    }
+    return {
+      name: item.name,
+      image_url: item.image_url,
+      symbol: item.symbol,
+      is_active: item.is_active,
+      id: item._id,
+    };
+  });
 
   res.status(200).json({
     status: "success",
     page: response?.page_info,
-    networks,
+    networks: new_networks,
   });
 });
 
