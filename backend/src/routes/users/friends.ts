@@ -52,7 +52,7 @@ router.patch(
 
       // send notification for tipper
       // TODO: Notification
-      const msgFriend = `You are now a fan with ${nextUser?.username}`;
+      const msgFriend = `You are now a fan of ${nextUser?.username}`;
       await Notification.create({
         notification_type: NotificationType.USER,
         user: req.currentUser?.id,
@@ -77,7 +77,7 @@ router.patch(
         { new: true }
       );
       // TODO: Notification
-      const msgRemovedFrd = `You have been removed ${nextUser?.username} from a list of your fans`;
+      const msgRemovedFrd = `ou have removed ${nextUser?.username} from your list of Fans`;
       await Notification.create({
         notification_type: NotificationType.USER,
         user: nextUser?.id,
