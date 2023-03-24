@@ -4,7 +4,7 @@ export enum NetworkType {
   POLYGON = "MATIC",
   BINANCE = "BNB",
   TEZOS = "TZ",
-  OK_COIN = "OKX",
+  // OK_COIN = "OKX",
 }
 
 export interface INetwork {
