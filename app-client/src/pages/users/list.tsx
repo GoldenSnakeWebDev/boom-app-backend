@@ -76,6 +76,15 @@ const AllUsersTable: FC = function () {
   const [newPage, setNewPage] = useState(1);
   const [pages, setPages] = useState([1, 2, 3]);
 
+  const getIndex = (index: number, page: number) => {
+    //{{ getIndex(index, page.current) }}
+    let page_label = index + 1;
+    if (page > 1) {
+      return page_label + limit * (page - 1);
+    }
+    return page_label;
+  };
+
   React.useEffect(() => {
     getData();
   }, []);
@@ -120,7 +129,7 @@ const AllUsersTable: FC = function () {
               className="hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               <Table.Cell className="whitespace-nowrap text-base font-medium text-gray-900 dark:text-white">
-                {index + 1}.
+                {getIndex(index, newPage)}.
               </Table.Cell>
               <Table.Cell className="mr-12 flex items-center space-x-6 whitespace-nowrap p-4 lg:mr-0">
                 <img

@@ -25,6 +25,7 @@ router.patch(
   "/api/v1/friends/:id",
   requireAuth,
   async (req: Request, res: Response) => {
+    // User A
     const user = await User.findById(req.currentUser?.id)
       .populate("sync_bank")
       .populate("friends")
@@ -37,6 +38,7 @@ router.patch(
       });
     }
 
+    // User B
     let nextUser = await User.findById(req.params.id);
 
     const areYouNextUserFun = nextUser?.funs
@@ -77,7 +79,7 @@ router.patch(
         { new: true }
       );
       // TODO: Notification
-      const msgRemovedFrd = `ou have removed ${nextUser?.username} from your list of Fans`;
+      const msgRemovedFrd = `You have removed ${nextUser?.username} from your list of Fans`;
       await Notification.create({
         notification_type: NotificationType.USER,
         user: nextUser?.id,

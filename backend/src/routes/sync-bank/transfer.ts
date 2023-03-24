@@ -40,14 +40,14 @@ const router = Router();
  *         description: . Return current logged in user sync bank.
  */
 router.post(
-  "/api/v1/sync-bank/tipping",
+  "/api/v1/sync-bank/transfer-sync",
   [
     body("amount")
       .notEmpty()
       .withMessage("please provide the amount you are willing to transfer"),
     body("user")
       .notEmpty()
-      .withMessage("please provide the user id you are trying to tip"),
+      .withMessage("please provide the user id you are trying transfer to"),
     body("networkType")
       .notEmpty()
       .withMessage("please provide  which network are you tipping from"),
@@ -90,7 +90,7 @@ router.post(
     await Notification.create({
       notification_type: NotificationType.USER,
       user: req.currentUser?.id,
-      message: `Successfully tipped ${tipedUser?.username}`,
+      message: `Successfully transferred ${amount} to ${tipedUser?.username}`,
       timestamp: new Date(timestamp),
     });
 
@@ -107,7 +107,7 @@ router.post(
     await Notification.create({
       notification_type: NotificationType.USER,
       user: req.currentUser?.id,
-      message: `You have been tipped by ${req.currentUser?.username}`,
+      message: `You have received ${amount} from ${req.currentUser?.username}`,
       timestamp: new Date(timestamp),
     });
 
@@ -119,4 +119,4 @@ router.post(
   }
 );
 
-export { router as TippingRoute };
+export { router as TransferSyncRoute };
