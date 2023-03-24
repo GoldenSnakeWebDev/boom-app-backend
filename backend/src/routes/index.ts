@@ -29,6 +29,7 @@ import { CallbackURLRoute } from "./callback-urls/google-pay";
 import { BlockUserRoutes } from "./users/block";
 import { StripePaymentRoutes } from "./stripe";
 import { PayPalRoutes } from "./paypal";
+import { TransferSyncRoute } from "./sync-bank/transfer";
 
 app.use([
   UserResetPasswordResetRoutes,
@@ -59,3 +60,4 @@ app.use([CallbackURLRoute]);
 app.use([BlockUserRoutes]);
 app.use([StripePaymentRoutes]);
 app.use([PayPalRoutes]);
+app.use([TransferSyncRoute]);
