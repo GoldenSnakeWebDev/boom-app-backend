@@ -17,10 +17,10 @@ const router = Router();
 
 /**
  * @openapi
- * /api/v1/sync-bank/tipping:
+ * /api/v1/sync-bank/transfer-sync:
  *   post:
  *     tags:
- *        - SyncBank-Tipping
+ *        - SyncBank-Transfer
  *     description: Tiping User with some sync coins
  *     produces:
  *        - application/json
