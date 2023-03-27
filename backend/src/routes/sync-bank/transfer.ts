@@ -8,10 +8,15 @@ import {
   ITransactionStatus,
 } from "../../models/transaction";
 import { User } from "./../../models/user";
+import { Boom } from "./../../models/boom";
 
 import { getNextTransaction } from "../../utils/transaction-common";
 import { BadRequestError } from "../../errors/bad-request-error";
 import { NotificationType, Notification } from "./../../models/notification";
+import { validateRequest } from "../../middlewares";
+import { Network, NetworkType } from "../../models/network";
+import { SyncBank } from "../../models/syncbank";
+import { onSignalSendNotification } from "../../utils/on-signal";
 
 const router = Router();
 
@@ -115,6 +120,105 @@ router.post(
       status: "success",
       transaction,
       message: syncBankResponse.message,
+    });
+  }
+);
+
+/**
+ * @openapi
+ * /api/v1/transfer-my-boom/:id:
+ *   post:
+ *     tags:
+ *        - Booms
+ *     description: Enable transfer of single boom to another user.
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     parameters:
+ *        - name: receiver
+ *          description: Provider the new owner id `receiver`
+ *     responses:
+ *       200:
+ *         description: . Enable transfer of single boom to another user
+ */
+
+router.post(
+  "/api/v1/transfer-my-boom/:id",
+  [
+    body("receiver")
+      .notEmpty()
+      .withMessage("Provider the receiver information"),
+  ],
+  requireAuth,
+  validateRequest,
+  async (req: Request, res: Response) => {
+    const { receiver } = req.body;
+    const existBoom = await Boom.findById(req.params.id);
+
+    if (!existBoom) {
+      throw new BadRequestError("This boom does not exist");
+    }
+
+    const oldOwner = await User.findById(existBoom.user);
+
+    if (!oldOwner) {
+      throw new BadRequestError("The boom owner does not exist");
+    }
+
+    // end of deducting  wallet amount
+
+    const newOwner = await User.findById(receiver);
+    if (!newOwner) {
+      throw new BadRequestError(
+        "The user you trying to transfer to does not exists"
+      );
+    }
+
+    // update the boom to a new user
+    await Boom.findByIdAndUpdate(
+      existBoom.id,
+      { user: receiver },
+      { new: true }
+    );
+
+    // OLD OWNER's Notification
+    await Notification.create({
+      message: `${req.currentUser?.username}, you have successfully transferred your boom to ${newOwner.username}`,
+      user: oldOwner.id,
+      boom: existBoom.id,
+      notification_type: NotificationType.BOOM,
+    });
+
+    await onSignalSendNotification({
+      contents: {
+        en: `${req.currentUser?.username}, you have successfully transferred your boom to ${newOwner.username}`,
+        es: `${req.currentUser?.username}, you have successfully transferred your boom to ${newOwner.username}`,
+      },
+      included_segments: [oldOwner.device_id!],
+      name: "Transfer Success",
+    });
+
+    // New Owner's Notification
+    await Notification.create({
+      message: `You have received a new boom from  ${req.currentUser?.username}`,
+      user: newOwner?.id,
+      boom: existBoom.id,
+      notification_type: NotificationType.BOOM,
+    });
+
+    await onSignalSendNotification({
+      contents: {
+        en: `You have received a new boom from  ${req.currentUser?.username}`,
+        es: `You have received a new boom from  ${req.currentUser?.username}`,
+      },
+      included_segments: [newOwner?.device_id!],
+      name: "Bought Booms ",
+    });
+
+    res.status(200).json({
+      status: "success",
+      message: "Successfully transferred your boom to a new owner",
     });
   }
 );

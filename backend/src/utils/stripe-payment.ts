@@ -6,16 +6,15 @@ export const stripe = new Stripe(config.STRIPE.SK, {
 });
 
 export interface StripeItem {
-    price_data: {
-      currency: "usd";
-      product_data: {
-        name: string;
-      };
-      unit_amount: number;
+  price_data: {
+    currency: "usd";
+    product_data: {
+      name: string;
     };
-    quantity: number;
-  }
-
+    unit_amount: number;
+  };
+  quantity: number;
+}
 
 export const stripeCheckOut = async (
   items: Array<{
@@ -38,7 +37,15 @@ export const stripeCheckOut = async (
       line_items: items,
       success_url,
       cancel_url,
+      payment_intent_data: {
+        application_fee_amount: 2000,
+        transfer_data: {
+          destination: `ACCOUNT_ID`,
+        },
+      },
     });
+
+    // confirm the Checkout
 
     return {
       url: session.url,
@@ -48,7 +55,7 @@ export const stripeCheckOut = async (
       createdAt: new Date(session.created),
     };
   } catch (error: any) {
-    console.log(error)
+    console.log(error);
     return {
       url: "",
       error: error.message,
@@ -65,8 +72,8 @@ export const stripeProcessCallBack = (body: any) => {
 
 /**
  * Create a payout
- * @param opts 
- * @returns 
+ * @param opts
+ * @returns
  */
 export const stripeCreatePayout = async (opts: {
   amount: number;
@@ -89,7 +96,7 @@ export const stripeCreatePayout = async (opts: {
     return {
       error: error.message,
       amount_total: 0,
-      createdAt: new Date(Date.now())
+      createdAt: new Date(Date.now()),
     };
   }
 };
