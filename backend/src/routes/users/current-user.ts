@@ -189,4 +189,53 @@ router.patch(
     });
   }
 );
+
+/**
+ * @openapi
+ * /api/v1/users-only-funs-or-frens
+ *   get:
+ *     tags:
+ *        - Auth
+ *     description: List only fans and frens .
+ *     produces:
+ *        - application/json
+ *     consumes:
+ *        - application/json
+ *     responses:
+ *       200:
+ *         description: . Returns a list of only fans or frens.
+ */
+router.get(
+  "/api/v1/users-only-funs-or-frens",
+  requireAuth,
+  async (req: Request, res: Response) => {
+    const frenForCurrentUser = await User.findById(
+      req.currentUser?.id
+    ).populate("friends", "_id");
+    const fansForCurrentUser = await User.findById(
+      req.currentUser?.id
+    ).populate("funs", "_id");
+
+    const mergeUserList =
+      frenForCurrentUser && fansForCurrentUser
+        ? [
+            ...frenForCurrentUser.friends!.map((item: any) => item._id),
+            ...fansForCurrentUser.funs!.map((item: any) => item._id),
+          ]
+        : [];
+
+    const users = await User.find({
+      _id: { $in: mergeUserList },
+      $nor: [{ is_admin: true, _id: req.currentUser?.id }],
+    }).select("username photo first_name last_name");
+
+    if (!users) {
+      throw new BadRequestError("User not found");
+    }
+    res.status(200).json({
+      status: "success",
+      users,
+    });
+  }
+);
 export { router as CurrentUserRoutes };

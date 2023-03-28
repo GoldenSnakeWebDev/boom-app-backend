@@ -9,17 +9,12 @@ import {
 } from "../../models/transaction";
 import { User } from "./../../models/user";
 import { Boom } from "./../../models/boom";
-
 import { getNextTransaction } from "../../utils/transaction-common";
 import { BadRequestError } from "../../errors/bad-request-error";
 import { NotificationType, Notification } from "./../../models/notification";
 import { validateRequest } from "../../middlewares";
-import { Network, NetworkType } from "../../models/network";
-import { SyncBank } from "../../models/syncbank";
 import { onSignalSendNotification } from "../../utils/on-signal";
-
 const router = Router();
-
 /**
  * @openapi
  * /api/v1/sync-bank/transfer-sync:
