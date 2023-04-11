@@ -19,7 +19,7 @@ import { HelperRoutes } from "./helper";
 import { NetworksListRoutes } from "./networks";
 import { CommentRoutes } from "./booms/comment";
 import { EpicTaleRoutes } from "./status/index";
-import { BoomBoxRoutes } from "./boom-box";
+import { BoomBoxRoutes } from "./boom-box/boom-box";
 import { NotificationRoutes } from "./notification/index";
 import { FriendsFollowersRoutes } from "./users/friends";
 import { TezosMintAndURLPrep } from "./tezos";

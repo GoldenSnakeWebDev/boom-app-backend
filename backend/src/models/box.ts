@@ -6,19 +6,19 @@ export enum BoomBoxType {
 }
 
 export interface IBoomBox {
-  box?: string;
   box_type?: string;
   image_url?: string;
   label: string;
-  messages?: Array<{
-    content: string;
-    author: Types.ObjectId;
-    receiver: Types.ObjectId;
-    timestamp?: Date;
-    is_delete?: boolean;
+  members?: Array<{
+    user: Types.ObjectId;
+    is_burnt: boolean;
+    is_admin: boolean;
+    created_at?: Date;
   }>;
+  user?: string;
   created_at: Date;
   is_active?: boolean;
+  is_deleted?: boolean;
 }
 
 const boomBoxSchema = new Schema<IBoomBox>(
@@ -35,19 +35,19 @@ const boomBoxSchema = new Schema<IBoomBox>(
     },
     image_url: { type: Schema.Types.String, default: "" },
     label: { type: Schema.Types.String, default: "" },
-    box: { type: Schema.Types.String, default: "" },
-    messages: [
+    user: { type: Schema.Types.ObjectId, ref: "User" },
+    members: [
       {
-        content: { type: Schema.Types.Mixed, default: "" },
-        receiver: { type: Schema.Types.ObjectId, ref: "User" },
-        author: { type: Schema.Types.ObjectId, ref: "User" },
-        timestamp: { type: Schema.Types.Date, default: Date.now },
-        is_delete: { type: Schema.Types.Boolean, default: false },
+        user: { type: Schema.Types.ObjectId, ref: "User" },
+        created_at: { type: Schema.Types.Date, default: Date.now },
+        is_admin: { type: Schema.Types.Boolean, default: false },
+        is_burnt: { type: Schema.Types.Boolean, default: false },
       },
     ],
     created_at: { type: Schema.Types.Date, default: Date.now },
 
     is_active: { type: Schema.Types.Boolean, default: true },
+    is_deleted: { type: Schema.Types.Boolean, default: true },
   },
   {
     toJSON: {
