@@ -50,11 +50,35 @@ router.get("/api/v1/networks", async (req: Request, res: Response) => {
 
   const networks = await response.paginate().query;
   const full_url = req.protocol + "://" + req.get("host");
+  const base_url =
+    full_url.includes("127.0.0.1") || full_url.includes("localhost")
+      ? `http://127.0.0.1:4000`
+      : full_url;
   const new_networks = networks.map((item: any) => {
     if (item.symbol === "TZ") {
       return {
         name: item.name,
-        image_url: `${full_url}/backend/LOGOS/TezosLogo_Icon_Blue.png`,
+        image_url: `${base_url}/LOGOS/TezosLogo_Icon_Blue.png`,
+        symbol: item.symbol,
+        is_active: item.is_active,
+        id: item._id,
+      };
+    }
+
+    if (item.symbol === "BNB") {
+      return {
+        name: item.name,
+        image_url: `${base_url}/LOGOS/binance-icono.png`,
+        symbol: item.symbol,
+        is_active: item.is_active,
+        id: item._id,
+      };
+    }
+
+    if (item.symbol === "MATIC") {
+      return {
+        name: item.name,
+        image_url: `${base_url}/LOGOS/polygon-matic-logo.png`,
         symbol: item.symbol,
         is_active: item.is_active,
         id: item._id,
