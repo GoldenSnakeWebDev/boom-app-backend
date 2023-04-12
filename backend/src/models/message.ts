@@ -21,7 +21,7 @@ const messageSchema = new Schema<IMessage>(
     receiver: { type: Schema.Types.ObjectId, ref: "User" },
     content: { type: Schema.Types.Mixed, default: "" },
     created_at: { type: Schema.Types.Date, default: Date.now },
-    is_deleted: { type: Schema.Types.Boolean, default: true },
+    is_deleted: { type: Schema.Types.Boolean, default: false },
   },
   {
     toJSON: {

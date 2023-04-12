@@ -1,4 +1,4 @@
-import { Schema, model, Types } from "mongoose";
+import { Schema, model } from "mongoose";
 
 export enum BoomBoxType {
   PRIVATE = "private",
@@ -10,7 +10,7 @@ export interface IBoomBox {
   image_url?: string;
   label: string;
   members?: Array<{
-    user: Types.ObjectId;
+    user: string;
     is_burnt: boolean;
     is_admin: boolean;
     created_at?: Date;
@@ -47,7 +47,7 @@ const boomBoxSchema = new Schema<IBoomBox>(
     created_at: { type: Schema.Types.Date, default: Date.now },
 
     is_active: { type: Schema.Types.Boolean, default: true },
-    is_deleted: { type: Schema.Types.Boolean, default: true },
+    is_deleted: { type: Schema.Types.Boolean, default: false },
   },
   {
     toJSON: {
