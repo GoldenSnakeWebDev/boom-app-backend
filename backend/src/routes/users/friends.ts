@@ -170,14 +170,14 @@ router.patch(
       await Notification.create({
         notification_type: NotificationType.USER,
         user: nextUser?.id,
-        message: `${nextUser?.username} left your fren`,
+        message: `${nextUser?.username} not your fren`,
       });
 
       // TODO: Notification
       await Notification.create({
         notification_type: NotificationType.USER,
         user: req.currentUser?.id,
-        message: `${req.currentUser?.username} left your fren`,
+        message: `${req.currentUser?.username} not your fren`,
       });
     }
 

@@ -45,7 +45,15 @@ router.post(
   async (req: Request, res: Response) => {
     const { email, password, username } = req.body;
 
-    const user = await User.findOne({ $or: [{ username }, { email: email }] });
+    const emailRegex = new RegExp(email, "i");
+    const usernameRegex = new RegExp(username, "i");
+
+    const user = await User.findOne({
+      $or: [
+        { username: { $regex: usernameRegex } },
+        { email: { $regex: emailRegex } },
+      ],
+    });
 
     if (user) {
       throw new BadRequestError(

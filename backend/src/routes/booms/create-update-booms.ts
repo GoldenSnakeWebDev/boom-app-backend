@@ -421,13 +421,13 @@ router.patch(
           notification_type: NotificationType.BOOM,
           user: boomMinted.user,
           boom: req.params.id,
-          message: `${req.currentUser?.username} has smiled for your boom`,
+          message: `${req.currentUser?.username} has smiled at your Boom`,
           timestamp: new Date(timestamp),
         });
         await onSignalSendNotification({
           contents: {
-            en: `${req.currentUser?.username} has smiled your boom`,
-            es: `${req.currentUser?.username} has smiled your boom`,
+            en: `${req.currentUser?.username} has smiled at your Boom`,
+            es: `${req.currentUser?.username} has smiled at your Boom`,
           },
           included_segments: [boomOwner.device_id!],
           name: "Reaction",
@@ -476,13 +476,13 @@ router.patch(
           notification_type: NotificationType.BOOM,
           user: boomMinted.user,
           boom: req.params.id,
-          message: `${req.currentUser?.username} has re-boomed`,
+          message: `${req.currentUser?.username} has re-boomed your Boom`,
           timestamp: new Date(timestamp),
         });
         await onSignalSendNotification({
           contents: {
-            en: `${req.currentUser?.username} has re-boomed`,
-            es: `${req.currentUser?.username} has re-boomed`,
+            en: `${req.currentUser?.username} has re-boomed your Boom`,
+            es: `${req.currentUser?.username} has re-boomed your Boom`,
           },
           included_segments: [boomOwner.device_id!],
           name: "Reaction",
