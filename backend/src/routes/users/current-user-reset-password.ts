@@ -68,12 +68,8 @@ router.post(
       );
     }
     // update password
-
-    await User.findByIdAndUpdate(
-      user.id,
-      { password: new_password },
-      { new: true }
-    );
+    user.password = new_password;
+    await user.save();
     res.status(200).send({
       status: "success",
       message: "Successfully updated your password",
