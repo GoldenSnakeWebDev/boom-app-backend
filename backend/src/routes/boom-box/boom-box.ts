@@ -8,24 +8,28 @@ import { ApiResponse } from "../../utils/api-response";
 
 const router = Router();
 
-router.get("/api/v1/boom-box", async (req: Request, res: Response) => {
-  const response = new ApiResponse(
-    BoomBox.find({ is_deleted: false })
-      .populate("user", "username photo first_name last_name")
-      .populate("members.user", "username photo first_name last_name")
-      .populate("messages.sender", "username photo first_name last_name"),
-    req.query
-  )
-    .filter()
-    .sort()
-    .limitFields();
-  const boomBoxes = await response.query;
+router.get(
+  "/api/v1/boom-box",
+  requireAuth,
+  async (req: Request, res: Response) => {
+    const response = new ApiResponse(
+      BoomBox.find({ is_deleted: false, "members.user": req.currentUser?.id })
+        .populate("user", "username photo first_name last_name")
+        .populate("members.user", "username photo first_name last_name")
+        .populate("messages.sender", "username photo first_name last_name"),
+      req.query
+    )
+      .filter()
+      .sort()
+      .limitFields();
+    const boomBoxes = await response.query;
 
-  res.status(200).json({
-    status: "success",
-    boomBoxes,
-  });
-});
+    res.status(200).json({
+      status: "success",
+      boomBoxes,
+    });
+  }
+);
 
 router.post(
   "/api/v1/boom-box",
