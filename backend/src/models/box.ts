@@ -6,6 +6,7 @@ export enum BoomBoxType {
 }
 
 export interface IBoomBox {
+  is_group?: boolean;
   box_type?: string;
   image_url?: string;
   label: string;
@@ -13,6 +14,12 @@ export interface IBoomBox {
     user: string;
     is_burnt: boolean;
     is_admin: boolean;
+    created_at?: Date;
+  }>;
+
+  messages: Array<{
+    sender?: string;
+    content?: string;
     created_at?: Date;
   }>;
   user?: string;
@@ -23,6 +30,7 @@ export interface IBoomBox {
 
 const boomBoxSchema = new Schema<IBoomBox>(
   {
+    is_group: { type: Schema.Types.Boolean, default: false },
     box_type: {
       type: Schema.Types.String,
       default: BoomBoxType.PUBLIC,
@@ -44,6 +52,14 @@ const boomBoxSchema = new Schema<IBoomBox>(
         is_burnt: { type: Schema.Types.Boolean, default: false },
       },
     ],
+    messages: [
+      {
+        sender: { type: Schema.Types.ObjectId, ref: "User" },
+        created_at: { type: Schema.Types.Date, default: Date.now },
+        content: { type: Schema.Types.String, default: "" },
+      },
+    ],
+
     created_at: { type: Schema.Types.Date, default: Date.now },
 
     is_active: { type: Schema.Types.Boolean, default: true },
