@@ -51,15 +51,11 @@ router.post(
     body("networkType")
       .notEmpty()
       .withMessage("please provide  which network are you tipping from"),
+    body("timestamp").notEmpty().withMessage("provide the user timestamp"),
   ],
   requireAuth,
   async (req: Request, res: Response) => {
     let { amount, user, networkType, timestamp } = req.body;
-
-    if (timestamp) {
-      timestamp = Date.now();
-    }
-
     const tipedUser = await User.findById(user);
 
     if (!tipedUser) {

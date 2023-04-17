@@ -256,7 +256,7 @@ router.patch(
 );
 
 router.delete(
-  "/api/v2/boombox/:id",
+  "/api/v1/boom-box/:id",
   requireAuth,
   async (req: Request, res: Response) => {
     const boomBox = await BoomBox.findById(req.params.id);
@@ -264,16 +264,16 @@ router.delete(
       throw new BadRequestError("The boombox was not found");
     }
 
-    const boomQuery = await BoomBox.findOne(
-      { _id: req.params.id, "members.users": req.currentUser?.id },
-      { "members.$": 1 }
-    )
-      .populate("user", "username photo first_name last_name")
-      .populate("members.user", "username photo first_name last_name");
+    const boomQuery = await BoomBox.findOne({
+      _id: req.params.id,
+      "members.user": req.currentUser?.id,
+    }).populate("members.user", "username photo first_name last_name is_admin");
 
-    const requestCaller: any = boomQuery?.user;
+    if (!boomQuery) {
+      throw new BadRequestError("Boom not found");
+    }
 
-    if (!requestCaller.is_admin) {
+    if (!boomQuery.members?.some((m: any) => m.is_admin)) {
       throw new BadRequestError("You are not allowed to perform this task");
     }
 

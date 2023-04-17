@@ -9,7 +9,7 @@ import {
 } from "../../models/transaction";
 import { getNextTransaction } from "../../utils/transaction-common";
 import { Notification, NotificationType } from "./../../models/notification";
-import {onSignalSendNotification}  from  "./../../utils/on-signal"
+import { onSignalSendNotification } from "./../../utils/on-signal";
 
 const router = Router();
 
@@ -69,7 +69,7 @@ router.post(
 
     // buy the assets
     // TODO: Notification
-    const msg  =  `You have successfully bought ${networkType} ${amount}`
+    const msg = `You have successfully bought ${networkType} ${amount}`;
     await Notification.create({
       notification_type: NotificationType.BOOM,
       user: req.currentUser?.id,
@@ -127,14 +127,11 @@ router.post(
       .withMessage(
         "please provide from which network are you withdrawing from"
       ),
+    body("timestamp").notEmpty().withMessage("provide the user timestamp"),
   ],
   requireAuth,
   async (req: Request, res: Response) => {
     let { amount, networkType, timestamp } = req.body;
-
-    if (timestamp) {
-      timestamp = Date.now();
-    }
 
     const transactionRef = await getNextTransaction();
 
@@ -158,7 +155,7 @@ router.post(
 
     // buy the assets
     // TODO: Notification
-    const msg  =  `You have successfully withdraw ${networkType} ${amount}`;
+    const msg = `You have successfully withdraw ${networkType} ${amount}`;
     await Notification.create({
       notification_type: NotificationType.BOOM,
       user: req.currentUser?.id,

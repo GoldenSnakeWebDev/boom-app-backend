@@ -51,15 +51,12 @@ router.post(
     body("networkType")
       .notEmpty()
       .withMessage("please provide  which network are you tipping from"),
+
+    body("timestamp").notEmpty().withMessage("provide the user timestamp"),
   ],
   requireAuth,
   async (req: Request, res: Response) => {
     let { amount, user, networkType, timestamp } = req.body;
-
-    if (timestamp) {
-      timestamp = Date.now();
-    }
-
     const tipedUser = await User.findById(user);
 
     if (!tipedUser) {
@@ -70,12 +67,13 @@ router.post(
 
     const transactionRef = await getNextTransaction();
 
-    const transaction = Transaction.create({
+    let transaction = await Transaction.create({
       transaction_number: transactionRef,
       amount,
       user: tipedUser.id!,
       transaction_type: ITransactionType.DEPOSIT,
       status: ITransactionStatus.PENDING,
+      transaction_date: new Date(timestamp),
     });
     //for tiper
     await updateWalletBalance({
@@ -95,7 +93,7 @@ router.post(
     });
 
     // after approve that payments have reached to our bank
-    const syncBankResponse = await updateWalletBalance({
+    await updateWalletBalance({
       userId: tipedUser.id,
       transaction_type: ITransactionType.INCOME,
       amount,
@@ -113,8 +111,12 @@ router.post(
 
     res.status(200).json({
       status: "success",
-      transaction,
-      message: syncBankResponse.message,
+      transaction: await Transaction.findByIdAndUpdate(
+        transaction.id,
+        { status: ITransactionStatus.SUCCESS },
+        { new: true }
+      ),
+      message: `You have successfully tipped a user`,
     });
   }
 );

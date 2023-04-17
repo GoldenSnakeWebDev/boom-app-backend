@@ -386,7 +386,7 @@ router.patch(
         await Boom.findByIdAndUpdate(
           req.params.id,
           {
-            $pull: { "reactions.likes": req.currentUser?.id! },
+            $pull: { "reactions.loves": req.currentUser?.id! },
           },
           { new: true }
         );
@@ -436,7 +436,7 @@ router.patch(
         await Boom.findByIdAndUpdate(
           req.params.id,
           {
-            $pull: { "reactions.likes": req.currentUser?.id! },
+            $pull: { "reactions.smiles": req.currentUser?.id! },
           },
           { new: true }
         );
@@ -491,7 +491,7 @@ router.patch(
         await Boom.findByIdAndUpdate(
           req.params.id,
           {
-            $pull: { "reactions.likes": req.currentUser?.id! },
+            $pull: { "reactions.rebooms": req.currentUser?.id! },
           },
           { new: true }
         );
@@ -541,7 +541,7 @@ router.patch(
         await Boom.findByIdAndUpdate(
           req.params.id,
           {
-            $pull: { "reactions.likes": req.currentUser?.id! },
+            $pull: { "reactions.reports": req.currentUser?.id! },
           },
           { new: true }
         );
