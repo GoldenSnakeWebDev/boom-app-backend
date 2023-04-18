@@ -13,14 +13,17 @@ router.get(
   requireAuth,
   async (req: Request, res: Response) => {
     const response = new ApiResponse(
-      BoomBox.find({
-        $or: [
-          { user: req.currentUser?.id },
-          {
-            "members.user._id": req.currentUser?.id!,
-          },
-        ],
-      })
+      BoomBox
+        .find
+        //   {
+        //   $or: [
+        //     { user: req.currentUser?.id },
+        //     {
+        //       "members.user._id": req.currentUser?.id!,
+        //     },
+        //   ],
+        // }
+        ()
         .populate("user", "username photo first_name last_name")
         .populate("members.user", "username photo first_name last_name")
         .populate("messages.sender", "username photo first_name last_name"),
