@@ -112,6 +112,8 @@ router.post(
       boomBox = await BoomBox.findByIdAndUpdate(
         boomBox.id,
         {
+          box_type: BoomBoxType.PUBLIC,
+          is_group: true,
           $addToSet: { members: { $each: newMembers } },
           $push: {
             messages: {
@@ -134,6 +136,8 @@ router.post(
       boomBox = await BoomBox.findByIdAndUpdate(
         boomBox.id,
         {
+          box_type: BoomBoxType.PRIVATE,
+          is_group: false,
           $addToSet: { members: { $each: newMembers } },
           $push: {
             messages: {
