@@ -8,7 +8,6 @@ import { ApiResponse } from "../../utils/api-response";
 import { onSignalSendNotification } from "../../utils/on-signal";
 
 const router = Router();
-
 router.get(
   "/api/v1/boom-box",
   requireAuth,
@@ -48,7 +47,6 @@ router.post(
   validateRequest,
   async (req: Request, res: Response) => {
     const { members, label, image_url, timestamp, is_group_chat } = req.body;
-
     if (!is_group_chat) {
       const exists = await BoomBox.findOne({
         user: req.currentUser?.id,
@@ -65,11 +63,9 @@ router.post(
         });
       }
     }
-
     if (typeof members !== "object") {
       throw new BadRequestError("The list of frens or fans is incorrect");
     }
-
     const users = await User.find({ _id: { $in: members } });
 
     if (users.length !== members.length) {
