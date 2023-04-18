@@ -340,10 +340,9 @@ router.delete(
       throw new BadRequestError("Boom not found");
     }
 
-    if (!boomQuery.members?.some((m: any) => m.is_admin)) {
+    if (boomBox.user?.toString() !== req.currentUser?.id) {
       throw new BadRequestError("You are not allowed to perform this task");
     }
-
     await BoomBox.findByIdAndDelete(boomBox.id);
 
     res.status(204).json({});
