@@ -53,6 +53,7 @@ router.post(
       const exists = await BoomBox.findOne({
         user: req.currentUser?.id,
         "members.user": members[0],
+        is_deleted: false,
       })
         .populate("user", "username photo first_name last_name")
         .populate("members.user", "username photo first_name last_name")
