@@ -5,6 +5,7 @@ import { requireAuth, validateRequest } from "../../middlewares";
 import { User } from "../../models";
 import { BoomBox, BoomBoxType } from "../../models/box";
 import { ApiResponse } from "../../utils/api-response";
+import { onSignalSendNotification } from "../../utils/on-signal";
 
 const router = Router();
 
@@ -108,7 +109,7 @@ router.post(
           },
         },
         { new: true }
-      );
+      ).populate("user", "username photo first_name last_name");
     } else {
       boomBox = await BoomBox.findByIdAndUpdate(
         boomBox.id,
@@ -127,9 +128,30 @@ router.post(
           },
         },
         { new: true }
-      );
+      ).populate("user", "username photo first_name last_name");
     }
 
+    const notifiedUsers: Array<any> = boomBox.members
+      .map((user: any) => {
+        if (!user.user._id.equals(req.currentUser?.id!)) {
+          return user;
+        }
+        return null;
+      })
+      .filter((i: any) => i);
+
+    // Notify the user for first time
+    notifiedUsers.forEach(async (user: any) => {
+      const currentUser = await User.findById(user._id);
+      await onSignalSendNotification({
+        contents: {
+          en: boomBox.messages[0].content,
+          es: boomBox.messages[0].content,
+        },
+        included_segments: [currentUser?.device_id!],
+        name: "DM",
+      });
+    });
     res.status(200).json({
       status: "success",
       boomBox,
@@ -163,6 +185,15 @@ router.post(
       throw new BadRequestError("Forbidden");
     }
 
+    const notifiedUsers: Array<any> = boomBox.members
+      .map((user: any) => {
+        if (!user.user._id.equals(req.currentUser?.id!)) {
+          return user;
+        }
+        return null;
+      })
+      .filter((i: any) => i);
+
     boomBox = await BoomBox.findByIdAndUpdate(
       boomBox.id,
       {
@@ -183,6 +214,19 @@ router.post(
       .populate("user", "username photo first_name last_name")
       .populate("members.user", "username photo first_name last_name")
       .populate("messages.sender", "username photo first_name last_name");
+
+    // Notify the user for first time
+    notifiedUsers.forEach(async (user: any) => {
+      const currentUser = await User.findById(user._id);
+      await onSignalSendNotification({
+        contents: {
+          en: `You have received a messsage from ${req.currentUser?.username} in ${boomBox?.label}`,
+          es: `You have received a messsage from ${req.currentUser?.username} in ${boomBox?.label}`,
+        },
+        included_segments: [currentUser?.device_id!],
+        name: "DM",
+      });
+    });
 
     res.status(200).json({
       status: "success",
