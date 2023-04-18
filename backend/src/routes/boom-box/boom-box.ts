@@ -14,7 +14,7 @@ router.get(
   requireAuth,
   async (req: Request, res: Response) => {
     const response = new ApiResponse(
-      BoomBox.find({ is_deleted: false, "members.user": req.currentUser?.id })
+      BoomBox.find({ "members.user": req.currentUser?.id })
         .populate("user", "username photo first_name last_name")
         .populate("members.user", "username photo first_name last_name")
         .populate("messages.sender", "username photo first_name last_name"),
@@ -53,7 +53,6 @@ router.post(
       const exists = await BoomBox.findOne({
         user: req.currentUser?.id,
         "members.user": members[0],
-        is_deleted: false,
       })
         .populate("user", "username photo first_name last_name")
         .populate("members.user", "username photo first_name last_name")
@@ -345,11 +344,7 @@ router.delete(
       throw new BadRequestError("You are not allowed to perform this task");
     }
 
-    await BoomBox.findByIdAndUpdate(
-      boomBox.id,
-      { is_deleted: true },
-      { new: true }
-    );
+    await BoomBox.findByIdAndDelete(boomBox.id);
 
     res.status(204).json({});
   }
