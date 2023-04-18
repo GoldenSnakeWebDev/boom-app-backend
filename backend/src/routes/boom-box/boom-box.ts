@@ -49,6 +49,23 @@ router.post(
   async (req: Request, res: Response) => {
     const { members, label, image_url, timestamp, is_group_chat } = req.body;
 
+    if (!is_group_chat) {
+      const exists = await BoomBox.findOne({
+        user: req.currentUser?.id,
+        "members.user": members[0],
+      })
+        .populate("user", "username photo first_name last_name")
+        .populate("members.user", "username photo first_name last_name")
+        .populate("messages.sender", "username photo first_name last_name");
+      if (exists) {
+        return res.status(200).json({
+          status: "success",
+          boomBox: exists,
+          message: `Successfully created ${exists.label}`,
+        });
+      }
+    }
+
     if (typeof members !== "object") {
       throw new BadRequestError("The list of frens or fans is incorrect");
     }
@@ -158,7 +175,7 @@ router.post(
         name: "DM",
       });
     });
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       boomBox,
       message: `Successfully created ${boomBox.label}`,
