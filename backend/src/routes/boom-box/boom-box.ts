@@ -12,7 +12,7 @@ router.get(
   "/api/v1/boom-box",
   requireAuth,
   async (req: Request, res: Response) => {
-    console.log("Booms", oomBox.find({ "members.user": req.currentUser?.id }));
+    console.log("Booms", BoomBox.find({ "members.user": req.currentUser?.id }));
     const response = new ApiResponse(
       BoomBox.find({ "members.user": req.currentUser?.id })
         .populate("user", "username photo first_name last_name")
