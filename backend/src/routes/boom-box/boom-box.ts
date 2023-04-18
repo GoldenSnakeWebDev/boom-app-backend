@@ -12,9 +12,15 @@ router.get(
   "/api/v1/boom-box",
   requireAuth,
   async (req: Request, res: Response) => {
-    console.log("Booms", BoomBox.find({ "members.user": req.currentUser?.id }));
     const response = new ApiResponse(
-      BoomBox.find({ "members.user": req.currentUser?.id })
+      BoomBox.find({
+        $or: [
+          { user: req.currentUser?.id },
+          {
+            "members.user._id": req.currentUser?.id!,
+          },
+        ],
+      })
         .populate("user", "username photo first_name last_name")
         .populate("members.user", "username photo first_name last_name")
         .populate("messages.sender", "username photo first_name last_name"),
@@ -67,6 +73,7 @@ router.post(
     if (typeof members !== "object") {
       throw new BadRequestError("The list of frens or fans is incorrect");
     }
+
     const users = await User.find({ _id: { $in: members } });
 
     if (users.length !== members.length) {
@@ -202,20 +209,20 @@ router.post(
       throw new BadRequestError("Boom Box not found");
     }
 
-    console.log(
-      "Are you member? ",
-      boomBox.members?.some((m: any) => m.user._id.equals(req.currentUser?.id!))
-    );
-    if (
-      !boomBox.members?.some((m: any) =>
-        m.user._id.equals(req.currentUser?.id!)
-      )
-    ) {
-      throw new BadRequestError("Forbidden");
-    }
+    // console.log(
+    //   "Are you member? ",
+    //   boomBox.members?.some((m: any) => m.user._id.equals(req.currentUser?.id!))
+    // );
+    // if (
+    //   !boomBox.members?.some((m: any) =>
+    //     m.user._id.equals(req.currentUser?.id!)
+    //   )
+    // ) {
+    //   throw new BadRequestError("Forbidden");
+    // }
 
-    const notifiedUsers: Array<any> = boomBox.members
-      .map((user: any) => {
+    const notifiedUsers: Array<any> = boomBox
+      ?.members!.map((user: any) => {
         if (!user.user._id.equals(req.currentUser?.id!)) {
           return user;
         }
