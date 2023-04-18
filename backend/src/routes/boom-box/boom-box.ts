@@ -109,7 +109,10 @@ router.post(
           },
         },
         { new: true }
-      ).populate("user", "username photo first_name last_name");
+      )
+        .populate("user", "username photo first_name last_name")
+        .populate("members.user", "username photo first_name last_name")
+        .populate("messages.sender", "username photo first_name last_name");
     } else {
       boomBox = await BoomBox.findByIdAndUpdate(
         boomBox.id,
@@ -128,7 +131,10 @@ router.post(
           },
         },
         { new: true }
-      ).populate("user", "username photo first_name last_name");
+      )
+        .populate("user", "username photo first_name last_name")
+        .populate("members.user", "username photo first_name last_name")
+        .populate("messages.sender", "username photo first_name last_name");
     }
 
     const notifiedUsers: Array<any> = boomBox.members
