@@ -12,6 +12,7 @@ router.get(
   "/api/v1/boom-box",
   requireAuth,
   async (req: Request, res: Response) => {
+    console.log("Booms", oomBox.find({ "members.user": req.currentUser?.id }));
     const response = new ApiResponse(
       BoomBox.find({ "members.user": req.currentUser?.id })
         .populate("user", "username photo first_name last_name")
@@ -200,6 +201,11 @@ router.post(
     if (!boomBox) {
       throw new BadRequestError("Boom Box not found");
     }
+
+    console.log(
+      "Are you member? ",
+      boomBox.members?.some((m: any) => m.user._id.equals(req.currentUser?.id!))
+    );
     if (
       !boomBox.members?.some((m: any) =>
         m.user._id.equals(req.currentUser?.id!)
