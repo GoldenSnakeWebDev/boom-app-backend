@@ -12,18 +12,16 @@ router.get(
   "/api/v1/boom-box",
   requireAuth,
   async (req: Request, res: Response) => {
+    console.log("Current User", req.currentUser?.id);
     const response = new ApiResponse(
-      BoomBox
-        .find
-        //   {
-        //   $or: [
-        //     { user: req.currentUser?.id },
-        //     {
-        //       "members.user._id": req.currentUser?.id!,
-        //     },
-        //   ],
-        // }
-        ()
+      BoomBox.find({
+        $or: [
+          { user: req.currentUser?.id },
+          {
+            "members.user": req.currentUser?.id!,
+          },
+        ],
+      })
         .populate("user", "username photo first_name last_name")
         .populate("members.user", "username photo first_name last_name")
         .populate("messages.sender", "username photo first_name last_name"),
@@ -140,6 +138,12 @@ router.post(
         .populate("members.user", "username photo first_name last_name")
         .populate("messages.sender", "username photo first_name last_name");
     } else {
+      newMembers.push({
+        is_burnt: false,
+        is_admin: false,
+        user: req.currentUser?.id!,
+        created_at: new Date(timestamp),
+      });
       boomBox = await BoomBox.findByIdAndUpdate(
         boomBox.id,
         {
@@ -356,9 +360,16 @@ router.delete(
       throw new BadRequestError("Boom not found");
     }
 
-    if (boomBox.user?.toString() !== req.currentUser?.id) {
-      throw new BadRequestError("You are not allowed to perform this task");
+    if (boomBox.is_group) {
+      if (boomBox.user?.toString() !== req.currentUser?.id) {
+        throw new BadRequestError("You are not allowed to perform this task");
+      }
     }
+
+    // check if not group -> what do i do???
+    // if (boomBox.user?.toString() !== req.currentUser?.id) {
+    //   throw new BadRequestError("You are not allowed to perform this task");
+    // }
     await BoomBox.findByIdAndDelete(boomBox.id);
 
     res.status(204).json({});
