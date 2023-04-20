@@ -12,7 +12,6 @@ const start = async () => {
   await mongoose
     .connect(DB_URL)
     .then(() => console.log("Successfully connected to db"));
-
   await seed();
   updateStatuses();
 

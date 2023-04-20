@@ -1,5 +1,23 @@
 import axios from "axios";
+import * as cheerio from "cheerio";
 import { NetworkType } from "../models";
+
+export const priceOKXScrap = async () => {
+  const url = "https://coinmarketcap.com/currencies/okt/";
+
+  try {
+    const { data } = await axios.get(url);
+    const $ = cheerio.load(data);
+
+    const priceSection = $(".priceSection");
+
+    const priceValue = priceSection.find(".priceValue").text();
+    console.log(priceValue);
+    return Number(priceValue.replace("$", ""));
+  } catch (error) {
+    return 0;
+  }
+};
 
 export const currencyConversion = async (
   network: NetworkType,
@@ -13,6 +31,13 @@ export const currencyConversion = async (
     url = `https://www.binance.com/api/v3/depth?symbol=XTZUSDT`;
   } else if (network === NetworkType.BINANCE) {
     url = `https://www.binance.com/api/v3/depth?symbol=BNBUSDT`;
+  } else if (network === NetworkType.OK_COIN) {
+    url = "";
+    const amount = await priceOKXScrap();
+    return {
+      amount,
+      error: "",
+    };
   } else {
     url = `https://www.binance.com/api/v3/depth?symbol=${network}USDT`;
   }

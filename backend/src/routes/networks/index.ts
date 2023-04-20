@@ -84,6 +84,17 @@ router.get("/api/v1/networks", async (req: Request, res: Response) => {
         id: item._id,
       };
     }
+
+    if (item.symbol === "OKT") {
+      return {
+        name: item.name,
+        image_url: `${base_url}/LOGOS/okx.png`,
+        symbol: item.symbol,
+        is_active: item.is_active,
+        id: item._id,
+      };
+    }
+
     return {
       name: item.name,
       image_url: item.image_url,
