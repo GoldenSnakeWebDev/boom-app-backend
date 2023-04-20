@@ -8,13 +8,11 @@ export const priceOKXScrap = async () => {
   try {
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
-
     const priceSection = $(".priceSection");
-
     const priceValue = priceSection.find(".priceValue").text();
-    console.log(priceValue);
     return Number(priceValue.replace("$", ""));
   } catch (error) {
+    console.log("Error", error);
     return 0;
   }
 };
@@ -25,19 +23,20 @@ export const currencyConversion = async (
 ) => {
   let url: string;
 
+  if (network === NetworkType.OK_COIN) {
+    const amount = await priceOKXScrap();
+    return {
+      amount,
+      error: "",
+    };
+  }
+
   if (network === NetworkType.POLYGON) {
     url = `https://www.binance.com/api/v3/depth?symbol=MATICUSDT`;
   } else if (network === NetworkType.TEZOS) {
     url = `https://www.binance.com/api/v3/depth?symbol=XTZUSDT`;
   } else if (network === NetworkType.BINANCE) {
     url = `https://www.binance.com/api/v3/depth?symbol=BNBUSDT`;
-  } else if (network === NetworkType.OK_COIN) {
-    url = "";
-    const amount = await priceOKXScrap();
-    return {
-      amount,
-      error: "",
-    };
   } else {
     url = `https://www.binance.com/api/v3/depth?symbol=${network}USDT`;
   }

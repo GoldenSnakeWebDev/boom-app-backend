@@ -143,6 +143,8 @@ router.get("/api/v1/networks-pricing", async (req: Request, res: Response) => {
     networkType = NetworkType.TEZOS;
   } else if (symbol! === NetworkType.BINANCE) {
     networkType = NetworkType.BINANCE;
+  } else if (symbol! === NetworkType.OK_COIN) {
+    networkType = NetworkType.OK_COIN;
   }
 
   const currentPrice = await currencyConversion(
