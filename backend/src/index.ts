@@ -3,6 +3,7 @@ import { server } from "./app";
 import { config } from "./config";
 import { updateStatuses } from "./schedular";
 import { seed } from "./seeders/seeds";
+// import { crossChainMint } from "./utils/cross-mint";
 
 const start = async () => {
   const DB_URL = config.DB_URL! || `mongodb://127.0.0.1:27017/boom-dev`;

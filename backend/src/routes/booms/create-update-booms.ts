@@ -16,6 +16,7 @@ import { requireAuth } from "../../middlewares";
 import { updateWalletBalance } from "../../utils/sync-bank";
 import { ITransactionType } from "../../models/transaction";
 import { onSignalSendNotification } from "./../../utils/on-signal";
+import { BoomVersion } from "../../models/boom-version";
 
 const router = Router();
 
@@ -595,11 +596,14 @@ router.patch(
 
 router.post(
   "/api/v1/by-booms-with-sync-coins",
-  [body("boom").notEmpty().withMessage("Please provide your boom information")],
+  [
+    body("boom").notEmpty().withMessage("Please provide your boom information"),
+    body("timestamp").notEmpty().withMessage("Provide a timestamp for buying a boom"),
+  ],
   requireAuth,
   validateRequest,
   async (req: Request, res: Response) => {
-    const { boom } = req.body;
+    const { boom, timestamp } = req.body;
     const existBoom = await Boom.findById(boom);
 
     if (!existBoom) {
@@ -649,6 +653,49 @@ router.post(
     if (!update.success) {
       throw new BadRequestError("Buying transaction was not successful");
     }
+
+    const currentVersions = existBoom.quantity;
+
+    let boomVersion = await BoomVersion.findOne({ boom: existBoom.id });
+
+    if (!boomVersion) {
+      await Boom.create({
+        description: existBoom.description,
+        boom_type: existBoom.boom_type,
+        network: existBoom.network,
+        image_url: existBoom.image_url,
+        user: req.currentUser?.id!,
+        quantity: 1,
+        fixed_price: existBoom.fixed_price,
+        title: existBoom.title,
+        location: existBoom.location,
+        price: existBoom.price,
+        tags: existBoom.tags,
+        created_at: new Date(timestamp),
+      })
+      boomVersion = await BoomVersion.create({ boom: existBoom.id, minted_versions: 1 });
+    } else {
+
+      if (boomVersion.minted_versions! >= currentVersions!) {
+        throw new BadRequestError("You can't buy this boom. It is out of stock")
+      }
+      await Boom.create({
+        description: existBoom.description,
+        boom_type: existBoom.boom_type,
+        network: existBoom.network,
+        image_url: existBoom.image_url,
+        user: req.currentUser?.id!,
+        quantity: 1,
+        fixed_price: existBoom.fixed_price,
+        title: existBoom.title,
+        location: existBoom.location,
+        price: existBoom.price,
+        tags: existBoom.tags,
+        created_at: new Date(timestamp),
+      })
+      boomVersion = await BoomVersion.findByIdAndUpdate(boomVersion.id, { minted_version: boomVersion.minted_versions! + 1 }, { new: true })
+    }
+
 
     await Boom.findByIdAndUpdate(
       existBoom.id,

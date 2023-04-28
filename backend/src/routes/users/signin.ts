@@ -65,8 +65,6 @@ router.post(
       throw new BadRequestError(`Wrong credentials. Please try again`);
     }
 
-    console.log("Current User", user);
-
     if (!user.is_active) {
       throw new BadRequestError("Your account has been burned");
     }

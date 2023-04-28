@@ -1,7 +1,8 @@
-import dotenv from 'dotenv'
-dotenv.config({ path: '.env' })
+import dotenv from "dotenv";
+dotenv.config({ path: ".env" });
 // get the current app Environment
-const appEnv = process.env.APP_ENV! === 'testing' ? `development` : `production`
+const appEnv =
+  process.env.APP_ENV! === "testing" ? `development` : `production`;
 /**
  * Configuration
  */
@@ -11,12 +12,12 @@ export const config = {
   PRIVATE_KEY: process.env.PRIVATE_KEY!,
   PUBLIC_KEY: process.env.PUBLIC_KEY!,
   RPC_URL:
-    appEnv === 'development'
+    appEnv === "development"
       ? `https://data-seed-prebsc-1-s3.binance.org:8545`
       : process.env.RPC_URL!,
   PORT: process.env.PORT!,
   ENVIRONMENT: appEnv,
-  FOLDER_NAME: 'uploads',
+  FOLDER_NAME: "uploads",
   MAIL: {
     SEND_GRID: process.env.MAIL_SEND_GRID_SECRET!,
     SENDER: process.env.MAIL_SEND_GRID_SENDER!,
@@ -30,20 +31,20 @@ export const config = {
     PANCAKE_ADDRESS: {
       TEZOS:
         appEnv === `development`
-          ? '0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c'
+          ? "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c"
           : process.env.TZX_ADDR!,
       BNB:
         appEnv === `development`
-          ? '0x764a0cd6a16e9cdeb20fb0820a3d58f5ef7d2daa'
+          ? "0x764a0cd6a16e9cdeb20fb0820a3d58f5ef7d2daa"
           : process.env.BNB_ADDR!,
       MATIC:
         appEnv === `development`
-          ? '0xd41fdb03ba84762dd66a0af1a6c8540ff1ba5dfb'
+          ? "0xd41fdb03ba84762dd66a0af1a6c8540ff1ba5dfb"
           : process.env.MATIC_ADDR!,
     },
     TREASURY_TOKEN:
       appEnv === `development`
-        ? '0x65afadd39029741b3b8f0756952c74678c9cec93'
+        ? "0x65afadd39029741b3b8f0756952c74678c9cec93"
         : process.env.TREASURY_USDT_ADDR!,
   },
   STRIPE: {
@@ -58,4 +59,8 @@ export const config = {
   SERVER_URL: process.env.SERVER_URL!,
   PINATA_API_KEY: process.env.PINATA_API_KEY!,
   PINATA_SECRET_API_KEY: process.env.PINATA_SECRET_API_KEY!,
-}
+  CROSSMINT: {
+    CLIENT_SECRET: process.env.CROSSMINT_CLIENT_SECRET!,
+    PROJECT_ID: process.env.CROSSMINT_PROJECT_ID!,
+  },
+};
