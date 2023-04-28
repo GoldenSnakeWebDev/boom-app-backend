@@ -94,6 +94,7 @@ router.post(
       price,
       location,
       timestamp,
+      boom_state,
       tags,
     } = req.body;
 
@@ -125,6 +126,7 @@ router.post(
       title,
       location,
       price,
+      boom_state,
       tags,
       created_at: new Date(timestamp),
     });
@@ -213,6 +215,7 @@ router.patch(
       fixed_price,
       title,
       price,
+      boom_state,
       tags,
     } = req.body;
 
@@ -249,6 +252,7 @@ router.patch(
       title,
       tags,
       price,
+      boom_state
     });
 
     res.status(200).json({

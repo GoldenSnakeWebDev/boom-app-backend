@@ -1,6 +1,6 @@
 import { Router, Response, Request } from "express";
 import { ApiResponse } from "../../utils/api-response";
-import { Boom, BoomType, User } from "../../models";
+import { Boom, BoomState, BoomType, User } from "../../models";
 import { requireAuth } from "../../middlewares";
 
 const router = Router();
@@ -25,6 +25,15 @@ router.get("/api/v1/booms-types", async (_req: Request, res: Response) => {
     .status(200)
     .json({ status: "success", boom_types: Object.values(BoomType) });
 });
+
+
+router.get("/api/v1/booms-states", async (_req: Request, res: Response) => {
+  res
+    .status(200)
+    .json({ status: "success", boom_states: Object.values(BoomState) });
+});
+
+
 
 /**
  * @openapi
