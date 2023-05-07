@@ -43,8 +43,8 @@
         },
         "testing": {
             "type": "simple",
-            "label": "ghostnet",
-            "rpcUrl": "https://ghostnet.ecadinfra.com"
+            "label": "mumbainet",
+            "rpcUrl": "https://rpc.mumbainet.teztnets.xyz"
         },
         "production": {
             "type": "simple",
@@ -60,6 +60,10 @@
         {
             "type": "npm",
             "name": "@taqueria/plugin-taquito"
+        },
+        {
+            "type": "npm",
+            "name": "@taqueria/plugin-flextesa"
         }
     ]
 }

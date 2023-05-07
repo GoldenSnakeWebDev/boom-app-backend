@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@taqueria/plugin-flextesa": "^0.28.6",
     "@taqueria/plugin-ligo": "^0.28.5",
     "@taqueria/plugin-taquito": "^0.28.5"
   }
