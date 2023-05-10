@@ -187,7 +187,7 @@ router.post(
           en: boomBox.messages[0].content,
           es: boomBox.messages[0].content,
         },
-        included_segments: [currentUser?.device_id!],
+        include_external_user_id: [currentUser?.device_id!],
         name: "DM",
       });
     });
@@ -267,7 +267,7 @@ router.post(
           en: `You have received a messsage from ${req.currentUser?.username} in ${boomBox?.label}`,
           es: `You have received a messsage from ${req.currentUser?.username} in ${boomBox?.label}`,
         },
-        included_segments: [currentUser?.device_id!],
+        include_external_user_id: [currentUser?.device_id!],
         name: "DM",
       });
     });

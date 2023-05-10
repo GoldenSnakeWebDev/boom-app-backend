@@ -34,7 +34,7 @@ declare global {
 }
 
 export interface IOnSignalData {
-  included_segments: Array<string>;
+  include_external_user_id: Array<string>;
   contents: {
     en: string;
     es: string;

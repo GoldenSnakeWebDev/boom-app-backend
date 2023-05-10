@@ -67,7 +67,7 @@ router.patch(
             en: msgFriend,
             es: msgFriend,
           },
-          included_segments: [req.currentUser?.device_id!],
+          include_external_user_id: [req.currentUser?.device_id!],
           name: "Friends",
         });
       }
@@ -92,7 +92,7 @@ router.patch(
             en: msgRemovedFrd,
             es: msgRemovedFrd,
           },
-          included_segments: [nextUser?.device_id!],
+          include_external_user_id: [nextUser?.device_id!],
           name: "Friends",
         });
       }
@@ -133,7 +133,7 @@ router.patch(
             en: msgFrd,
             es: msgFrd,
           },
-          included_segments: [req.currentUser?.device_id!],
+          include_external_user_id: [req.currentUser?.device_id!],
           name: "frens",
         });
       }
@@ -150,7 +150,7 @@ router.patch(
             en: `${req.currentUser?.username} is now your fren`,
             es: `${req.currentUser?.username} is now your fren`,
           },
-          included_segments: [nextUser?.device_id!],
+          include_external_user_id: [nextUser?.device_id!],
           name: "Friends",
         });
       }

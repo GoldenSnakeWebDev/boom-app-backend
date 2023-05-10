@@ -186,7 +186,7 @@ router.post(
         en: `${req.currentUser?.username}, you have successfully transferred your boom to ${newOwner.username}`,
         es: `${req.currentUser?.username}, you have successfully transferred your boom to ${newOwner.username}`,
       },
-      included_segments: [oldOwner.device_id!],
+      include_external_user_id: [oldOwner.device_id!],
       name: "Transfer Success",
     });
 
@@ -203,7 +203,7 @@ router.post(
         en: `You have received a new boom from  ${req.currentUser?.username}`,
         es: `You have received a new boom from  ${req.currentUser?.username}`,
       },
-      included_segments: [newOwner?.device_id!],
+      include_external_user_id: [newOwner?.device_id!],
       name: "Bought Booms ",
     });
 

@@ -235,7 +235,7 @@ router.post(
           en: `You have successfully ${actionType} ${networkType} ${amount}`,
           es: `You have successfully ${actionType} ${networkType} ${amount}`,
         },
-        included_segments: [req.currentUser?.device_id!],
+        include_external_user_id: [req.currentUser?.device_id!],
         name: `GooglePay-${actionType}`,
       });
     } else {

@@ -144,7 +144,7 @@ router.post(
         en: `You have successfully created a boom`,
         es: `You have successfully created a boom`,
       },
-      included_segments: [req.currentUser?.device_id!],
+      include_external_user_id: [req.currentUser?.device_id!],
       name: "Boom Creation",
     });
 
@@ -332,7 +332,7 @@ router.patch(
             en: `${req.currentUser?.username} has liked  your boom`,
             es: `${req.currentUser?.username} has liked  your boom`,
           },
-          included_segments: [boomOwner.device_id!],
+          include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
         });
       } else {
@@ -357,7 +357,7 @@ router.patch(
             en: `${req.currentUser?.username} has disliked your boom`,
             es: `${req.currentUser?.username} has disliked your boom`,
           },
-          included_segments: [boomOwner.device_id!],
+          include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
         });
       }
@@ -384,7 +384,7 @@ router.patch(
             en: `${req.currentUser?.username} has loved your boom`,
             es: `${req.currentUser?.username} has loved your boom`,
           },
-          included_segments: [boomOwner.device_id!],
+          include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
         });
       } else {
@@ -408,7 +408,7 @@ router.patch(
             en: `${req.currentUser?.username} has disliked your boom`,
             es: `${req.currentUser?.username} has disliked your boom`,
           },
-          included_segments: [boomOwner.device_id!],
+          include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
         });
       }
@@ -434,7 +434,7 @@ router.patch(
             en: `${req.currentUser?.username} has smiled at your Boom`,
             es: `${req.currentUser?.username} has smiled at your Boom`,
           },
-          included_segments: [boomOwner.device_id!],
+          include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
         });
       } else {
@@ -458,7 +458,7 @@ router.patch(
             en: `${req.currentUser?.username} is sad about your boom`,
             es: `${req.currentUser?.username} is sad about your boom`,
           },
-          included_segments: [boomOwner.device_id!],
+          include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
         });
       }
@@ -489,7 +489,7 @@ router.patch(
             en: `${req.currentUser?.username} has re-boomed your Boom`,
             es: `${req.currentUser?.username} has re-boomed your Boom`,
           },
-          included_segments: [boomOwner.device_id!],
+          include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
         });
       } else {
@@ -513,7 +513,7 @@ router.patch(
             en: `${req.currentUser?.username} is re-boomed`,
             es: `${req.currentUser?.username} is re-boomed`,
           },
-          included_segments: [boomOwner.device_id!],
+          include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
         });
       }
@@ -539,7 +539,7 @@ router.patch(
             en: `${req.currentUser?.username} has reported your boom`,
             es: `${req.currentUser?.username} has reported your boom`,
           },
-          included_segments: [boomOwner.device_id!],
+          include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
         });
       } else {
@@ -563,7 +563,7 @@ router.patch(
             en: `${req.currentUser?.username} has withheld the reporting on your boom`,
             es: `${req.currentUser?.username} has withheld the reporting on your boom`,
           },
-          included_segments: [boomOwner.device_id!],
+          include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
         });
       }
@@ -720,7 +720,7 @@ router.post(
         en: `${req.currentUser?.username} has bought your boom successfully at ${network.symbol} ${existBoom.price}`,
         es: `${req.currentUser?.username} has bought your boom successfully at ${network.symbol} ${existBoom.price}`,
       },
-      included_segments: [oldOwner.device_id!],
+      include_external_user_id: [oldOwner.device_id!],
       name: "Bought Booms",
     });
 
@@ -737,7 +737,7 @@ router.post(
         en: `You have successfully bought a boom`,
         es: `You have successfully bought a boom`,
       },
-      included_segments: [req.currentUser?.device_id!],
+      include_external_user_id: [req.currentUser?.device_id!],
       name: "Bought Booms ",
     });
 

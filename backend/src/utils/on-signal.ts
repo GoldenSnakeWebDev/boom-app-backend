@@ -32,9 +32,9 @@ export const onSignalSendNotification = async (data: IOnSignalData) => {
     JSON.stringify({
       app_id: config.PUSH_NOTIFICATION.ON_SIGNAL_APP_ID,
       name: data.name,
-      included_segments: ["Subscribed Users"],
+      include_external_user_id: ["Subscribed Users"],
       contents: data.contents,
-      include_external_user_ids: data.included_segments,
+      include_external_user_ids: data.include_external_user_id,
       channel_for_external_user_ids: "push",
       headings: data.contents,
     })

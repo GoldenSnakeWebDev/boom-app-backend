@@ -72,7 +72,7 @@ router.post(
 
     await onSignalSendNotification({
       contents: { en: notification.message, es: notification.message },
-      included_segments: [req.currentUser?.device_id!],
+      include_external_user_id: [req.currentUser?.device_id!],
       name: "Commenting",
     });
 
