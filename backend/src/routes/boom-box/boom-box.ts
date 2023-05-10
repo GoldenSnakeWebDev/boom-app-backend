@@ -189,6 +189,9 @@ router.post(
         },
         include_external_user_id: [currentUser?.device_id!],
         name: "DM",
+        headings:{
+          en: `Direct Message`
+        }
       });
     });
     return res.status(200).json({
@@ -269,6 +272,9 @@ router.post(
         },
         include_external_user_id: [currentUser?.device_id!],
         name: "DM",
+        headings:{
+          en: `Direct Message`
+        }
       });
     });
 

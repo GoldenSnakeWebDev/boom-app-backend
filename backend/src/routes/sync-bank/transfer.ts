@@ -188,6 +188,9 @@ router.post(
       },
       include_external_user_id: [oldOwner.device_id!],
       name: "Transfer Success",
+      headings:{
+        en: `Boom Sent`
+      }
     });
 
     // New Owner's Notification
@@ -205,6 +208,9 @@ router.post(
       },
       include_external_user_id: [newOwner?.device_id!],
       name: "Bought Booms ",
+      headings:{
+        en: `Boom Received`
+      }
     });
 
     res.status(200).json({

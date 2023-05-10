@@ -146,6 +146,9 @@ router.post(
       },
       include_external_user_id: [req.currentUser?.device_id!],
       name: "Boom Creation",
+      headings:{
+        en: `Boom Creation`
+      }
     });
 
     res.status(201).json({
@@ -334,6 +337,9 @@ router.patch(
           },
           include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
+          headings:{
+            en: `Reaction`
+          }
         });
       } else {
         await Boom.findByIdAndUpdate(
@@ -359,6 +365,9 @@ router.patch(
           },
           include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
+          headings:{
+            en: `Uncreaction`
+          }
         });
       }
     } else if (react_type === "loves") {
@@ -386,6 +395,9 @@ router.patch(
           },
           include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
+          headings:{
+            en: `Loved Boom`
+          }
         });
       } else {
         await Boom.findByIdAndUpdate(
@@ -410,6 +422,9 @@ router.patch(
           },
           include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
+          headings:{
+            en: `Unreaction`
+          }
         });
       }
     } else if (react_type === "smiles") {
@@ -436,6 +451,9 @@ router.patch(
           },
           include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
+          headings:{
+            en: `Boom Smile`
+          }
         });
       } else {
         await Boom.findByIdAndUpdate(
@@ -460,6 +478,9 @@ router.patch(
           },
           include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
+          headings:{
+            en: `Sad Reaction`
+          }
         });
       }
     } else if (react_type === "rebooms") {
@@ -491,6 +512,9 @@ router.patch(
           },
           include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
+          headings:{
+            en: `Re-Boom Reaction`
+          }
         });
       } else {
         await Boom.findByIdAndUpdate(
@@ -515,6 +539,9 @@ router.patch(
           },
           include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
+          headings:{
+            en: `Reboom Reaction`
+          }
         });
       }
     } else if (react_type === "reports") {
@@ -541,6 +568,9 @@ router.patch(
           },
           include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
+          headings:{
+            en: `Boom Reported`
+          }
         });
       } else {
         await Boom.findByIdAndUpdate(
@@ -565,6 +595,9 @@ router.patch(
           },
           include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
+          headings:{
+            en: `Unreported Boom`
+          }
         });
       }
     }
@@ -722,6 +755,9 @@ router.post(
       },
       include_external_user_id: [oldOwner.device_id!],
       name: "Bought Booms",
+      headings:{
+        en: `Boom Minted`
+      }
     });
 
     // New Owner's Notification
@@ -739,6 +775,9 @@ router.post(
       },
       include_external_user_id: [req.currentUser?.device_id!],
       name: "Bought Booms ",
+      headings:{
+        en: `Boom Bought`
+      }
     });
 
     res.status(200).json({

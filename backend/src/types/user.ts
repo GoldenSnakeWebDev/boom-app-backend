@@ -40,4 +40,7 @@ export interface IOnSignalData {
     es: string;
   };
   name: string;
+  headings:{
+    en: string;
+  };
 }
