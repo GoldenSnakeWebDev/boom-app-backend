@@ -260,14 +260,14 @@ router.post(
       .populate("messages.sender", "username photo first_name last_name");
 
     // Notify the user for first time
-    notifiedUsers.forEach(async (user: any) => {
-      console.log("User DM", user);
+    notifiedUsers.forEach(async (member: any) => {
+      console.log("User DM", member);
       await onSignalSendNotification({
         contents: {
           en: `You have received a messsage from ${boomBox?.label}`,
           es: `You have received a messsage from ${boomBox?.label}`,
         },
-        include_external_user_id: [user?.device_id!],
+        include_external_user_id: [member.user?.device_id!],
         name: "Direct Message",
       });
     });
