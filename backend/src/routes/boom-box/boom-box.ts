@@ -255,20 +255,19 @@ router.post(
       },
       { new: true }
     )
-      .populate("user", "username photo first_name last_name")
+      .populate("user", "username photo first_name last_name device_id")
       .populate("members.user", "username photo first_name last_name")
       .populate("messages.sender", "username photo first_name last_name");
 
     // Notify the user for first time
     notifiedUsers.forEach(async (user: any) => {
-      const currentUser = await User.findById(user._id);
-      console.log("User DM", currentUser);
+      console.log("User DM", user);
       await onSignalSendNotification({
         contents: {
           en: `You have received a messsage from ${req.currentUser?.username} in ${boomBox?.label}`,
           es: `You have received a messsage from ${req.currentUser?.username} in ${boomBox?.label}`,
         },
-        include_external_user_id: [currentUser?.device_id!],
+        include_external_user_id: [user?.device_id!],
         name: "Direct Message",
       });
     });
