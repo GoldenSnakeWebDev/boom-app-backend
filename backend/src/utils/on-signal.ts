@@ -27,6 +27,8 @@ export const onSignalSendNotification = async (data: IOnSignalData) => {
     console.log("ERROR:");
     console.log(e);
   });
+  console.log("Fix OnSignal")
+  console.log(data.include_external_user_id);
 
   req.write(
     JSON.stringify({
