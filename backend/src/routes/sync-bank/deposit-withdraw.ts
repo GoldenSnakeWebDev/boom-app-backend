@@ -81,7 +81,7 @@ router.post(
         en: msg,
         es: msg,
       },
-      included_segments: [req.currentUser?.device_id!],
+      include_external_user_id: [req.currentUser?.device_id!],
       name: `deposit-withdraw`,
     });
 
@@ -168,7 +168,7 @@ router.post(
         en: msg,
         es: msg,
       },
-      included_segments: [req.currentUser?.device_id!],
+      include_external_user_id: [req.currentUser?.device_id!],
       name: `deposit-withdraw`,
     });
 

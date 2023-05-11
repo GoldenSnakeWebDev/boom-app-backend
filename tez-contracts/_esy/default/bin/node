@@ -1,0 +1,4 @@
+#!/bin/sh
+export ESY__NODE_BIN_PATH='/Users/ggichuru/ControlRoom/Ngeni/Client/felix-boom-social-media/tez-contracts/_esy/default/bin'
+exec '/usr/bin/node' -r '/Users/ggichuru/ControlRoom/Ngeni/Client/felix-boom-social-media/tez-contracts/_esy/default/pnp.js' "$@"
+              

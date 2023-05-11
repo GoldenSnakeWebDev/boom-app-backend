@@ -144,8 +144,11 @@ router.post(
         en: `You have successfully created a boom`,
         es: `You have successfully created a boom`,
       },
-      included_segments: [req.currentUser?.device_id!],
+      include_external_user_id: [req.currentUser?.device_id!],
       name: "Boom Creation",
+      headings:{
+        en: `Boom Creation`
+      }
     });
 
     res.status(201).json({
@@ -332,8 +335,11 @@ router.patch(
             en: `${req.currentUser?.username} has liked  your boom`,
             es: `${req.currentUser?.username} has liked  your boom`,
           },
-          included_segments: [boomOwner.device_id!],
+          include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
+          headings:{
+            en: `Reaction`
+          }
         });
       } else {
         await Boom.findByIdAndUpdate(
@@ -357,8 +363,11 @@ router.patch(
             en: `${req.currentUser?.username} has disliked your boom`,
             es: `${req.currentUser?.username} has disliked your boom`,
           },
-          included_segments: [boomOwner.device_id!],
+          include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
+          headings:{
+            en: `Uncreaction`
+          }
         });
       }
     } else if (react_type === "loves") {
@@ -384,8 +393,11 @@ router.patch(
             en: `${req.currentUser?.username} has loved your boom`,
             es: `${req.currentUser?.username} has loved your boom`,
           },
-          included_segments: [boomOwner.device_id!],
+          include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
+          headings:{
+            en: `Loved Boom`
+          }
         });
       } else {
         await Boom.findByIdAndUpdate(
@@ -408,8 +420,11 @@ router.patch(
             en: `${req.currentUser?.username} has disliked your boom`,
             es: `${req.currentUser?.username} has disliked your boom`,
           },
-          included_segments: [boomOwner.device_id!],
+          include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
+          headings:{
+            en: `Unreaction`
+          }
         });
       }
     } else if (react_type === "smiles") {
@@ -434,8 +449,11 @@ router.patch(
             en: `${req.currentUser?.username} has smiled at your Boom`,
             es: `${req.currentUser?.username} has smiled at your Boom`,
           },
-          included_segments: [boomOwner.device_id!],
+          include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
+          headings:{
+            en: `Boom Smile`
+          }
         });
       } else {
         await Boom.findByIdAndUpdate(
@@ -458,8 +476,11 @@ router.patch(
             en: `${req.currentUser?.username} is sad about your boom`,
             es: `${req.currentUser?.username} is sad about your boom`,
           },
-          included_segments: [boomOwner.device_id!],
+          include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
+          headings:{
+            en: `Sad Reaction`
+          }
         });
       }
     } else if (react_type === "rebooms") {
@@ -489,8 +510,11 @@ router.patch(
             en: `${req.currentUser?.username} has re-boomed your Boom`,
             es: `${req.currentUser?.username} has re-boomed your Boom`,
           },
-          included_segments: [boomOwner.device_id!],
+          include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
+          headings:{
+            en: `Re-Boom Reaction`
+          }
         });
       } else {
         await Boom.findByIdAndUpdate(
@@ -513,8 +537,11 @@ router.patch(
             en: `${req.currentUser?.username} is re-boomed`,
             es: `${req.currentUser?.username} is re-boomed`,
           },
-          included_segments: [boomOwner.device_id!],
+          include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
+          headings:{
+            en: `Reboom Reaction`
+          }
         });
       }
     } else if (react_type === "reports") {
@@ -539,8 +566,11 @@ router.patch(
             en: `${req.currentUser?.username} has reported your boom`,
             es: `${req.currentUser?.username} has reported your boom`,
           },
-          included_segments: [boomOwner.device_id!],
+          include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
+          headings:{
+            en: `Boom Reported`
+          }
         });
       } else {
         await Boom.findByIdAndUpdate(
@@ -563,8 +593,11 @@ router.patch(
             en: `${req.currentUser?.username} has withheld the reporting on your boom`,
             es: `${req.currentUser?.username} has withheld the reporting on your boom`,
           },
-          included_segments: [boomOwner.device_id!],
+          include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
+          headings:{
+            en: `Unreported Boom`
+          }
         });
       }
     }
@@ -720,8 +753,11 @@ router.post(
         en: `${req.currentUser?.username} has bought your boom successfully at ${network.symbol} ${existBoom.price}`,
         es: `${req.currentUser?.username} has bought your boom successfully at ${network.symbol} ${existBoom.price}`,
       },
-      included_segments: [oldOwner.device_id!],
+      include_external_user_id: [oldOwner.device_id!],
       name: "Bought Booms",
+      headings:{
+        en: `Boom Minted`
+      }
     });
 
     // New Owner's Notification
@@ -737,8 +773,11 @@ router.post(
         en: `You have successfully bought a boom`,
         es: `You have successfully bought a boom`,
       },
-      included_segments: [req.currentUser?.device_id!],
+      include_external_user_id: [req.currentUser?.device_id!],
       name: "Bought Booms ",
+      headings:{
+        en: `Boom Bought`
+      }
     });
 
     res.status(200).json({

@@ -22,12 +22,12 @@ export class NetowkSeed extends SeedHelper {
         },
         {
           name: "Tezos",
-          image_url: "https://tezos.com/favicon-16x16.png",
+          image_url: "https://lh3.googleusercontent.com/pw/AJFCJaXTz7aHCa5ppryvbsUU7K6hvfLD6zO4gdwfNor3RsBeqB_jZQI6GX09WXY2Q7Tbfj5C6lmXRuiMsT7PxYKxFHz0hL-uJC6dCq0_z6w-gW7khuYOm6DD7rluwcUQVClB7AGEF7YaYLn87my0I5Y7XwKDLA=w805-h988-s-no?authuser=0",
           symbol: "TZ",
         },
         {
           name: "polygon(Matic)",
-          image_url: "https://polygon.technology/favicon-32x32.png",
+          image_url: "https://lh3.googleusercontent.com/pw/AJFCJaVIpWecFNGNX89IyIvgoZ9VYEcYLriuEnJxMWl3mln-frvHFYGe1_11ZFXahnKvnztnc8INIzhcBFoJMark30fXILSNMJ2wXmtvdCuUgvkgzKNVWbUbF_7wIampel94SXl8zV8ERs_X6lq0fnuS_hSxWg=w512-h512-s-no?authuser=0",
           symbol: "MATIC",
         },
         {
