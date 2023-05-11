@@ -261,8 +261,8 @@ router.post(
 
     // Notify the user for first time
     notifiedUsers.forEach(async (user: any) => {
-      console.log("User DM", user);
       const currentUser = await User.findById(user._id);
+      console.log("User DM", currentUser);
       await onSignalSendNotification({
         contents: {
           en: `You have received a messsage from ${req.currentUser?.username} in ${boomBox?.label}`,
