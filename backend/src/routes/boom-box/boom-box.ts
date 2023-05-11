@@ -264,8 +264,8 @@ router.post(
       console.log("User DM", member);
       await onSignalSendNotification({
         contents: {
-          en: `You have received a messsage from ${boomBox?.label}`,
-          es: `You have received a messsage from ${boomBox?.label}`,
+          en: `You have received a messsage from ${req.currentUser?.username}`,
+          es: `You have received a messsage from ${req.currentUser?.username}`,
         },
         include_external_user_id: [member.user?.device_id!],
         name: "Direct Message",
