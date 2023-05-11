@@ -211,6 +211,11 @@ router.post(
     const { content, timestamp } = req.body;
     let boomBox = await BoomBox.findById(req.params.id)
       .populate("user", "username photo first_name last_name device_id")
+
+
+
+
+
       .populate("members.user", "username photo first_name last_name")
       .populate("messages.sender", "username photo first_name last_name");
     if (!boomBox) {
