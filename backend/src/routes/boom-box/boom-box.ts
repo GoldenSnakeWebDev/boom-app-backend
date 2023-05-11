@@ -230,9 +230,9 @@ router.post(
     // }
 
     const notifiedUsers: Array<any> = boomBox
-      ?.members!.map((user: any) => {
-        if (!user.user._id.equals(req.currentUser?.id!)) {
-          return user;
+      ?.members!.map((member: any) => {
+        if (!member.user._id.equals(req.currentUser?.id!)) {
+          return member;
         }
         return null;
       })

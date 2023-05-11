@@ -3,6 +3,7 @@ import { body } from "express-validator";
 import jwt from "jsonwebtoken";
 import { validateRequest } from "../../middlewares/validate-request";
 import { User } from "./../../models/user";
+import { Token } from './../../models/token';
 import { BadRequestError } from "../../errors/bad-request-error";
 import { PasswordManager } from "../../utils/password-manager";
 import { config } from "./../../config";
@@ -91,6 +92,10 @@ router.post(
       config.JWT_KEY
     );
 
+
+    // create token
+
+    await Token.create({ token, user: user.id });
     req.session = {
       jwt: token,
     };

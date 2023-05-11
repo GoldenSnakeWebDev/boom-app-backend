@@ -5,6 +5,7 @@ import { NotAuthorizedError } from "../../errors/not-authorized-error";
 import { BadRequestError } from "../../errors/bad-request-error";
 import { requireSuperAdmin } from "../../middlewares/require-super-admin";
 import { ApiResponse } from "../../utils/api-response";
+import { Token } from "../../models/token";
 
 const router = Router();
 
@@ -30,7 +31,8 @@ router.get(
     const user = await User.findById(req.currentUser?.id)
       .populate("sync_bank")
       .populate("friends", "username photo first_name last_name")
-      .populate("funs", "username photo first_name last_name");
+      .populate("funs", "username photo first_name last_name")
+      .populate("tipping_info");
 
     if (!user) {
       throw new NotAuthorizedError();
@@ -179,6 +181,13 @@ router.patch(
       },
       { new: true }
     );
+
+    const token = await Token.findOne({ user: req.params.id, is_active: true, is_deleted: false })
+
+    if (token) {
+      await Token.findByIdAndUpdate(token.id, { is_active: false, is_deleted: true }, { new: true });
+    }
+
     /**
      * Burn user
      */
@@ -219,9 +228,9 @@ router.get(
     const mergeUserList =
       frenForCurrentUser && fansForCurrentUser
         ? [
-            ...frenForCurrentUser.friends!.map((item: any) => item._id),
-            ...fansForCurrentUser.funs!.map((item: any) => item._id),
-          ]
+          ...frenForCurrentUser.friends!.map((item: any) => item._id),
+          ...fansForCurrentUser.funs!.map((item: any) => item._id),
+        ]
         : [];
 
     const users = await User.find({

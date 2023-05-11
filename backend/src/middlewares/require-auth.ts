@@ -3,8 +3,9 @@ import jwt from "jsonwebtoken";
 import { NotAuthorizedError } from "./../errors/not-authorized-error";
 import { UserPayload } from "./../types/user";
 import { config } from "../config";
+import { Token } from "../models/token";
 
-export const requireAuth = (
+export const requireAuth = async (
   req: Request,
   _res: Response,
   next: NextFunction
@@ -21,6 +22,12 @@ export const requireAuth = (
   const accessToken = req.session?.jwt || token;
 
   if (!accessToken) {
+    throw new NotAuthorizedError();
+  }
+
+
+  const savedToken = await Token.findOne({ token: accessToken, is_deleted: false, is_active: true });
+  if (!savedToken) {
     throw new NotAuthorizedError();
   }
 

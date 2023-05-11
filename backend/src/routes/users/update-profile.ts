@@ -56,6 +56,7 @@ router.post(
       location,
       social_media,
       cover,
+      tipping_info
     } = req.body;
     const user = await User.findById(req.currentUser?.id!);
 
@@ -83,6 +84,7 @@ router.post(
         cover,
         location,
         social_media,
+        tipping_info
       },
       { new: true }
     );

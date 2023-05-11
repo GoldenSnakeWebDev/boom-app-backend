@@ -18,6 +18,7 @@ export interface UserPayload {
   device_id?: string;
   blocked_users?: Array<any>;
   location?: string;
+  tipping_info?: any;
   bio?: string;
   username?: string;
   user_type?: string;

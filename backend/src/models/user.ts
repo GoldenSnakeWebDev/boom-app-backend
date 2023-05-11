@@ -23,6 +23,10 @@ interface IUser {
   password_reset_token?: string;
   is_admin?: boolean;
   bio?: string;
+  tipping_info?: {
+    network: string;
+    address: string;
+  }
   username?: string;
   password: string;
   user_type?: string;
@@ -59,6 +63,10 @@ const userSchema = new Schema<IUser>(
         ).join(",")}`,
       },
       default: UserType.NORAMAL,
+    },
+    tipping_info: {
+      network: { type: Schema.Types.ObjectId, ref: "Network" },
+      address: { type: Schema.Types.String, default: "" }
     },
     booms: [{ type: Schema.Types.ObjectId, ref: "BoomBox" }],
     blocked_users: [{ type: Schema.Types.ObjectId, ref: "User" }],
