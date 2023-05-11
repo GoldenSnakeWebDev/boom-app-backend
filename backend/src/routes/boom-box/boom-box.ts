@@ -188,10 +188,7 @@ router.post(
           es: boomBox.messages[0].content,
         },
         include_external_user_id: [currentUser?.device_id!],
-        name: "DM",
-        headings:{
-          en: `Direct Message`
-        }
+        name: "Direct Message",
       });
     });
     return res.status(200).json({
@@ -271,10 +268,7 @@ router.post(
           es: `You have received a messsage from ${req.currentUser?.username} in ${boomBox?.label}`,
         },
         include_external_user_id: [currentUser?.device_id!],
-        name: "DM",
-        headings:{
-          en: `Direct Message`
-        }
+        name: "Direct Message",
       });
     });
 

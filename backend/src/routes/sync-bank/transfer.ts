@@ -187,10 +187,7 @@ router.post(
         es: `${req.currentUser?.username}, you have successfully transferred your boom to ${newOwner.username}`,
       },
       include_external_user_id: [oldOwner.device_id!],
-      name: "Transfer Success",
-      headings:{
-        en: `Boom Sent`
-      }
+      name: "Boom Sent",
     });
 
     // New Owner's Notification
@@ -207,10 +204,8 @@ router.post(
         es: `You have received a new boom from  ${req.currentUser?.username}`,
       },
       include_external_user_id: [newOwner?.device_id!],
-      name: "Bought Booms ",
-      headings:{
-        en: `Boom Received`
-      }
+      name: "Boom Received",
+
     });
 
     res.status(200).json({

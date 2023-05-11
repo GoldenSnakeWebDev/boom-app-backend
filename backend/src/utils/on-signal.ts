@@ -36,7 +36,7 @@ export const onSignalSendNotification = async (data: IOnSignalData) => {
       contents: data.contents,
       include_external_user_ids: data.include_external_user_id,
       channel_for_external_user_ids: "push",
-      headings: data.headings,
+      headings: { en: data.name },
     })
   );
   req.end();

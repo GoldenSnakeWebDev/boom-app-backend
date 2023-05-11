@@ -146,9 +146,6 @@ router.post(
       },
       include_external_user_id: [req.currentUser?.device_id!],
       name: "Boom Creation",
-      headings:{
-        en: `Boom Creation`
-      }
     });
 
     res.status(201).json({
@@ -337,9 +334,7 @@ router.patch(
           },
           include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
-          headings:{
-            en: `Reaction`
-          }
+
         });
       } else {
         await Boom.findByIdAndUpdate(
@@ -365,9 +360,7 @@ router.patch(
           },
           include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
-          headings:{
-            en: `Uncreaction`
-          }
+
         });
       }
     } else if (react_type === "loves") {
@@ -395,9 +388,6 @@ router.patch(
           },
           include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
-          headings:{
-            en: `Loved Boom`
-          }
         });
       } else {
         await Boom.findByIdAndUpdate(
@@ -422,9 +412,6 @@ router.patch(
           },
           include_external_user_id: [boomOwner.device_id!],
           name: "Reaction",
-          headings:{
-            en: `Unreaction`
-          }
         });
       }
     } else if (react_type === "smiles") {
@@ -450,10 +437,7 @@ router.patch(
             es: `${req.currentUser?.username} has smiled at your Boom`,
           },
           include_external_user_id: [boomOwner.device_id!],
-          name: "Reaction",
-          headings:{
-            en: `Boom Smile`
-          }
+          name: "Smiled Reaction",
         });
       } else {
         await Boom.findByIdAndUpdate(
@@ -477,10 +461,7 @@ router.patch(
             es: `${req.currentUser?.username} is sad about your boom`,
           },
           include_external_user_id: [boomOwner.device_id!],
-          name: "Reaction",
-          headings:{
-            en: `Sad Reaction`
-          }
+          name: "Sad Reaction",
         });
       }
     } else if (react_type === "rebooms") {
@@ -511,10 +492,8 @@ router.patch(
             es: `${req.currentUser?.username} has re-boomed your Boom`,
           },
           include_external_user_id: [boomOwner.device_id!],
-          name: "Reaction",
-          headings:{
-            en: `Re-Boom Reaction`
-          }
+          name: "Re-Boom Reaction",
+
         });
       } else {
         await Boom.findByIdAndUpdate(
@@ -538,10 +517,8 @@ router.patch(
             es: `${req.currentUser?.username} is re-boomed`,
           },
           include_external_user_id: [boomOwner.device_id!],
-          name: "Reaction",
-          headings:{
-            en: `Reboom Reaction`
-          }
+          name: "Reboom Reaction",
+
         });
       }
     } else if (react_type === "reports") {
@@ -567,10 +544,8 @@ router.patch(
             es: `${req.currentUser?.username} has reported your boom`,
           },
           include_external_user_id: [boomOwner.device_id!],
-          name: "Reaction",
-          headings:{
-            en: `Boom Reported`
-          }
+          name: "Report Reaction",
+
         });
       } else {
         await Boom.findByIdAndUpdate(
@@ -594,10 +569,8 @@ router.patch(
             es: `${req.currentUser?.username} has withheld the reporting on your boom`,
           },
           include_external_user_id: [boomOwner.device_id!],
-          name: "Reaction",
-          headings:{
-            en: `Unreported Boom`
-          }
+          name: "Withheld Reaction",
+
         });
       }
     }
@@ -754,10 +727,7 @@ router.post(
         es: `${req.currentUser?.username} has bought your boom successfully at ${network.symbol} ${existBoom.price}`,
       },
       include_external_user_id: [oldOwner.device_id!],
-      name: "Bought Booms",
-      headings:{
-        en: `Boom Minted`
-      }
+      name: "Boom Minted",
     });
 
     // New Owner's Notification
@@ -774,10 +744,7 @@ router.post(
         es: `You have successfully bought a boom`,
       },
       include_external_user_id: [req.currentUser?.device_id!],
-      name: "Bought Booms ",
-      headings:{
-        en: `Boom Bought`
-      }
+      name: "Boom Bought",
     });
 
     res.status(200).json({

@@ -115,10 +115,7 @@ router.post(
         es: `Successfully ${actionType} ${networkType} ${amount}`,
       },
       include_external_user_id: [req.currentUser?.device_id!],
-      name: `GooglePay-${actionType}`,
-      headings:{
-        en: `${networkType} ${actionType}`
-      }
+      name: `GooglePay ${networkType} ${actionType}`,
     });
     res.status(200).json({
       status: "success",

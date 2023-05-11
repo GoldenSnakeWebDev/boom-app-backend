@@ -73,10 +73,7 @@ router.post(
     await onSignalSendNotification({
       contents: { en: notification.message, es: notification.message },
       include_external_user_id: [req.currentUser?.device_id!],
-      name: "Commenting",
-      headings:{
-        en: `Boom Comments`
-      }
+      name: "Boom Comments",
     });
 
     boom = await Boom.findByIdAndUpdate(

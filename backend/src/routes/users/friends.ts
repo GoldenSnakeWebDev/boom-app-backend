@@ -94,6 +94,7 @@ router.patch(
           },
           include_external_user_id: [nextUser?.device_id!],
           name: "Friends",
+
         });
       }
     }
