@@ -709,7 +709,10 @@ router.post(
 
     await Boom.findByIdAndUpdate(
       existBoom.id,
-      { user: req.currentUser?.id! },
+      {
+        user: req.currentUser?.id!,
+        quantity: existBoom?.quantity! - boomVersion?.minted_versions!
+      },
       { new: true }
     );
 

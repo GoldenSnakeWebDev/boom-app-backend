@@ -152,7 +152,7 @@ router.patch(
             es: `${req.currentUser?.username} is now your fren`,
           },
           include_external_user_id: [nextUser?.device_id!],
-          name: "Friends",
+          name: "Fun",
         });
       }
     } else {

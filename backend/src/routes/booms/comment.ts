@@ -1,7 +1,7 @@
 import { Router, Request, Response } from "express";
 import { body } from "express-validator";
 import { Comment } from "../../models/comment";
-import { Boom } from "../../models";
+import { Boom, User } from "../../models";
 import { validateRequest } from "../../middlewares";
 import { requireAuth } from "../../middlewares";
 import { BadRequestError } from "../../errors";
@@ -53,6 +53,12 @@ router.post(
       throw new BadRequestError("This boom does not exist");
     }
 
+    const boomOwner = await User.findById(boom.user);
+
+    if (!boomOwner) {
+      throw new BadRequestError("Boom  User not found");
+    }
+
     const comment = new Comment({
       message,
       user: req.currentUser?.id!,
@@ -72,8 +78,8 @@ router.post(
 
     await onSignalSendNotification({
       contents: { en: notification.message, es: notification.message },
-      include_external_user_id: [req.currentUser?.device_id!],
-      name: "Boom Comments",
+      include_external_user_id: [boomOwner?.device_id!],
+      name: "Comment",
     });
 
     boom = await Boom.findByIdAndUpdate(
