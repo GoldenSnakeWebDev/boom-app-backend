@@ -68,7 +68,7 @@ router.patch(
             es: msgFriend,
           },
           include_external_user_id: [req.currentUser?.device_id!],
-          name: "Friends",
+          name: "Fun",
         });
       }
     } else {
@@ -93,7 +93,7 @@ router.patch(
             es: msgRemovedFrd,
           },
           include_external_user_id: [nextUser?.device_id!],
-          name: "Friends",
+          name: "Fun",
 
         });
       }
