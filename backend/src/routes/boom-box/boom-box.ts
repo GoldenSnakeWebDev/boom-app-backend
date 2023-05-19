@@ -393,7 +393,7 @@ router.delete(
 
 
     let boom = await BoomBox.findByIdAndUpdate(req.params.id, {
-      $pull: { "members.user": req.params.memberId }
+      $pull: { "members": { "user": req.params.memberId } }
     }, { new: true })
       .populate("user", "username photo first_name last_name")
       .populate("members.user", "username photo first_name last_name")
