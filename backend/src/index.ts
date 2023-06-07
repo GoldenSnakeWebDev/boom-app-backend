@@ -3,6 +3,8 @@ import { server } from "./app";
 import { config } from "./config";
 import { updateStatuses } from "./schedular";
 import { seed } from "./seeders/seeds";
+// import { passwordResetTemplate } from "./templates/password-reset";
+// import { sendGridSendMail } from "./utils/send-grid";
 // import { crossChainMint } from "./utils/cross-mint";
 
 const start = async () => {
