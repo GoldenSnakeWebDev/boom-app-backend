@@ -730,7 +730,7 @@ router.post(
         es: `${req.currentUser?.username} has bought your boom successfully at ${network.symbol} ${existBoom.price}`,
       },
       include_external_user_id: [oldOwner.device_id!],
-      name: "Boom Minted",
+      name: "Boom Bought",
     });
 
     // New Owner's Notification

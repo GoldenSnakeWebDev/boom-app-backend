@@ -50,8 +50,8 @@ router.post(
 
     const user = await User.findOne({
       $or: [
-        { username: { $regex: usernameRegex } },
         { email: { $regex: emailRegex } },
+        { username: { $regex: `!${usernameRegex}` } },
       ],
     });
 
@@ -76,7 +76,7 @@ router.post(
 
     // create user with password
 
-    const newUser = new User({ email, password, username, is_active: true });
+    const newUser = new User({ email, password, username: `!${username}`, is_active: true });
 
     const syncBank = await createSyncBankForNewUser({
       user: newUser.id,
