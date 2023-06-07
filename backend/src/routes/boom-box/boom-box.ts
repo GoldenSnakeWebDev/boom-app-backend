@@ -385,11 +385,11 @@ router.delete(
       throw new BadRequestError("BoomBox not found!. Try again later");
     }
 
-    if (boomBox.is_group) {
-      if (boomBox.user?.toString() !== req.currentUser?.id) {
-        throw new BadRequestError("You are not allowed to remove a member from this Boom Box");
-      }
-    }
+    // if (boomBox.is_group) {
+    //   if (boomBox.user?.toString() !== req.currentUser?.id) {
+    //     throw new BadRequestError("You are not allowed to remove a member from this Boom Box");
+    //   }
+    // }
 
 
     let boom = await BoomBox.findByIdAndUpdate(req.params.id, {

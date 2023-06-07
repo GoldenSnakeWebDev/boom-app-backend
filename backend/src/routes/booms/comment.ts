@@ -68,11 +68,19 @@ router.post(
 
     await comment.save();
 
-    const notification = await Notification.create({
+    await Notification.create({
       notification_type: NotificationType.BOOM,
       user: req.currentUser?.id,
       boom: req.params.boomId,
-      message: `${req.currentUser?.username} commented on your boom`,
+      message: `You have commented on ${boom.title}`,
+      timestamp: new Date(timestamp),
+    });
+
+    const notification = await Notification.create({
+      notification_type: NotificationType.BOOM,
+      user: boom.user,
+      boom: req.params.boomId,
+      message: `${req.currentUser?.username!} has commented on ${boom.title}`,
       timestamp: new Date(timestamp),
     });
 
