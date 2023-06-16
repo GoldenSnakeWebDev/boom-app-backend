@@ -100,10 +100,10 @@ contract BoomFactory is
         return hasRole(DEFAULT_ADMIN_ROLE, _owner) ? _owner : address(0);
     }
 
-    function deployBoom721Token(string memory _name, string memory _symbol)
-        external
-        returns (BoomERC721 _token)
-    {
+    function deployBoom721Token(
+        string memory _name,
+        string memory _symbol
+    ) external returns (BoomERC721 _token) {
         _token = new BoomERC721();
         _token.initialize(
             defaultAdmin,
@@ -112,18 +112,16 @@ contract BoomFactory is
             CONTRACT_URL,
             trustedForwarders,
             primarySaleRecipient,
-            royaltyRecipient,
-            royaltyBps,
             platformFeeBps,
             platformFeeRecipient
         );
         boomER721Token = _token;
     }
 
-    function deployBoomERC20Token(string memory _name, string memory _symbol)
-        external
-        returns (TokenERC20 _token)
-    {
+    function deployBoomERC20Token(
+        string memory _name,
+        string memory _symbol
+    ) external returns (TokenERC20 _token) {
         _token = new TokenERC20();
         _token.initialize(
             defaultAdmin,
@@ -152,10 +150,9 @@ contract BoomFactory is
     }
 
     /// @dev Lets a contract admin set the URI for the contract-level metadata.
-    function setContractURI(string calldata _uri)
-        external
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
+    function setContractURI(
+        string calldata _uri
+    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
         contractURI = _uri;
     }
 }

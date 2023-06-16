@@ -46,8 +46,6 @@ abstract contract BaseTest is Test {
             CONTRACT_URI,
             forwarders(),
             saleRecipient,
-            royaltyRecipient,
-            royaltyBps,
             platformFeeBps,
             platformFeeRecipient
         );
@@ -92,10 +90,10 @@ abstract contract BaseTest is Test {
         _forwarders[0] = address(forwarder);
     }
 
-    function _mintTokenERC721To(address recipient, string memory url)
-        internal
-        returns (uint256 _tokenId)
-    {
+    function _mintTokenERC721To(
+        address recipient,
+        string memory url
+    ) internal returns (uint256 _tokenId) {
         vm.startPrank(defaultAdmin);
         _tokenId = boomERC721.mintTo(recipient, url);
         vm.stopPrank();

@@ -24,10 +24,8 @@ import "@openzeppelin/contracts-upgradeable/utils/MulticallUpgradeable.sol";
 // Helper interfaces
 import "@openzeppelin/contracts-upgradeable/interfaces/IERC2981Upgradeable.sol";
 import {Currency} from "../libraries/Currency.sol";
-
 import {IContract} from "../interfaces/IContract.sol";
 import {IOwnable} from "../interfaces/IOwnable.sol";
-import {IRoyalty} from "../interfaces/IRoyalty.sol";
 import {IPrimarySale} from "../interfaces/IPrimarySale.sol";
 import {IPlatformFee} from "../interfaces/IPlatformFee.sol";
 
@@ -35,7 +33,6 @@ contract BoomERC721 is
     Initializable,
     IContract,
     IOwnable,
-    IRoyalty,
     IPrimarySale,
     IPlatformFee,
     ITokenERC721,
@@ -56,9 +53,6 @@ contract BoomERC721 is
         keccak256(
             "MintRequest(address to,address royaltyRecipient,uint256 royaltyBps,address primarySaleRecipient,string uri,uint256 price,address currency,uint128 validityStartTimestamp,uint128 validityEndTimestamp,bytes32 uid)"
         );
-
-    /// @dev Only TRANSFER_ROLE holders can have tokens transferred from or to them, during restricted transfers.
-    bytes32 private constant TRANSFER_ROLE = keccak256("TRANSFER_ROLE");
     /// @dev Only MINTER_ROLE holders can sign off on `MintRequest`s.
     bytes32 private constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
@@ -81,12 +75,6 @@ contract BoomERC721 is
     /// @dev The adress that receives all primary sales value.
     address public platformFeeRecipient;
 
-    /// @dev The recipient of who gets the royalty.
-    address private royaltyRecipient;
-
-    /// @dev The percentage of royalty how much royalty in basis points.
-    uint128 private royaltyBps;
-
     /// @dev The % of primary sales collected by the contract as fees.
     uint128 public platformFeeBps;
 
@@ -99,9 +87,6 @@ contract BoomERC721 is
     /// @dev Mapping from tokenId => URI
     mapping(uint256 => string) private uri;
 
-    /// @dev Token ID => royalty recipient and bps for token
-    mapping(uint256 => RoyaltyInfo) private royaltyInfoForToken;
-
     /// @dev Initiliazes the contract, like a constructor.
     function initialize(
         address _defaultAdmin,
@@ -110,8 +95,6 @@ contract BoomERC721 is
         string memory _contractURI,
         address[] memory _trustedForwarders,
         address _saleRecipient,
-        address _royaltyRecipient,
-        uint128 _royaltyBps,
         uint128 _platformFeeBps,
         address _platformFeeRecipient
     ) external initializer {
@@ -121,9 +104,7 @@ contract BoomERC721 is
         __ERC2771Context_init(_trustedForwarders);
         __ERC721_init(_name, _symbol);
 
-        // Initialize this contract's state.
-        royaltyRecipient = _royaltyRecipient;
-        royaltyBps = _royaltyBps;
+        // Initialize this contract's state
         platformFeeRecipient = _platformFeeRecipient;
         primarySaleRecipient = _saleRecipient;
         contractURI = _contractURI;
@@ -132,7 +113,6 @@ contract BoomERC721 is
         _owner = _defaultAdmin;
         _setupRole(DEFAULT_ADMIN_ROLE, _defaultAdmin);
         _setupRole(MINTER_ROLE, _defaultAdmin);
-        _setupRole(TRANSFER_ROLE, _defaultAdmin);
         // _setupRole(TRANSFER_ROLE, address(0));
     }
 
@@ -156,27 +136,26 @@ contract BoomERC721 is
     }
 
     /// @dev Verifies that a mint request is signed by an account holding MINTER_ROLE (at the time of the function call).
-    function verify(MintRequest calldata _req, bytes calldata _signature)
-        public
-        view
-        returns (bool, address)
-    {
+    function verify(
+        MintRequest calldata _req,
+        bytes calldata _signature
+    ) public view returns (bool, address) {
         address signer = recoverAddress(_req, _signature);
         return (!minted[_req.uid] && hasRole(MINTER_ROLE, signer), signer);
     }
 
     /// @dev Returns the URI for a tokenId
-    function tokenURI(uint256 _tokenId)
-        public
-        view
-        override
-        returns (string memory)
-    {
+    function tokenURI(
+        uint256 _tokenId
+    ) public view override returns (string memory) {
         return uri[_tokenId];
     }
 
     /// @dev Lets an account with MINTER_ROLE mint an NFT.
-    function mintTo(address _to, string calldata _uri)
+    function mintTo(
+        address _to,
+        string calldata _uri
+    )
         external
         returns (
             // onlyRole(MINTER_ROLE)
@@ -185,20 +164,6 @@ contract BoomERC721 is
     {
         // `_mintTo` is re-used. `mintTo` just adds a minter role check.
         return _mintTo(_to, _uri);
-    }
-
-    ///     =====   External functions  =====
-
-    /// @dev See EIP-2981
-    function royaltyInfo(uint256 tokenId, uint256 salePrice)
-        external
-        view
-        virtual
-        returns (address receiver, uint256 royaltyAmount)
-    {
-        (address recipient, uint256 bps) = getRoyaltyInfoForToken(tokenId);
-        receiver = recipient;
-        royaltyAmount = (salePrice * bps) / MAX_BPS;
     }
 
     /// @dev Mints an NFT according to the provided mint request.
@@ -211,13 +176,6 @@ contract BoomERC721 is
 
         tokenIdMinted = _mintTo(receiver, _req.uri);
 
-        if (_req.royaltyRecipient != address(0)) {
-            royaltyInfoForToken[tokenIdMinted] = RoyaltyInfo({
-                recipient: _req.royaltyRecipient,
-                bps: _req.royaltyBps
-            });
-        }
-
         collectPrice(_req);
 
         emit TokensMintedWithSignature(signer, receiver, tokenIdMinted, _req);
@@ -226,41 +184,11 @@ contract BoomERC721 is
     //      =====   Setter functions  =====
 
     /// @dev Lets a module admin set the default recipient of all primary sales.
-    function setPrimarySaleRecipient(address _saleRecipient)
-        external
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
+    function setPrimarySaleRecipient(
+        address _saleRecipient
+    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
         primarySaleRecipient = _saleRecipient;
         emit PrimarySaleRecipientUpdated(_saleRecipient);
-    }
-
-    /// @dev Lets a module admin update the royalty bps and recipient.
-    function setDefaultRoyaltyInfo(
-        address _royaltyRecipient,
-        uint256 _royaltyBps
-    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        require(_royaltyBps <= MAX_BPS, "exceed royalty bps");
-
-        royaltyRecipient = _royaltyRecipient;
-        royaltyBps = uint128(_royaltyBps);
-
-        emit DefaultRoyalty(_royaltyRecipient, _royaltyBps);
-    }
-
-    /// @dev Lets a module admin set the royalty recipient for a particular token Id.
-    function setRoyaltyInfoForToken(
-        uint256 _tokenId,
-        address _recipient,
-        uint256 _bps
-    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        require(_bps <= MAX_BPS, "exceed royalty bps");
-
-        royaltyInfoForToken[_tokenId] = RoyaltyInfo({
-            recipient: _recipient,
-            bps: _bps
-        });
-
-        emit RoyaltyForToken(_tokenId, _recipient, _bps);
     }
 
     /// @dev Lets a module admin update the fees on primary sales.
@@ -289,10 +217,9 @@ contract BoomERC721 is
     }
 
     /// @dev Lets a module admin set the URI for contract-level metadata.
-    function setContractURI(string calldata _uri)
-        external
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
+    function setContractURI(
+        string calldata _uri
+    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
         contractURI = _uri;
     }
 
@@ -303,32 +230,13 @@ contract BoomERC721 is
         return (platformFeeRecipient, uint16(platformFeeBps));
     }
 
-    /// @dev Returns the platform fee bps and recipient.
-    function getDefaultRoyaltyInfo() external view returns (address, uint16) {
-        return (royaltyRecipient, uint16(royaltyBps));
-    }
-
-    /// @dev Returns the royalty recipient for a particular token Id.
-    function getRoyaltyInfoForToken(uint256 _tokenId)
-        public
-        view
-        returns (address, uint16)
-    {
-        RoyaltyInfo memory royaltyForToken = royaltyInfoForToken[_tokenId];
-
-        return
-            royaltyForToken.recipient == address(0)
-                ? (royaltyRecipient, uint16(royaltyBps))
-                : (royaltyForToken.recipient, uint16(royaltyForToken.bps));
-    }
-
     ///     =====   Internal functions  =====
 
     /// @dev Mints an NFT to `to`
-    function _mintTo(address _to, string calldata _uri)
-        internal
-        returns (uint256 tokenIdToMint)
-    {
+    function _mintTo(
+        address _to,
+        string calldata _uri
+    ) internal returns (uint256 tokenIdToMint) {
         // Increment new token ID
         nextTokenIdToMint += 1;
         tokenIdToMint = nextTokenIdToMint;
@@ -353,11 +261,9 @@ contract BoomERC721 is
     }
 
     /// @dev Resolves 'stack too deep' error in `recoverAddress`.
-    function _encodeRequest(MintRequest calldata _req)
-        private
-        pure
-        returns (bytes memory)
-    {
+    function _encodeRequest(
+        MintRequest calldata _req
+    ) private pure returns (bytes memory) {
         return
             abi.encode(
                 TYPEHASH,
@@ -375,10 +281,10 @@ contract BoomERC721 is
     }
 
     /// @dev Verifies that a mint request is valid.
-    function verifyRequest(MintRequest calldata _req, bytes calldata _signature)
-        internal
-        returns (address)
-    {
+    function verifyRequest(
+        MintRequest calldata _req,
+        bytes calldata _signature
+    ) internal returns (address) {
         (bool success, address signer) = verify(_req, _signature);
         require(success, "invalid signature");
 
@@ -443,21 +349,11 @@ contract BoomERC721 is
         uint256 tokenId
     ) internal virtual override(ERC721EnumerableUpgradeable) {
         super._beforeTokenTransfer(from, to, tokenId);
-
-        // if transfer is restricted on the contract, we still want to allow burning and minting
-        if (
-            !hasRole(TRANSFER_ROLE, address(0)) &&
-            from != address(0) &&
-            to != address(0)
-        ) {
-            // require(
-            //     hasRole(TRANSFER_ROLE, from) || hasRole(TRANSFER_ROLE, to),
-            //     "restricted to TRANSFER_ROLE holders"
-            // );
-        }
     }
 
-    function supportsInterface(bytes4 interfaceId)
+    function supportsInterface(
+        bytes4 interfaceId
+    )
         public
         view
         virtual

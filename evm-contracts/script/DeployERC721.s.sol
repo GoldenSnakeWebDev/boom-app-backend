@@ -27,8 +27,6 @@ contract DeployScript is BaseDeploy {
             CONTRACT_URI,
             forwarders(),
             saleRecipient,
-            royaltyRecipient,
-            royaltyBps,
             platformFeeBps,
             platformFeeRecipient
         );

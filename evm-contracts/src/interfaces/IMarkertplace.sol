@@ -323,14 +323,4 @@ interface IMarketplace is IContract, IPlatformFee {
         address _currency,
         uint256 _totalPrice
     ) external;
-
-    /**
-     *  @notice Lets any account close an auction on behalf of either the (1) auction's creator, or (2) winning bidder.
-     *              For (1): The auction creator is sent the the winning bid amount.
-     *              For (2): The winning bidder is sent the auctioned NFTs.
-     *
-     *  @param _listingId The uid of the listing (the auction to close).
-     *  @param _closeFor For whom the auction is being closed - the auction creator or winning bidder.
-     */
-    function closeAuction(uint256 _listingId, address _closeFor) external;
 }

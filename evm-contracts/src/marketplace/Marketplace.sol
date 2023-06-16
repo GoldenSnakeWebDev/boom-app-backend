@@ -182,7 +182,9 @@ contract Marketplace is
         return this.onERC721Received.selector;
     }
 
-    function supportsInterface(bytes4 interfaceId)
+    function supportsInterface(
+        bytes4 interfaceId
+    )
         public
         view
         virtual
@@ -365,10 +367,9 @@ contract Marketplace is
     }
 
     /// @dev Lets a direct listing creator cancel their listing.
-    function cancelDirectListing(uint256 _listingId)
-        external
-        onlyListingCreator(_listingId)
-    {
+    function cancelDirectListing(
+        uint256 _listingId
+    ) external onlyListingCreator(_listingId) {
         Listing memory targetListing = listings[_listingId];
 
         require(targetListing.listingType == ListingType.Direct, "!DIRECT");
@@ -552,9 +553,10 @@ contract Marketplace is
     }
 
     /// @dev Processes a new offer to a direct listing.
-    function handleOffer(Listing memory _targetListing, Offer memory _newOffer)
-        internal
-    {
+    function handleOffer(
+        Listing memory _targetListing,
+        Offer memory _newOffer
+    ) internal {
         require(
             _newOffer.quantityWanted <= _targetListing.quantity &&
                 _targetListing.quantity > 0,
@@ -580,9 +582,10 @@ contract Marketplace is
     }
 
     /// @dev Processes an incoming bid in an auction.
-    function handleBid(Listing memory _targetListing, Offer memory _incomingBid)
-        internal
-    {
+    function handleBid(
+        Listing memory _targetListing,
+        Offer memory _incomingBid
+    ) internal {
         Offer memory currentWinningBid = winningBid[_targetListing.listingId];
         uint256 currentOfferAmount = currentWinningBid.pricePerToken *
             currentWinningBid.quantityWanted;
@@ -672,12 +675,10 @@ contract Marketplace is
     //////////////////////////////////////////////////////////////*/
 
     /// @dev Lets an account close an auction for either the (1) winning bidder, or (2) auction creator.
-    function closeAuction(uint256 _listingId, address _closeFor)
-        external
-        override
-        nonReentrant
-        onlyExistingListing(_listingId)
-    {
+    function closeAuction(
+        uint256 _listingId,
+        address _closeFor
+    ) external nonReentrant onlyExistingListing(_listingId) {
         Listing memory targetListing = listings[_listingId];
 
         require(
@@ -988,11 +989,10 @@ contract Marketplace is
     //////////////////////////////////////////////////////////////*/
 
     /// @dev Enforces quantity == 1 if tokenType is TokenType.ERC721.
-    function getSafeQuantity(TokenType _tokenType, uint256 _quantityToCheck)
-        internal
-        pure
-        returns (uint256 safeQuantity)
-    {
+    function getSafeQuantity(
+        TokenType _tokenType,
+        uint256 _quantityToCheck
+    ) internal pure returns (uint256 safeQuantity) {
         if (_quantityToCheck == 0) {
             safeQuantity = 0;
         } else {
@@ -1003,11 +1003,9 @@ contract Marketplace is
     }
 
     /// @dev Returns the interface supported by a contract.
-    function getTokenType(address _assetContract)
-        internal
-        view
-        returns (TokenType tokenType)
-    {
+    function getTokenType(
+        address _assetContract
+    ) internal view returns (TokenType tokenType) {
         if (
             IERC165Upgradeable(_assetContract).supportsInterface(
                 type(IERC1155Upgradeable).interfaceId
@@ -1048,10 +1046,10 @@ contract Marketplace is
     }
 
     /// @dev Lets a contract admin set auction buffers.
-    function setAuctionBuffers(uint256 _timeBuffer, uint256 _bidBufferBps)
-        external
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
+    function setAuctionBuffers(
+        uint256 _timeBuffer,
+        uint256 _bidBufferBps
+    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
         require(_bidBufferBps < MAX_BPS, "invalid BPS.");
 
         timeBuffer = uint64(_timeBuffer);
@@ -1061,10 +1059,9 @@ contract Marketplace is
     }
 
     /// @dev Lets a contract admin set the URI for the contract-level metadata.
-    function setContractURI(string calldata _uri)
-        external
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
+    function setContractURI(
+        string calldata _uri
+    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
         contractURI = _uri;
     }
 

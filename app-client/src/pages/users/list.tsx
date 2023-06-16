@@ -136,8 +136,11 @@ const AllUsersTable: FC = function () {
                   className="h-10 w-10 rounded-full"
                   src={
                     user.photo
-                      ? user.photo.replace(":9443", "/backend")
-                      : `http://128.199.191.206/backend/uploads/uploads-6df7988e-7008-11ed-9234-0123456789ab-1669742153412.jpeg`
+                      ? user.photo.replace(
+                          "http://128.199.191.206:9443",
+                          "https://boomhost.xyz/backend"
+                        )
+                      : `https://boomhost.xyz/backend/uploads/uploads-6df7988e-7008-11ed-9234-0123456789ab-1669742153412.jpeg`
                   }
                   alt={`${user.first_name} ${user.last_name}`}
                 />
