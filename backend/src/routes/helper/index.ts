@@ -135,7 +135,7 @@ router.post(
   UploadPhoto,
   resizePhoto,
   async (req: Request, res: Response) => {
-    const full_url = req.protocol + "://" + req.get("host");
+    const full_url = req.protocol + "s://" + req.get("host");
 
     if (!FOLDER_NAME) {
       throw new BadRequestError(
@@ -171,7 +171,7 @@ router.post(
   "/api/v1/helpers/docs-uploads",
   uploadDocument,
   async (req: Request, res: Response) => {
-    const full_url = req.protocol + "://" + req.get("host");
+    const full_url = req.protocol + "s://" + req.get("host");
     if (!FOLDER_NAME) {
       throw new BadRequestError(
         "You must provide the holding dirctory name field: dirName"
