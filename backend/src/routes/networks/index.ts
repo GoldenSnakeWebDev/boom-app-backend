@@ -58,7 +58,7 @@ router.get("/api/v1/networks", async (req: Request, res: Response) => {
     if (item.symbol === "TZ") {
       return {
         name: item.name,
-        image_url: `${base_url}/LOGOS/TezosLogo_Icon_Blue.png`,
+        image_url: `${base_url}/backend/LOGOS/TezosLogo_Icon_Blue.png`,
         symbol: item.symbol,
         is_active: item.is_active,
         id: item._id,
@@ -68,7 +68,7 @@ router.get("/api/v1/networks", async (req: Request, res: Response) => {
     if (item.symbol === "BNB") {
       return {
         name: item.name,
-        image_url: `${base_url}/LOGOS/binance-icono.png`,
+        image_url: `${base_url}/backend/LOGOS/binance-icono.png`,
         symbol: item.symbol,
         is_active: item.is_active,
         id: item._id,
@@ -78,7 +78,7 @@ router.get("/api/v1/networks", async (req: Request, res: Response) => {
     if (item.symbol === "MATIC") {
       return {
         name: item.name,
-        image_url: `${base_url}/LOGOS/polygon-matic-logo.png`,
+        image_url: `${base_url}/backend/LOGOS/polygon-matic-logo.png`,
         symbol: item.symbol,
         is_active: item.is_active,
         id: item._id,
@@ -88,7 +88,7 @@ router.get("/api/v1/networks", async (req: Request, res: Response) => {
     if (item.symbol === "OKT") {
       return {
         name: item.name,
-        image_url: `${base_url}/LOGOS/okx.png`,
+        image_url: `${base_url}/backend/LOGOS/okx.png`,
         symbol: item.symbol,
         is_active: item.is_active,
         id: item._id,
