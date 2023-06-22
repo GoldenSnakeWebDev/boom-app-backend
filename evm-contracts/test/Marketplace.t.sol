@@ -51,11 +51,9 @@ contract MarketplaceTest is BoomFactoryTest {
         vm.stopPrank();
     }
 
-    function getListing(uint256 _listingId)
-        public
-        view
-        returns (Marketplace.Listing memory listing)
-    {
+    function getListing(
+        uint256 _listingId
+    ) public view returns (Marketplace.Listing memory listing) {
         (
             uint256 listingId,
             address tokenOwner,

@@ -217,6 +217,7 @@ router.patch(
       price,
       boom_state,
       tags,
+      token_id
     } = req.body;
 
     // perform checks
@@ -252,7 +253,8 @@ router.patch(
       title,
       tags,
       price,
-      boom_state
+      boom_state,
+      token_id
     });
 
     res.status(200).json({

@@ -21,6 +21,7 @@ export interface IBoom {
   description?: string;
   is_minted?: boolean;
   image_url?: string;
+  token_id?: string;
   network: Types.ObjectId;
   comments?: Array<Types.ObjectId>;
   user: Types.ObjectId;
@@ -53,6 +54,10 @@ const boomSchema = new Schema<IBoom>(
     boom_state: { type: Schema.Types.String, default: BoomState.UPLOAD },
     is_minted: { type: Schema.Types.Boolean, default: false },
     description: {
+      type: Schema.Types.String,
+      default: "",
+    },
+    token_id: {
       type: Schema.Types.String,
       default: "",
     },
