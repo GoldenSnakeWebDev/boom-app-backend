@@ -214,16 +214,16 @@ contract Marketplace is
         );
 
         require(tokenAmountToList > 0, "QUANTITY");
-        require(
-            hasRole(LISTER_ROLE, address(0)) ||
-                hasRole(LISTER_ROLE, _msgSender()),
-            "!LISTER"
-        );
-        require(
-            hasRole(ASSET_ROLE, address(0)) ||
-                hasRole(ASSET_ROLE, _params.assetContract),
-            "!ASSET"
-        );
+        // require(
+        //     hasRole(LISTER_ROLE, address(0)) ||
+        //         hasRole(LISTER_ROLE, _msgSender()),
+        //     "!LISTER"
+        // );
+        // require(
+        //     hasRole(ASSET_ROLE, address(0)) ||
+        //         hasRole(ASSET_ROLE, _params.assetContract),
+        //     "!ASSET"
+        // );
 
         uint256 startTime = _params.startTime;
         if (startTime < block.timestamp) {
