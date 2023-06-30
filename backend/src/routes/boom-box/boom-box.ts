@@ -292,6 +292,19 @@ router.get(
   }
 );
 
+
+router.get(
+  "/api/v1/boom-box-by-user/:userId",
+  requireAuth,
+  async (req: Request, res: Response) => {
+    const boomBox = await BoomBox.find({ user: req.params.userId })
+      .populate("user", "username photo first_name last_name")
+      .populate("members.user", "username photo first_name last_name")
+      .populate("messages.sender", "username photo first_name last_name");
+    res.status(200).json({ status: "success", boomBox });
+  }
+);
+
 router.patch(
   "/api/v1/boom-box/:id",
   [

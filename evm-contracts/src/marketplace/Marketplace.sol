@@ -42,11 +42,6 @@ contract Marketplace is
     bytes32 private constant MODULE_TYPE = bytes32("Marketplace");
     uint256 private constant VERSION = 1;
 
-    /// @dev Only lister role holders can create listings, when listings are restricted by lister address.
-    bytes32 private constant LISTER_ROLE = keccak256("LISTER_ROLE");
-    /// @dev Only assets from NFT contracts with asset role can be listed, when listings are restricted by asset address.
-    bytes32 private constant ASSET_ROLE = keccak256("ASSET_ROLE");
-
     /// @dev The address of the native token wrapper contract.
     address private nativeTokenWrapper;
 
@@ -126,8 +121,6 @@ contract Marketplace is
         platformFeeRecipient = _platformFeeRecipient;
 
         _setupRole(DEFAULT_ADMIN_ROLE, _defaultAdmin);
-        _setupRole(LISTER_ROLE, address(0));
-        _setupRole(ASSET_ROLE, address(0));
         // native wrapped token
         nativeTokenWrapper = _nativeTokenWrapper;
     }
