@@ -301,7 +301,7 @@ router.get(
       .populate("user", "username photo first_name last_name")
       .populate("members.user", "username photo first_name last_name")
       .populate("messages.sender", "username photo first_name last_name");
-    res.status(200).json({ status: "success", boomBox });
+    res.status(200).json({ status: "success", boomBoxes: boomBox });
   }
 );
 
