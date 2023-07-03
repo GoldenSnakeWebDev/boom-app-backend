@@ -99,14 +99,14 @@ router.patch(
       }
     }
 
-    const isSenderYourFun = user?.funs
+    const isSenderYourFun = nextUser?.funs
       ?.map((item) => item.toString())
       .includes(req.currentUser?.id!);
 
     if (
-      nextUser?.funs
+      user?.funs
         ?.map((item) => item.toString())
-        .includes(req.currentUser?.id!) ||
+        .includes(req.params.id) &&
       isSenderYourFun
     ) {
       await User.findByIdAndUpdate(
