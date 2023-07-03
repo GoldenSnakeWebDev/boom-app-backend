@@ -99,16 +99,19 @@ router.patch(
       }
     }
 
+    console.log("Current User FANS: ", user?.funs);
+    console.log("NextUser Fans: ", nextUser?.funs);
     const isSenderYourFun = nextUser?.funs
       ?.map((item) => item.toString())
       .includes(req.currentUser?.id!);
+    //
+    const loggedUserFans = user?.funs
+      ?.map((item) => item.toString())
+      .includes(req.params.id)
 
-    if (
-      user?.funs
-        ?.map((item) => item.toString())
-        .includes(req.params.id) &&
-      isSenderYourFun
-    ) {
+    if (loggedUserFans && isSenderYourFun) {
+
+      console.log("Reached HERE !! FANS & FRENS")
       await User.findByIdAndUpdate(
         req.currentUser?.id,
         { $push: { friends: req.params.id } },
