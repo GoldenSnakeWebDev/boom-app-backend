@@ -46,7 +46,10 @@ router.post(
     const { email, password, deviceId } = req.body;
 
     const user = await User.findOne({
-      $or: [{ email: email }, { username: email }],
+      $or: [
+        { email: { $regex: new RegExp(email, "i") } },
+        { username: { $regex: `!${email}`, $options: 'i' } }
+      ]
     })
       .populate("sync_bank")
       .populate("funs")

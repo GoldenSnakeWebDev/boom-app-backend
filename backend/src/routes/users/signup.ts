@@ -46,20 +46,25 @@ router.post(
     const { email, password, username } = req.body;
 
     const emailRegex = new RegExp(email, "i");
-    const usernameRegex = new RegExp(username, "i");
+    const usedUsername = `!${username}`
+
 
     const user = await User.findOne({
       $or: [
         { email: { $regex: emailRegex } },
-        { username: { $regex: `!${usernameRegex}` } },
+        { username: { $regex: `${usedUsername}`, $options: 'i' } },
       ],
     });
 
+
     if (user) {
+
+      console.log(user)
       throw new BadRequestError(
         "A user with the same email or username already exists."
       );
     }
+
 
     // check password
 
@@ -76,7 +81,7 @@ router.post(
 
     // create user with password
 
-    const newUser = new User({ email, password, username: `!${username}`, is_active: true });
+    const newUser = new User({ email, password, username: usedUsername, is_active: true });
 
     const syncBank = await createSyncBankForNewUser({
       user: newUser.id,

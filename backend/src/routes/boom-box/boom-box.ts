@@ -391,30 +391,57 @@ router.delete(
 );
 
 router.delete(
-  "/api/v1/boom-box/:id/messages/:memberId", requireAuth, async (req: Request, res: Response) => {
-    const boomBox = await BoomBox.findById(req.params.id).populate("members.user", "username photo first_name last_name");
+  "/api/v1/boom-box/:id/messages/:memberId",
+  requireAuth,
+  async (req: Request, res: Response) => {
+    try {
+      const boomBox = await BoomBox.findById(req.params.id).populate(
+        "members.user",
+        "username photo first_name last_name"
+      );
 
-    if (!boomBox) {
-      throw new BadRequestError("BoomBox not found!. Try again later");
+      if (!boomBox) {
+        throw new BadRequestError("BoomBox not found!. Try again later");
+      }
+
+      // if (boomBox.is_group) {
+      //   if (boomBox.user?.toString() !== req.currentUser?.id) {
+      //     throw new BadRequestError("You are not allowed to remove a member from this Boom Box");
+      //   }
+      // }
+
+      const updatedBoom = await BoomBox.findByIdAndUpdate(
+        req.params.id,
+        {
+          $pull: { members: { user: req.params.memberId } },
+        },
+        { new: true }
+      ).populate(
+        "user",
+        "username photo first_name last_name"
+      ).populate(
+        "members.user",
+        "username photo first_name last_name"
+      ).populate(
+        "messages.sender",
+        "username photo first_name last_name"
+      );
+
+      res.status(200).json({
+        status: "success",
+        boomBox: updatedBoom,
+        message: `Successfully removed member from ${updatedBoom?.label}`,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        status: "error",
+        message: "An error occurred",
+      });
     }
+  }
+);
 
-    // if (boomBox.is_group) {
-    //   if (boomBox.user?.toString() !== req.currentUser?.id) {
-    //     throw new BadRequestError("You are not allowed to remove a member from this Boom Box");
-    //   }
-    // }
-
-
-    let boom = await BoomBox.findByIdAndUpdate(req.params.id, {
-      $pull: { "members": { "user": req.params.memberId } }
-    }, { new: true })
-      .populate("user", "username photo first_name last_name")
-      .populate("members.user", "username photo first_name last_name")
-      .populate("messages.sender", "username photo first_name last_name");
-
-    res.status(200).json({ status: "success", boomBox: boom, message: `Successfully removed member from  ${boom?.label}` })
-
-  })
 
 
 export { router as BoomBoxRoutes };

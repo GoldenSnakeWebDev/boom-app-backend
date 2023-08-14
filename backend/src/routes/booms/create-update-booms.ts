@@ -705,7 +705,7 @@ router.post(
         tags: existBoom.tags,
         created_at: new Date(timestamp),
       })
-      boomVersion = await BoomVersion.findByIdAndUpdate(boomVersion.id, { minted_version: boomVersion.minted_versions! + 1 }, { new: true })
+      boomVersion = await BoomVersion.findByIdAndUpdate(boomVersion.id, { $inc: { minted_versions: 1 } }, { new: true })
     }
 
 
