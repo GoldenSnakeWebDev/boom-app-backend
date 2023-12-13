@@ -48,53 +48,67 @@ router.get("/api/v1/networks", async (req: Request, res: Response) => {
     .sort()
     .limitFields();
 
-  const networks = await response.paginate().query;
-  const full_url = req.protocol + "://" + req.get("host");
-  const base_url =
-    full_url.includes("127.0.0.1") || full_url.includes("localhost")
-      ? `http://127.0.0.1:4000`
-      : full_url;
+    const networks = await response.paginate().query;
+    // console.log("networkmodels>>>>", response);
+  // const full_url = req.protocol + "://" + req.get("host");
+  // const base_url =
+  //   full_url.includes("127.0.0.1") || full_url.includes("localhost")
+  //     ? `http://127.0.0.1:4000`
+  //     : full_url;
+  // const new_networks = networks.map((item: any) => {
+  //   if (item.symbol === "TZ") {
+  //     console.log("iamge url>>>>>", item.image_url);
+  //     return {
+  //       name: item.name,
+  //       // image_url: `${base_url}/backend/LOGOS/TezosLogo_Icon_Blue.png`,
+  //       image_url: item.image_url,
+  //       symbol: item.symbol,
+  //       is_active: item.is_active,
+  //       id: item._id,
+  //     };
+  //   }
+
+  //   if (item.symbol === "BNB") {
+  //     return {
+  //       name: item.name,
+  //       image_url: `${base_url}/backend/LOGOS/binance-icono.png`,
+  //       symbol: item.symbol,
+  //       is_active: item.is_active,
+  //       id: item._id,
+  //     };
+  //   }
+
+  //   if (item.symbol === "MATIC") {
+  //     return {
+  //       name: item.name,
+  //       image_url: `${base_url}/backend/LOGOS/polygon-matic-logo.png`,
+  //       symbol: item.symbol,
+  //       is_active: item.is_active,
+  //       id: item._id,
+  //     };
+  //   }
+
+  //   if (item.symbol === "OKT") {
+  //     return {
+  //       name: item.name,
+  //       image_url: `${base_url}/backend/LOGOS/okx.png`,
+  //       symbol: item.symbol,
+  //       is_active: item.is_active,
+  //       id: item._id,
+  //     };
+  //   }
+
+  //   return {
+  //     name: item.name,
+  //     image_url: item.image_url,
+  //     symbol: item.symbol,
+  //     is_active: item.is_active,
+  //     id: item._id,
+  //   };
+  // });
+
   const new_networks = networks.map((item: any) => {
-    if (item.symbol === "TZ") {
-      return {
-        name: item.name,
-        image_url: `${base_url}/backend/LOGOS/TezosLogo_Icon_Blue.png`,
-        symbol: item.symbol,
-        is_active: item.is_active,
-        id: item._id,
-      };
-    }
-
-    if (item.symbol === "BNB") {
-      return {
-        name: item.name,
-        image_url: `${base_url}/backend/LOGOS/binance-icono.png`,
-        symbol: item.symbol,
-        is_active: item.is_active,
-        id: item._id,
-      };
-    }
-
-    if (item.symbol === "MATIC") {
-      return {
-        name: item.name,
-        image_url: `${base_url}/backend/LOGOS/polygon-matic-logo.png`,
-        symbol: item.symbol,
-        is_active: item.is_active,
-        id: item._id,
-      };
-    }
-
-    if (item.symbol === "OKT") {
-      return {
-        name: item.name,
-        image_url: `${base_url}/backend/LOGOS/okx.png`,
-        symbol: item.symbol,
-        is_active: item.is_active,
-        id: item._id,
-      };
-    }
-
+ 
     return {
       name: item.name,
       image_url: item.image_url,
@@ -103,7 +117,6 @@ router.get("/api/v1/networks", async (req: Request, res: Response) => {
       id: item._id,
     };
   });
-
   res.status(200).json({
     status: "success",
     page: response?.page_info,

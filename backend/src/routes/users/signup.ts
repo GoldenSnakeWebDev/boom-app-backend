@@ -43,6 +43,8 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
+
+    console.log("okay backend?");
     const { email, password, username } = req.body;
 
     const emailRegex = new RegExp(email, "i");
@@ -60,9 +62,11 @@ router.post(
     if (user) {
 
       console.log(user)
-      throw new BadRequestError(
-        "A user with the same email or username already exists."
-      );
+
+      res.status(400).json({
+        success: "faild",
+        message: "A user with the same email or username already exists.",
+      });
     }
 
 

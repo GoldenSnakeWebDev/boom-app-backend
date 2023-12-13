@@ -38,13 +38,16 @@ router.post(
     body("email")
       .notEmpty()
       .withMessage("please provide email address  or username"),
-    body("deviceId").notEmpty().withMessage("please provide the device id"),
+    // body("deviceId").notEmpty().withMessage("please provide the device id"),
     body("password").notEmpty().withMessage("please provide your password"),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { email, password, deviceId } = req.body;
+    // const { email, password, deviceId } = req.body;
+    const { email, password} = req.body;
 
+    console.log("secret key>>>>",email);
+    
     const user = await User.findOne({
       $or: [
         { email: { $regex: new RegExp(email, "i") } },
@@ -75,12 +78,13 @@ router.post(
 
     // update device id
 
-    if (user.device_id !== deviceId) {
-      user.device_id = deviceId;
-      // save the device id
-      await user.save();
-    }
+    // if (user.device_id !== deviceId) {
+    //   user.device_id = deviceId;
+    //   // save the device id
+    //   await user.save();
+    // }
     // generate token
+    console.log("saved secret key>>>.", config.JWT_KEY);
     const token = jwt.sign(
       {
         id: user.id,

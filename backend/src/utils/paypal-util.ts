@@ -4,7 +4,8 @@ import { PaypalItem, PayOutType } from "./../types/paypal"
 
 // Configure paypal
 paypal.configure({
-  mode: config.PAYPAL.PAYPAL_CLIENT_ENV,
+  // mode: config.PAYPAL.PAYPAL_CLIENT_ENV,
+  mode: 'sandbox',
   client_id: config.PAYPAL.PAYPAL_CLIENT_ID,
   client_secret: config.PAYPAL.PAYPAL_CLIENT_SECRET,
 });

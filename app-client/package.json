@@ -21,7 +21,7 @@
     "flowbite": "^1.5.5",
     "flowbite-react": "^0.3.7",
     "react-apexcharts": "^1.4.0",
-    "react-icons": "^4.7.1"
+    "react-icons": "^4.11.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.26",
